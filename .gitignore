@@ -3,6 +3,9 @@ Java/
 Python/
 markdown/
 
+# IDE
+.trae/
+
 # OS files
 .DS_Store
 Thumbs.db
