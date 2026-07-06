@@ -16,18 +16,11 @@
         },
         {
             id: 2,
-            title: '关于本站',
-            date: '2026-07-01',
-            content: '本站使用纯原生技术栈构建：HTML + CSS + JavaScript，无需任何框架。托管于 GitHub Pages，支持博客发布/编辑/删除、全文搜索、Markdown 风格写作。后台采用 localStorage 做数据持久化，管理员登录后可管理博客内容。UI 采用毛玻璃拟态风格，搭配随机二次元背景图，JetBrains Mono 字体，打字机标题动画。希望这个小小的博客能记录下我的成长轨迹～',
-            tags: ['博客', '技术', 'GitHubPages', '前端']
+            title: 'C++你崛起吧',
+            date: '2026-07-06',
+            image: 'images/1.jpg',
+            tags: ['C++', 'GCC','GNU/Linux']
         },
-        {
-            id: 3,
-            title: '我的编程学习路线',
-            date: '2026-06-28',
-            content: '作为一名中职生，我的编程学习从 Python 起步，被它简洁的语法所吸引。随后接触了 C++ 的高性能世界，理解了指针和内存管理。最近开始学习 Java，感受面向对象的魅力。前端方面掌握了 HTML/CSS/JS 三件套，能够独立搭建完整的静态站点。未来计划深入学习数据结构和算法，以及 Linux 系统管理。编程之路漫漫，保持热爱，持续进步！',
-            tags: ['Python', 'C++', 'Java', '学习', '编程']
-        }
     ];
 
     // ==================== 全局状态 ====================
@@ -61,11 +54,19 @@
         typedText:      $('#typed-text'),
         toastContainer: $('#toastContainer'),
         visitorCount:   $('#visitorCount'),
+        blogImage:      $('#blogImage'),
+        blogImageFile:  $('#blogImageFile'),
+        imagePreview:   $('#imagePreview'),
+        imagePreviewImg:$('#imagePreviewImg'),
+        clearImageBtn:  $('#clearImageBtn'),
     };
+
+    // 暂存的 base64 图片数据（文件选择后暂存于此，保存时写入博客数据）
+    let pendingImageData = null;
 
     // ==================== 访客计数器 ====================
     function updateVisitorCount() {
-        const storageKey = 'site_visitor_count';
+        const storageKey = 'site_visitor_count_v2';
         const sessionKey = 'site_visit_session';
 
         // 获取当前总访问量
@@ -195,6 +196,88 @@
         dom.blogTags.value = '';
         dom.charCount.textContent = '0 / 5000';
         dom.charCount.className = 'char-count';
+        clearImageFields();
+    }
+
+    // ==================== 图片上传处理 ====================
+    function clearImageFields() {
+        pendingImageData = null;
+        if (dom.blogImage) dom.blogImage.value = '';
+        if (dom.blogImageFile) dom.blogImageFile.value = '';
+        if (dom.imagePreview) dom.imagePreview.style.display = 'none';
+        if (dom.imagePreviewImg) dom.imagePreviewImg.src = '';
+    }
+
+    function handleImageFileSelect() {
+        const file = dom.blogImageFile.files[0];
+        if (!file) return;
+
+        // 检查文件类型
+        if (!file.type.startsWith('image/')) {
+            showToast('请选择图片文件', 'error');
+            dom.blogImageFile.value = '';
+            return;
+        }
+
+        // 限制图片大小 2MB
+        if (file.size > 2 * 1024 * 1024) {
+            showToast('图片大小不能超过 2MB', 'error');
+            dom.blogImageFile.value = '';
+            return;
+        }
+
+        // 转为 base64
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            pendingImageData = e.target.result;
+            showImagePreview(pendingImageData);
+            // 选择本地图片后清空 URL 输入
+            if (dom.blogImage) dom.blogImage.value = '';
+        };
+        reader.onerror = function() {
+            showToast('图片读取失败，请重试', 'error');
+        };
+        reader.readAsDataURL(file);
+    }
+
+    function handleImageUrlInput() {
+        const url = dom.blogImage.value.trim();
+        if (url) {
+            pendingImageData = url;
+            showImagePreview(url);
+            // 输入 URL 后清空文件选择
+            if (dom.blogImageFile) dom.blogImageFile.value = '';
+        } else {
+            pendingImageData = null;
+            if (dom.imagePreview) dom.imagePreview.style.display = 'none';
+        }
+    }
+
+    function showImagePreview(src) {
+        if (!dom.imagePreview || !dom.imagePreviewImg) return;
+        dom.imagePreview.style.display = 'block';
+        dom.imagePreviewImg.src = src;
+    }
+
+    function getBlogImageData() {
+        // 优先返回本地文件转的 base64，其次返回 URL
+        return pendingImageData || (dom.blogImage ? dom.blogImage.value.trim() : '');
+    }
+
+    function populateImageFields(imageData) {
+        clearImageFields();
+        if (!imageData) return;
+
+        if (imageData.startsWith('data:image/')) {
+            // base64 数据，无法回填文件 input，仅显示预览
+            pendingImageData = imageData;
+            showImagePreview(imageData);
+        } else {
+            // URL 字符串
+            if (dom.blogImage) dom.blogImage.value = imageData;
+            pendingImageData = imageData;
+            showImagePreview(imageData);
+        }
     }
 
     // 点击遮罩层关闭模态框
@@ -265,9 +348,17 @@
                     </div>`
                 : '';
 
+            const blogImage = blog.image || blog.images || '';
+            const imageHtml = blogImage
+                ? `<div class="blog-image-wrapper">
+                       <img src="${escapeAttr(blogImage)}" alt="${escapeAttr(blog.title)}" class="blog-image" loading="lazy" onclick="window.openLightbox && window.openLightbox('${escapeAttr(blogImage)}')" onerror="this.parentElement.style.display='none'">
+                   </div>`
+                : '';
+
             card.innerHTML = `
                 <div class="blog-date">${escapeHtml(blog.date)}</div>
                 <h3>${escapeHtml(blog.title)}</h3>
+                ${imageHtml}
                 <p>${escapeHtml(blog.content)}</p>
                 <div class="blog-tags-row">${tagsHtml}</div>
                 ${editButtons}
@@ -281,6 +372,23 @@
         div.textContent = str;
         return div.innerHTML;
     }
+
+    function escapeAttr(str) {
+        return str.replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    }
+
+    // ==================== 图片灯箱 ====================
+    window.openLightbox = function(src) {
+        // 移除已有灯箱
+        const existing = document.querySelector('.lightbox-overlay');
+        if (existing) existing.remove();
+
+        const overlay = document.createElement('div');
+        overlay.className = 'lightbox-overlay';
+        overlay.innerHTML = '<img src="' + escapeAttr(src) + '" alt="放大查看">';
+        overlay.addEventListener('click', function() { overlay.remove(); });
+        document.body.appendChild(overlay);
+    };
 
     window.openAddBlog = function() {
         dom.blogModalTitle.textContent = '发布新博客';
@@ -303,6 +411,7 @@
         dom.blogDate.value = blog.date;
         dom.blogContent.value = blog.content;
         dom.blogTags.value = blog.tags.join(', ');
+        populateImageFields(blog.image || '');
         updateCharCount();
         openModal('blogModal');
     };
@@ -313,6 +422,7 @@
         const date    = dom.blogDate.value;
         const content = dom.blogContent.value.trim();
         const tags    = dom.blogTags.value.split(/[,，]/).map(t => t.trim()).filter(Boolean);
+        const image   = getBlogImageData();
 
         if (!title)   { showToast('请填写博客标题', 'error'); dom.blogTitle.focus(); return; }
         if (!date)    { showToast('请选择日期', 'error'); return; }
@@ -321,12 +431,12 @@
         if (id) {
             const index = blogs.findIndex(b => b.id === parseInt(id));
             if (index !== -1) {
-                blogs[index] = { ...blogs[index], title, date, content, tags };
+                blogs[index] = { ...blogs[index], title, date, content, tags, image };
                 showToast('✅ 博客已更新', 'success');
             }
         } else {
             const newId = blogs.length > 0 ? Math.max(...blogs.map(b => b.id)) + 1 : 1;
-            blogs.unshift({ id: newId, title, date, content, tags });
+            blogs.unshift({ id: newId, title, date, content, tags, image });
             showToast('✅ 博客发布成功', 'success');
         }
 
@@ -486,6 +596,12 @@
                 if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') saveBlog();
             });
         }
+        // 图片上传：文件选择
+        if (dom.blogImageFile) dom.blogImageFile.addEventListener('change', handleImageFileSelect);
+        // 图片上传：URL 输入
+        if (dom.blogImage) dom.blogImage.addEventListener('input', debounce(handleImageUrlInput, 500));
+        // 清除图片
+        if (dom.clearImageBtn) dom.clearImageBtn.addEventListener('click', clearImageFields);
     }
 
     // ==================== 工具函数 ====================

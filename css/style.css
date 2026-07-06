@@ -315,6 +315,47 @@ body.loaded {
     transform: translateY(-2px);
 }
 
+/* 博客图片 */
+.blog-image-wrapper {
+    margin-bottom: 15px;
+    border-radius: 12px;
+    overflow: hidden;
+}
+.blog-image {
+    width: 100%;
+    max-height: 350px;
+    object-fit: cover;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+}
+.blog-image:hover {
+    transform: scale(1.02);
+    box-shadow: 0 8px 30px rgba(102, 126, 234, 0.3);
+}
+
+/* 灯箱 */
+.lightbox-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0, 0, 0, 0.85);
+    backdrop-filter: blur(10px);
+    z-index: 10000;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    animation: fadeIn 0.3s ease;
+}
+.lightbox-overlay img {
+    max-width: 90vw;
+    max-height: 90vh;
+    border-radius: 12px;
+    box-shadow: 0 10px 60px rgba(0, 0, 0, 0.5);
+    animation: fadeInUp 0.3s ease;
+}
+
 /* 项目卡片 */
 .project-card {
     background: rgba(255, 255, 255, 0.15);

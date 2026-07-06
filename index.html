@@ -221,6 +221,15 @@
                     <label for="blogTags">标签（用逗号分隔）</label>
                     <input type="text" id="blogTags" placeholder="例如：Python, Flask, CSS, Linux..." maxlength="200">
                 </div>
+                <div class="form-group">
+                    <label for="blogImage">图片（可选，选择本地图片或输入URL）</label>
+                    <input type="file" id="blogImageFile" accept="image/*" style="margin-bottom: 8px;">
+                    <input type="text" id="blogImage" placeholder="或输入图片URL地址，例如：images/photo.jpg" maxlength="500">
+                    <div id="imagePreview" style="margin-top: 8px; display: none;">
+                        <img id="imagePreviewImg" src="" alt="预览" style="max-width: 200px; max-height: 150px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2);">
+                        <button type="button" id="clearImageBtn" style="display: block; margin-top: 4px; background: none; border: none; color: #ff6b6b; cursor: pointer; font-size: 13px;">✕ 清除图片</button>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <button class="btn-cancel" onclick="closeModal('blogModal')">取消</button>
