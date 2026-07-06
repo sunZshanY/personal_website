@@ -238,6 +238,26 @@
         </div>
     </div>
 
+    <!-- ==================== 博客详情查看弹窗 ==================== -->
+    <div id="blogDetailModal" class="modal hidden">
+        <div class="modal-content detail-content">
+            <div class="modal-header detail-header">
+                <h3 id="detailTitle"></h3>
+                <button class="close-modal" onclick="closeModal('blogDetailModal')">×</button>
+            </div>
+            <div class="modal-body detail-body">
+                <div id="detailMeta" class="detail-meta"></div>
+                <div id="detailImageWrapper" class="detail-image-wrapper hidden"></div>
+                <div id="detailContent" class="detail-text"></div>
+                <div id="detailTags" class="detail-tags"></div>
+            </div>
+            <div class="modal-footer detail-footer">
+                <button class="btn-cancel" id="detailShareBtn">📋 复制链接</button>
+                <button class="btn-cancel" onclick="closeModal('blogDetailModal')">关闭</button>
+            </div>
+        </div>
+    </div>
+
     <!-- ==================== 主脚本 ==================== -->
     <script src="js/alert.js" defer></script>
 </body>

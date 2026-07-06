@@ -59,10 +59,21 @@
         imagePreview:   $('#imagePreview'),
         imagePreviewImg:$('#imagePreviewImg'),
         clearImageBtn:  $('#clearImageBtn'),
+        // 博客详情查看
+        blogDetailModal:   $('#blogDetailModal'),
+        detailTitle:       $('#detailTitle'),
+        detailMeta:        $('#detailMeta'),
+        detailImageWrapper:$('#detailImageWrapper'),
+        detailContent:     $('#detailContent'),
+        detailTags:        $('#detailTags'),
+        detailShareBtn:    $('#detailShareBtn'),
     };
 
     // 暂存的 base64 图片数据（文件选择后暂存于此，保存时写入博客数据）
     let pendingImageData = null;
+
+    // 当前查看的博客详情 ID（用于分享链接）
+    let currentDetailBlogId = null;
 
     // ==================== 访客计数器 ====================
     function updateVisitorCount() {
@@ -186,6 +197,15 @@
         // 清除博客表单数据
         if (modalId === 'blogModal') clearBlogForm();
         if (modalId === 'loginModal') dom.loginError.textContent = '';
+        // 清除详情内容以释放内存
+        if (modalId === 'blogDetailModal') {
+            dom.detailTitle.textContent = '';
+            dom.detailContent.innerHTML = '';
+            dom.detailTags.innerHTML = '';
+            dom.detailImageWrapper.innerHTML = '';
+            dom.detailImageWrapper.classList.add('hidden');
+            currentDetailBlogId = null;
+        }
     };
 
     function clearBlogForm() {
@@ -289,12 +309,15 @@
     
     const loginModal = document.getElementById('loginModal');
     const blogModal = document.getElementById('blogModal');
+    const blogDetailModal = document.getElementById('blogDetailModal');
     if (loginModal) loginModal.addEventListener('click', handleModalBackdropClick);
     if (blogModal) blogModal.addEventListener('click', handleModalBackdropClick);
+    if (blogDetailModal) blogDetailModal.addEventListener('click', handleModalBackdropClick);
 
     // ESC 键关闭模态框
     window.addEventListener('keydown', function(e) {
         if (e.key === 'Escape') {
+            if (dom.blogDetailModal && !dom.blogDetailModal.classList.contains('hidden')) closeModal('blogDetailModal');
             if (dom.blogModal && !dom.blogModal.classList.contains('hidden')) closeModal('blogModal');
             if (dom.loginModal && !dom.loginModal.classList.contains('hidden')) closeModal('loginModal');
         }
@@ -335,6 +358,7 @@
         filteredBlogs.forEach(blog => {
             const card = document.createElement('article');
             card.className = 'blog-card';
+            card.dataset.blogId = blog.id;
             card.style.animation = 'fadeInUp 0.5s ease forwards';
 
             const tagsHtml = blog.tags
@@ -357,15 +381,67 @@
 
             card.innerHTML = `
                 <div class="blog-date">${escapeHtml(blog.date)}</div>
-                <h3>${escapeHtml(blog.title)}</h3>
+                <h3 class="blog-card-title">${escapeHtml(blog.title)}</h3>
                 ${imageHtml}
                 <p>${escapeHtml(blog.content)}</p>
                 <div class="blog-tags-row">${tagsHtml}</div>
+                <span class="read-more">阅读全文 →</span>
                 ${editButtons}
             `;
             dom.blogList.appendChild(card);
         });
     }
+
+    // ==================== 博客卡片事件委托（内存优化：单一监听器） ====================
+    function handleBlogCardClick(e) {
+        const card = e.target.closest('.blog-card');
+        if (!card) return;
+
+        // 忽略编辑/删除按钮的点击（它们有自己的 onclick 处理）
+        if (e.target.closest('.edit-btn') || e.target.closest('.delete-btn')) return;
+
+        // 忽略图片灯箱点击（图片有自己的 lightbox 处理）
+        if (e.target.closest('.blog-image')) return;
+
+        const blogId = parseInt(card.dataset.blogId, 10);
+        if (blogId) openBlogDetail(blogId);
+    }
+
+    // ==================== 博客详情查看 ====================
+    window.openBlogDetail = function(blogId) {
+        const blog = blogs.find(b => b.id === blogId);
+        if (!blog) return;
+
+        // 避免重复渲染同一博客
+        if (currentDetailBlogId === blogId && dom.blogDetailModal && !dom.blogDetailModal.classList.contains('hidden')) return;
+
+        currentDetailBlogId = blogId;
+
+        // 标题
+        dom.detailTitle.textContent = blog.title;
+
+        // 元信息
+        dom.detailMeta.innerHTML = `📅 ${escapeHtml(blog.date)} | ✍️ Omiaちゃん`;
+
+        // 图片
+        const img = blog.image || blog.images || '';
+        if (img) {
+            dom.detailImageWrapper.classList.remove('hidden');
+            dom.detailImageWrapper.innerHTML = `<img src="${escapeAttr(img)}" alt="${escapeAttr(blog.title)}" loading="lazy" onclick="window.openLightbox && window.openLightbox('${escapeAttr(img)}')">`;
+        } else {
+            dom.detailImageWrapper.classList.add('hidden');
+            dom.detailImageWrapper.innerHTML = '';
+        }
+
+        // 内容 — 按换行拆分为段落
+        const paragraphs = blog.content.split('\n').filter(p => p.trim());
+        dom.detailContent.innerHTML = paragraphs.map(p => `<p>${escapeHtml(p.trim())}</p>`).join('');
+
+        // 标签
+        dom.detailTags.innerHTML = blog.tags.map(t => `<span class="blog-tag">${escapeHtml(t)}</span>`).join('');
+
+        openModal('blogDetailModal');
+    };
 
     function escapeHtml(str) {
         const div = document.createElement('div');
@@ -602,6 +678,20 @@
         if (dom.blogImage) dom.blogImage.addEventListener('input', debounce(handleImageUrlInput, 500));
         // 清除图片
         if (dom.clearImageBtn) dom.clearImageBtn.addEventListener('click', clearImageFields);
+        // 博客卡片点击 → 详情查看（事件委托，单监听器覆盖所有卡片）
+        if (dom.blogList) dom.blogList.addEventListener('click', handleBlogCardClick);
+        // 详情分享按钮
+        if (dom.detailShareBtn) {
+            dom.detailShareBtn.addEventListener('click', function() {
+                if (!currentDetailBlogId) return;
+                const url = `${window.location.origin}${window.location.pathname}?blog=${currentDetailBlogId}`;
+                navigator.clipboard.writeText(url).then(function() {
+                    showToast('📋 链接已复制到剪贴板', 'success');
+                }).catch(function() {
+                    showToast('复制失败，请手动复制地址栏链接', 'error');
+                });
+            });
+        }
     }
 
     // ==================== 工具函数 ====================
