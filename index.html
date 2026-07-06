@@ -11,171 +11,223 @@
     <meta property="og:type" content="website">
     <title>Omiaちゃん的小博客</title>
     <link rel="icon" href="images/images1.jpg" type="image/jpeg">
-    <!-- 引入 JetBrains Mono 字体 -->
+    <!-- JetBrains Mono 字体 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
+
     <!-- ==================== 背景层 ==================== -->
     <div class="bg-layer" id="bgLayer"></div>
     <div class="bg-overlay"></div>
 
-    <!-- ==================== 管理员面板 ==================== -->
-    <div id="adminPanel" class="admin-panel hidden">
-        <span class="admin-label">管理员身份登录</span>
-        <button id="logoutBtn" class="logout-btn">退出登录</button>
-    </div>
-
     <!-- ==================== Toast 通知容器 ==================== -->
     <div id="toastContainer" class="toast-container"></div>
 
-    <!-- ==================== 内容层 ==================== -->
-    <div class="content">
-        <!-- 标题区域 -->
-        <header class="header">
-            <div class="logo-container">
-                <img src="images/images1.jpg" alt="Omiaちゃん Logo" class="logo" title="Omiaちゃん的小博客">
+    <!-- ==================== RinUI 布局 ==================== -->
+    <div class="rinui-layout">
+
+        <!-- ====== 顶部标题栏 (RinUI: #1a1a2e) ====== -->
+        <header class="rinui-topbar" id="topBar">
+            <div class="topbar-left">
+                <img src="images/images1.jpg" alt="Logo" class="topbar-logo" title="Omiaちゃん">
+                <span class="topbar-title">🌸 Omiaちゃん Blog</span>
             </div>
-            <h1 class="typing-effect" aria-label="Hello My name is Omiaちゃん">
-                <span id="typed-text"></span>
+            <div class="topbar-center">
+                <!-- 打字机效果区域 -->
+                <span id="typed-text" class="typed-text"></span>
                 <span class="cursor">|</span>
-            </h1>
-            <p class="subtitle">欢迎来到我的博客</p>
+            </div>
+            <div class="topbar-right">
+                <!-- 连接状态指示灯 (RinUI 风格) -->
+                <span class="status-dot" id="apiStatusDot" title="API 连接状态"></span>
+                <span class="status-text" id="apiStatusText">离线模式</span>
+
+                <span class="topbar-divider">|</span>
+
+                <!-- 管理员面板 -->
+                <span id="adminBadge" class="admin-badge hidden">👑 管理员</span>
+                <button id="logoutBtn" class="rinui-btn flat hidden">🚪 登出</button>
+                <button id="loginBtn" class="rinui-btn flat">🔑 登录</button>
+            </div>
         </header>
 
-        <!-- 导航菜单 -->
-        <nav class="nav-menu" aria-label="主导航">
-            <ul>
-                <li><button class="nav-btn active" data-target="blog">博客内容</button></li>
-                <li><button class="nav-btn" data-target="projects">个人项目</button></li>
-                <li><button class="nav-btn disabled" data-target="friends">友链</button></li>
-                <li><button class="nav-btn" data-target="about">个人简介</button></li>
-            </ul>
-        </nav>
+        <!-- ====== 主体区域 ====== -->
+        <div class="rinui-main">
 
-        <!-- 主内容区域 -->
-        <main class="main-content">
-            <!-- 博客内容 -->
-            <section id="blog" class="content-section active">
-                <div class="section-header">
-                    <h2>博客内容</h2>
-                    <button id="addBlogBtn" class="add-blog-btn hidden">发布新博客</button>
-                </div>
-                <!-- 博客搜索栏 -->
-                <div class="blog-search-bar">
-                    <input type="text" id="blogSearch" placeholder="搜索博客标题或内容..." autocomplete="off">
-                </div>
-                <div class="blog-list" id="blogList">
-                    <!-- 动态渲染博客卡片 -->
-                </div>
-                <div id="blogEmpty" class="empty-state hidden">
-                    <div class="empty-icon">
-                        <img src="images/Clion.png" alt="clion test">
-                        <p class="empty-title">正在开发中</p>
-                        <p class="empty-subtitle">暂无博客文章......</p>
+            <!-- 侧边导航 (RinUI: #16213e) -->
+            <nav class="rinui-sidebar" id="sidebar">
+                <div class="sidebar-section-label">导航菜单</div>
+
+                <button class="sidebar-nav-btn active" data-target="blog">
+                    <span class="nav-icon">📋</span> 博客内容
+                </button>
+                <button class="sidebar-nav-btn" data-target="projects">
+                    <span class="nav-icon">📁</span> 个人项目
+                </button>
+                <button class="sidebar-nav-btn disabled" data-target="friends">
+                    <span class="nav-icon">🔗</span> 友链
+                </button>
+                <button class="sidebar-nav-btn" data-target="about">
+                    <span class="nav-icon">👤</span> 个人简介
+                </button>
+
+                <!-- 管理员专属：新建博客 -->
+                <div class="sidebar-section-label" style="margin-top: 16px;">管理</div>
+                <button class="sidebar-nav-btn admin-only hidden" id="sidebarNewBlog" data-action="new-blog">
+                    <span class="nav-icon">✏️</span> 新建博客
+                </button>
+
+                <!-- KnowFlow 知识库 -->
+                <div class="sidebar-section-label" style="margin-top: 8px;">工具</div>
+                <a href="knowflow.html" class="sidebar-nav-btn" style="text-decoration:none;">
+                    <span class="nav-icon">📚</span> KnowFlow 知识库
+                </a>
+
+                <div class="sidebar-spacer"></div>
+
+                <!-- 版本信息 (RinUI: #505060) -->
+                <span class="sidebar-version">v1.0.0</span>
+            </nav>
+
+            <!-- 内容区 -->
+            <main class="rinui-content" id="mainContent">
+
+                <!-- 博客内容 -->
+                <section id="blog" class="content-panel active">
+                    <div class="panel-header">
+                        <h2 class="panel-title">📋 博客内容</h2>
+                        <button id="addBlogBtn" class="rinui-btn primary hidden">✏️ 发布新博客</button>
                     </div>
-                </div>
-            </section>
-
-            <!-- 个人项目 -->
-            <section id="projects" class="content-section">
-                <h2>个人项目开发</h2>
-
-                <div class="project-card">
-                    <div class="project-header">
-                        <h4>WEB_TODO</h4>
-                        <a href="https://sunzshany.github.io/TODO/" class="action-btn demo-btn" target="_blank" rel="noopener">
-                            <span></span> 立即体验
-                        </a>
+                    <!-- 搜索栏 -->
+                    <div class="search-bar">
+                        <span class="search-icon">🔍</span>
+                        <input type="text" id="blogSearch" placeholder="搜索博客标题、内容或标签..." autocomplete="off">
                     </div>
-                    <p class="project-desc">运用 HTML、CSS、JavaScript 以及 Python 等技术开发的 TODO 事项管理工具，支持任务的增删改查和分类管理。</p>
-                    <div class="project-tags">
-                        <span class="tag">HTML</span>
-                        <span class="tag">CSS</span>
-                        <span class="tag">JavaScript</span>
-                        <span class="tag">Python</span>
+                    <!-- 博客列表 -->
+                    <div class="blog-list" id="blogList"></div>
+                    <!-- 空状态 -->
+                    <div id="blogEmpty" class="empty-state hidden">
+                        <div class="empty-icon">📭</div>
+                        <p class="empty-title">暂无博客文章</p>
+                        <p class="empty-subtitle">登录后点击「新建博客」开始创作吧！</p>
                     </div>
-                </div>
+                </section>
 
-            </section>
+                <!-- 个人项目 -->
+                <section id="projects" class="content-panel">
+                    <h2 class="panel-title" style="text-align:center;">📁 个人项目开发</h2>
 
-            <!-- 友链 -->
-            <section id="friends" class="content-section">
-                <h2>🔗 友链</h2>
-                <div class="empty-state">
-                    <div class="empty-icon">🔗</div>
-                    <p>暂未添加友链，敬请期待...</p>
-                </div>
-            </section>
-
-            <!-- 个人简介 -->
-            <section id="about" class="content-section">
-                <h2> 个人简介喵~</h2>
-                <img src="images/images1.jpg" alt="Omiaちゃん" class="profile-image">
-                <p>Hello Everyone，我是Omiaちゃん，一名普通の中职生，爱好是写代码、玩FPS类游戏、音游等......</p>
-
-                <div class="skills-section">
-                    <h3>喜欢的编程语言</h3>
-                    <div class="skill-list">
-                        <div class="skill-item">
-                            <span class="skill-rank">🥇 No.1</span>
-                            <span class="skill-name">Python</span>
-                            <span class="skill-desc">简洁优雅，强大灵活</span>
+                    <div class="rinui-card project-card-full">
+                        <div class="card-header-row">
+                            <h4>WEB_TODO</h4>
+                            <a href="https://sunzshany.github.io/TODO/" class="rinui-btn success" target="_blank" rel="noopener">
+                                🚀 立即体验
+                            </a>
                         </div>
-                        <div class="skill-item">
-                            <span class="skill-rank">🥈 No.2</span>
-                            <span class="skill-name">C++</span>
-                            <span class="skill-desc">高性能系统开发</span>
-                        </div>
-                        <div class="skill-item">
-                            <span class="skill-rank">🥉 No.3</span>
-                            <span class="skill-name">Java</span>
-                            <span class="skill-desc">跨平台企业级开发</span>
+                        <p class="card-desc">运用 HTML、CSS、JavaScript 以及 Python Flask 框架等技术开发的 TODO 事项管理工具，支持任务的增删改查和分类管理。</p>
+                        <div class="card-tags">
+                            <span class="rinui-tag">HTML</span>
+                            <span class="rinui-tag">CSS</span>
+                            <span class="rinui-tag">JavaScript</span>
+                            <span class="rinui-tag">Python</span>
                         </div>
                     </div>
-                </div>
+                </section>
 
-                <h4>最喜欢的Linux发行版</h4>
-                <div class="like-Linux">
-                    <span class="rank">🥇 No.1</span>
-                    <span class="linux-name">Arch Linux</span>
-                    <span class="linux-desc">BTW I USE Arch</span>
-                </div>
-                <div class="like-Linux">
-                    <span class="rank">🥈 No.2</span>
-                    <span class="linux-name">Ubuntu</span>
-                    <span class="linux-desc">新手的最佳Linux发行版</span>
-                </div>
-                <div class="like-Linux">
-                    <span class="rank">🥉 No.3</span>
-                    <span class="linux-name">Debian</span>
-                    <span class="linux-desc">稳定可靠的发行版系统</span>
-                </div>
-            </section>
-        </main>
+                <!-- 友链 -->
+                <section id="friends" class="content-panel">
+                    <h2 class="panel-title" style="text-align:center;">🔗 友链</h2>
+                    <div class="empty-state">
+                        <div class="empty-icon">🔗</div>
+                        <p>暂未添加友链，敬请期待...</p>
+                    </div>
+                </section>
 
-        <!-- 底部信息 -->
-        <footer class="footer">
-            <div class="visitor-counter">
-                 今日浏览人数：<span id="visitorCount">0</span> 人
-            </div>
-            <div class="hidden-login" id="hiddenLogin" onclick="openModal('loginModal')">
-                        © sunZshanY.inc
-            </div>
-            <div class="footer-info">
-                萌ICP1145141919
-            </div>
+                <!-- 个人简介 -->
+                <section id="about" class="content-panel">
+                    <h2 class="panel-title" style="text-align:center;">👤 个人简介喵~</h2>
+                    <div class="about-content">
+                        <img src="images/images1.jpg" alt="Omiaちゃん" class="profile-image">
+                        <p>Hello Everyone，我是Omiaちゃん，一名普通の中职生，爱好是写代码、玩FPS类游戏、音游等......</p>
+
+                        <!-- 技能 -->
+                        <div class="rinui-card" style="margin-top: 24px;">
+                            <h3 class="card-section-title">喜欢的编程语言</h3>
+                            <div class="skill-list">
+                                <div class="skill-item">
+                                    <span class="skill-rank">🥇 No.1</span>
+                                    <span class="skill-name">Python</span>
+                                    <span class="skill-desc">简洁优雅，强大灵活</span>
+                                </div>
+                                <div class="skill-item">
+                                    <span class="skill-rank">🥈 No.2</span>
+                                    <span class="skill-name">C++</span>
+                                    <span class="skill-desc">高性能系统开发</span>
+                                </div>
+                                <div class="skill-item">
+                                    <span class="skill-rank">🥉 No.3</span>
+                                    <span class="skill-name">Java</span>
+                                    <span class="skill-desc">跨平台企业级开发</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Linux 发行版 -->
+                        <div class="rinui-card" style="margin-top: 20px;">
+                            <h3 class="card-section-title">最喜欢的Linux发行版</h3>
+                            <div class="linux-list">
+                                <div class="linux-item">
+                                    <span class="linux-rank">🥇 No.1</span>
+                                    <span class="linux-name">Arch Linux</span>
+                                    <span class="linux-desc">BTW I USE Arch</span>
+                                </div>
+                                <div class="linux-item">
+                                    <span class="linux-rank">🥈 No.2</span>
+                                    <span class="linux-name">Ubuntu</span>
+                                    <span class="linux-desc">新手的最佳Linux发行版</span>
+                                </div>
+                                <div class="linux-item">
+                                    <span class="linux-rank">🥉 No.3</span>
+                                    <span class="linux-name">Debian</span>
+                                    <span class="linux-desc">稳定可靠的发行版系统</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+
+        <!-- ====== 底部状态栏 (RinUI: #0f0f23) ====== -->
+        <footer class="rinui-statusbar" id="statusBar">
+            <span class="statusbar-left">API: http://127.0.0.1:5000/api</span>
+            <span class="statusbar-center">
+                <!-- 访客计数 -->
+                <span class="visitor-badge">
+                    👥 今日浏览：<span id="visitorCount">0</span> 人
+                </span>
+            </span>
+            <span class="statusbar-right">
+                <span id="statusUser">🔒 未登录</span>
+                <span class="statusbar-divider">|</span>
+                <span class="hidden-login" id="hiddenLogin">© sunZshanY.inc</span>
+                <span class="statusbar-divider">|</span>
+                <span>萌ICP1145141919</span>
+            </span>
         </footer>
+
     </div>
 
     <!-- ==================== 登录弹窗 ==================== -->
     <div id="loginModal" class="modal hidden">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>管理员登录</h3>
-                <button class="close-modal" onclick="closeModal('loginModal')">×</button>
+                <h3>🔑 管理员登录</h3>
+                <button class="close-modal" onclick="closeModal('loginModal')">&times;</button>
             </div>
             <div class="modal-body">
                 <div class="form-group">
@@ -189,8 +241,8 @@
                 <div class="error-message" id="loginError"></div>
             </div>
             <div class="modal-footer">
-                <button class="btn-cancel" onclick="closeModal('loginModal')">取消</button>
-                <button class="btn-submit" onclick="adminLogin()">登录</button>
+                <button class="rinui-btn flat" onclick="closeModal('loginModal')">取消</button>
+                <button class="rinui-btn primary" onclick="adminLogin()">登录</button>
             </div>
         </div>
     </div>
@@ -199,22 +251,22 @@
     <div id="blogModal" class="modal hidden">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 id="blogModalTitle">发布新博客</h3>
-                <button class="close-modal" onclick="closeModal('blogModal')">×</button>
+                <h3 id="blogModalTitle">✏️ 发布新博客</h3>
+                <button class="close-modal" onclick="closeModal('blogModal')">&times;</button>
             </div>
             <div class="modal-body">
                 <input type="hidden" id="blogId">
                 <div class="form-group">
-                    <label for="blogTitle">标题</label>
+                    <label for="blogTitle">标题 *</label>
                     <input type="text" id="blogTitle" placeholder="请输入博客标题" maxlength="100">
                 </div>
                 <div class="form-group">
-                    <label for="blogDate">日期</label>
+                    <label for="blogDate">日期 *</label>
                     <input type="date" id="blogDate">
                 </div>
                 <div class="form-group">
                     <label for="blogContent">内容</label>
-                    <textarea id="blogContent" rows="4" placeholder="请输入博客内容" maxlength="5000"></textarea>
+                    <textarea id="blogContent" rows="6" placeholder="请输入博客内容..." maxlength="5000"></textarea>
                     <span class="char-count" id="charCount">0 / 5000</span>
                 </div>
                 <div class="form-group">
@@ -222,18 +274,18 @@
                     <input type="text" id="blogTags" placeholder="例如：Python, Flask, CSS, Linux..." maxlength="200">
                 </div>
                 <div class="form-group">
-                    <label for="blogImage">图片（可选，选择本地图片或输入URL）</label>
+                    <label for="blogImageFile">图片（可选，选择本地图片或输入URL）</label>
                     <input type="file" id="blogImageFile" accept="image/*" style="margin-bottom: 8px;">
                     <input type="text" id="blogImage" placeholder="或输入图片URL地址，例如：images/photo.jpg" maxlength="500">
                     <div id="imagePreview" style="margin-top: 8px; display: none;">
                         <img id="imagePreviewImg" src="" alt="预览" style="max-width: 200px; max-height: 150px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.2);">
-                        <button type="button" id="clearImageBtn" style="display: block; margin-top: 4px; background: none; border: none; color: #ff6b6b; cursor: pointer; font-size: 13px;">✕ 清除图片</button>
+                        <button type="button" id="clearImageBtn" style="display: block; margin-top: 4px; background: none; border: none; color: #f44336; cursor: pointer; font-size: 13px;">❌ 清除图片</button>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button class="btn-cancel" onclick="closeModal('blogModal')">取消</button>
-                <button class="btn-submit" onclick="saveBlog()">保存</button>
+                <button class="rinui-btn flat" onclick="closeModal('blogModal')">取消</button>
+                <button class="rinui-btn primary" onclick="saveBlog()">💾 保存</button>
             </div>
         </div>
     </div>
@@ -243,7 +295,7 @@
         <div class="modal-content detail-content">
             <div class="modal-header detail-header">
                 <h3 id="detailTitle"></h3>
-                <button class="close-modal" onclick="closeModal('blogDetailModal')">×</button>
+                <button class="close-modal" onclick="closeModal('blogDetailModal')">&times;</button>
             </div>
             <div class="modal-body detail-body">
                 <div id="detailMeta" class="detail-meta"></div>
@@ -252,8 +304,8 @@
                 <div id="detailTags" class="detail-tags"></div>
             </div>
             <div class="modal-footer detail-footer">
-                <button class="btn-cancel" id="detailShareBtn">📋 复制链接</button>
-                <button class="btn-cancel" onclick="closeModal('blogDetailModal')">关闭</button>
+                <button class="rinui-btn flat" id="detailShareBtn">📋 复制链接</button>
+                <button class="rinui-btn flat" onclick="closeModal('blogDetailModal')">关闭</button>
             </div>
         </div>
     </div>

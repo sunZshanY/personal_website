@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="KnowFlow — 个人知识库管理系统，基于 RinUI Fluent Design">
+    <title>KnowFlow · 个人知识库</title>
+    <link rel="icon" href="images/images1.jpg" type="image/jpeg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/knowflow.css">
+</head>
+<body>
+
+    <!-- ==================== Toast 通知容器 ==================== -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- ==================== RinUI 布局 ==================== -->
+    <div class="rinui-layout">
+
+        <!-- ====== 顶部标题栏 (RinUI: #1a1a2e) ====== -->
+        <header class="rinui-topbar">
+            <div class="topbar-left">
+                <span class="topbar-logo-icon">📚</span>
+                <span class="topbar-title">KnowFlow</span>
+                <span class="topbar-subtitle">个人知识库</span>
+            </div>
+
+            <!-- 搜索栏 -->
+            <div class="topbar-search">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="globalSearch" placeholder="搜索知识库..." autocomplete="off">
+                <button class="search-clear hidden" id="searchClear" title="清除搜索">&times;</button>
+            </div>
+
+            <div class="topbar-right">
+                <!-- 视图切换 -->
+                <button class="rinui-btn flat view-toggle active" data-view="grid" title="网格视图">⊞</button>
+                <button class="rinui-btn flat view-toggle" data-view="list" title="列表视图">☰</button>
+
+                <span class="topbar-divider">|</span>
+
+                <!-- 统计 -->
+                <span class="topbar-stat" id="noteCount">0 条笔记</span>
+
+                <!-- 操作 -->
+                <button class="rinui-btn primary" id="newNoteBtn">✏️ 新建笔记</button>
+                <button class="rinui-btn flat" id="exportBtn" title="导出知识库">📤</button>
+                <button class="rinui-btn flat" id="importBtn" title="导入知识库">📥</button>
+                <input type="file" id="importFile" accept=".json" class="hidden">
+            </div>
+        </header>
+
+        <!-- ====== 主体区域 ====== -->
+        <div class="rinui-main">
+
+            <!-- 侧边栏 (RinUI: #16213e) -->
+            <aside class="rinui-sidebar" id="sidebar">
+                <!-- 分类导航 -->
+                <div class="sidebar-section-label">分类</div>
+                <button class="sidebar-nav-btn active" data-filter="all">
+                    <span class="nav-icon">📋</span> 全部笔记
+                    <span class="nav-count" id="countAll">0</span>
+                </button>
+                <button class="sidebar-nav-btn" data-filter="favorites">
+                    <span class="nav-icon">⭐</span> 收藏夹
+                    <span class="nav-count" id="countFav">0</span>
+                </button>
+
+                <div class="sidebar-divider"></div>
+
+                <!-- 动态分类列表 -->
+                <div class="sidebar-section-label">
+                    分类目录
+                    <button class="category-add-btn" id="addCategoryBtn" title="新建分类">+</button>
+                </div>
+                <div class="category-list" id="categoryList">
+                    <!-- 动态渲染 -->
+                </div>
+
+                <div class="sidebar-divider"></div>
+
+                <!-- 标签云 -->
+                <div class="sidebar-section-label">标签</div>
+                <div class="tag-cloud" id="tagCloud">
+                    <!-- 动态渲染 -->
+                </div>
+
+                <div class="sidebar-spacer"></div>
+
+                <!-- 底部信息 -->
+                <div class="sidebar-footer">
+                    <span class="sidebar-version">KnowFlow v1.0.0</span>
+                    <span class="sidebar-storage" id="storageInfo"></span>
+                </div>
+            </aside>
+
+            <!-- 内容区 -->
+            <main class="rinui-content" id="mainContent">
+                <!-- 空状态 -->
+                <div id="emptyState" class="empty-state">
+                    <div class="empty-icon">📭</div>
+                    <p class="empty-title">知识库为空</p>
+                    <p class="empty-subtitle">点击「✏️ 新建笔记」开始记录你的知识吧！</p>
+                    <button class="rinui-btn primary" style="margin-top:16px;" onclick="document.getElementById('newNoteBtn').click()">
+                        ✏️ 创建第一条笔记
+                    </button>
+                </div>
+
+                <!-- 笔记网格/列表 -->
+                <div id="noteGrid" class="note-grid hidden"></div>
+            </main>
+        </div>
+
+        <!-- ====== 底部状态栏 (RinUI: #0f0f23) ====== -->
+        <footer class="rinui-statusbar">
+            <span class="statusbar-left">💾 数据存储于浏览器本地</span>
+            <span class="statusbar-center" id="statusFilter">筛选：全部笔记</span>
+            <span class="statusbar-right">
+                <span id="statusStats"></span>
+                <span class="statusbar-divider">|</span>
+                <span>KnowFlow · 个人知识库</span>
+            </span>
+        </footer>
+    </div>
+
+    <!-- ==================== 笔记编辑弹窗 ==================== -->
+    <div id="noteModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="noteModalTitle">✏️ 新建笔记</h3>
+                <button class="close-modal" id="closeNoteModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="noteId">
+
+                <div class="form-row">
+                    <div class="form-group" style="flex: 2;">
+                        <label for="noteTitle">标题 *</label>
+                        <input type="text" id="noteTitle" placeholder="笔记标题" maxlength="200">
+                    </div>
+                    <div class="form-group" style="flex: 1;">
+                        <label for="noteCategory">分类</label>
+                        <div class="category-select-wrapper">
+                            <select id="noteCategory">
+                                <option value="">无分类</option>
+                            </select>
+                            <button class="rinui-btn flat category-new-btn" id="newCategoryInlineBtn" title="新建分类">+</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="noteContent">内容</label>
+                    <div class="editor-toolbar">
+                        <button class="toolbar-btn" data-action="bold" title="加粗"><b>B</b></button>
+                        <button class="toolbar-btn" data-action="italic" title="斜体"><i>I</i></button>
+                        <button class="toolbar-btn" data-action="heading" title="标题">H</button>
+                        <button class="toolbar-btn" data-action="code" title="代码">&lt;/&gt;</button>
+                        <button class="toolbar-btn" data-action="list" title="列表">≡</button>
+                        <button class="toolbar-btn" data-action="link" title="链接">🔗</button>
+                        <span class="toolbar-spacer"></span>
+                        <button class="toolbar-btn" id="previewToggle" title="预览">👁 预览</button>
+                    </div>
+                    <textarea id="noteContent" rows="10" placeholder="开始记录你的知识...&#10;&#10;支持简单 Markdown 格式：&#10;# 标题&#10;**加粗** *斜体*&#10;- 列表项&#10;`代码`" maxlength="50000"></textarea>
+                    <div id="contentPreview" class="content-preview hidden"></div>
+                    <span class="char-count" id="noteCharCount">0 / 50000</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="noteTags">标签（用逗号分隔）</label>
+                    <input type="text" id="noteTags" placeholder="例如：Python, 教程, 笔记..." maxlength="300">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="rinui-btn flat" id="cancelNoteBtn">取消</button>
+                <button class="rinui-btn flat" id="favToggleBtn" title="收藏">⭐</button>
+                <button class="rinui-btn primary" id="saveNoteBtn">💾 保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 删除确认弹窗 ==================== -->
+    <div id="confirmModal" class="modal hidden">
+        <div class="modal-content" style="max-width: 400px;">
+            <div class="modal-header">
+                <h3>⚠️ 确认删除</h3>
+                <button class="close-modal" id="closeConfirmModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p style="color:#c0c0d0; text-align:center;" id="confirmMessage">确定要删除这条笔记吗？此操作不可撤销！</p>
+            </div>
+            <div class="modal-footer">
+                <button class="rinui-btn flat" id="cancelConfirmBtn">取消</button>
+                <button class="rinui-btn danger" id="confirmDeleteBtn">🗑️ 删除</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 详情查看弹窗 ==================== -->
+    <div id="detailModal" class="modal hidden">
+        <div class="modal-content detail-content">
+            <div class="modal-header detail-header">
+                <h3 id="detailTitle"></h3>
+                <button class="close-modal" id="closeDetailModal">&times;</button>
+            </div>
+            <div class="modal-body detail-body">
+                <div class="detail-meta" id="detailMeta"></div>
+                <div class="detail-text" id="detailContent"></div>
+                <div class="detail-tags" id="detailTags"></div>
+            </div>
+            <div class="modal-footer detail-footer">
+                <button class="rinui-btn flat" id="detailEditBtn">✏️ 编辑</button>
+                <button class="rinui-btn flat" id="detailDeleteBtn">🗑️ 删除</button>
+                <button class="rinui-btn flat" id="closeDetailBtn">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ==================== 主脚本 ==================== -->
+    <script src="js/knowflow.js" defer></script>
+</body>
+</html>
