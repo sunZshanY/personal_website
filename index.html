@@ -1,319 +1,203 @@
 <!DOCTYPE html>
-<html lang="zh-CN">
+<html lang="zh-CN" dir="ltr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Omiaちゃん的小博客 — 分享编程学习、项目开发与日常生活的个人站点">
-    <meta name="keywords" content="Omia,博客,编程,Python,C++,Java,Linux,中职生">
+    <meta name="description" content="Omiaちゃん的小博客 — 编程学习、项目开发与日常生活">
+    <meta name="keywords" content="Omia,博客,编程,Python,C++,Java,Linux">
     <meta name="author" content="Omiaちゃん">
     <meta property="og:title" content="Omiaちゃん的小博客">
-    <meta property="og:description" content="分享编程学习、项目开发与日常生活的个人站点">
+    <meta property="og:description" content="分享编程学习与日常生活的个人站点">
     <meta property="og:type" content="website">
+    <meta property="og:url" content="https://sunzshany.github.io/">
     <title>Omiaちゃん的小博客</title>
     <link rel="icon" href="images/images1.jpg" type="image/jpeg">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body>
-
-    <!-- ==================== 背景层 ==================== -->
-    <div class="bg-layer" id="bgLayer"></div>
-    <div class="bg-overlay"></div>
-
-    <!-- ==================== Toast 容器 ==================== -->
+<body data-theme="rinui-dark">
+    <!-- 背景层 -->
+    <div class="bg-layer" id="bgLayer" aria-hidden="true"></div>
+    <div class="bg-overlay" aria-hidden="true"></div>
+    <!-- Toast -->
     <div id="toastContainer" class="toast-container" aria-live="polite"></div>
 
-    <!-- ==================== RinUI 主布局 ==================== -->
-    <div class="rinui-layout">
+    <!-- ====== RinUI 布局框架 ====== -->
+    <div class="rinui-layout" id="appRoot">
 
-        <!-- ====== 顶部标题栏 (#1a1a2e) ====== -->
-        <header class="rinui-topbar">
+        <!-- 顶部标题栏 -->
+        <header class="rinui-topbar" role="banner">
             <div class="topbar-left">
-                <img src="images/images1.jpg" alt="Logo" class="topbar-logo">
+                <img src="images/images1.jpg" alt="Omia" class="topbar-logo" width="32" height="32" loading="eager">
                 <span class="topbar-title">🌸 Omiaちゃん Blog</span>
             </div>
-
-            <div class="topbar-center">
-                <span id="typed-text" class="typed-text"></span>
-                <span class="cursor" aria-hidden="true">|</span>
+            <div class="topbar-center" aria-hidden="true">
+                <span id="typed-text" class="typed-text"></span><span class="cursor">|</span>
             </div>
-
-            <div class="topbar-right">
-                <span class="status-indicator" title="API 状态">
+            <nav class="topbar-right" aria-label="工具栏">
+                <span class="status-indicator" title="API连接状态" role="status">
                     <span class="status-dot" id="apiStatusDot"></span>
-                    <span class="status-label" id="apiStatusText">离线模式</span>
+                    <span class="status-label" id="apiStatusText">离线</span>
                 </span>
-                <span class="topbar-separator">|</span>
-                <span id="adminBadge" class="admin-badge hidden">👑 管理员</span>
-                <button id="logoutBtn" class="rinui-btn flat hidden">🚪 登出</button>
-                <button id="loginBtn" class="rinui-btn flat">🔑 登录</button>
-            </div>
+                <span class="topbar-separator" aria-hidden="true">|</span>
+                <span id="adminBadge" class="admin-badge hidden" aria-live="polite">👑</span>
+                <button id="logoutBtn" class="rinui-btn flat hidden" aria-label="退出登录">🚪 登出</button>
+                <button id="loginBtn" class="rinui-btn flat" aria-label="管理员登录">🔑 登录</button>
+            </nav>
         </header>
 
-        <!-- ====== 主体区域 ====== -->
+        <!-- 主体 -->
         <div class="rinui-main">
-
-            <!-- 侧边导航 (#16213e) -->
+            <!-- 侧边栏 -->
             <nav class="rinui-sidebar" aria-label="主导航">
-                <span class="sidebar-label">导航菜单</span>
-
-                <button class="sidebar-btn active" data-panel="blog" aria-current="page">
-                    <span class="sidebar-btn-icon">📋</span> 博客内容
-                </button>
-                <button class="sidebar-btn" data-panel="projects">
-                    <span class="sidebar-btn-icon">📁</span> 个人项目
-                </button>
-                <button class="sidebar-btn disabled" data-panel="friends" disabled>
-                    <span class="sidebar-btn-icon">🔗</span> 友链
-                </button>
-                <button class="sidebar-btn" data-panel="about">
-                    <span class="sidebar-btn-icon">👤</span> 个人简介
-                </button>
-
-                <span class="sidebar-label" style="margin-top:14px;">工具</span>
-                <a href="knowflow/index.html" class="sidebar-btn" style="text-decoration:none;">
-                    <span class="sidebar-btn-icon">📚</span> KnowFlow 知识库
-                </a>
-
-                <span class="sidebar-label" style="margin-top:14px;">管理</span>
-                <button class="sidebar-btn admin-only hidden" id="sidebarNewBlog" data-action="new-blog">
-                    <span class="sidebar-btn-icon">✏️</span> 新建博客
-                </button>
-
+                <span class="sidebar-label">导航</span>
+                <button class="sidebar-btn active" data-panel="blog" aria-current="page">📋 博客</button>
+                <button class="sidebar-btn" data-panel="projects">📁 项目</button>
+                <button class="sidebar-btn disabled" data-panel="friends" disabled>🔗 友链</button>
+                <button class="sidebar-btn" data-panel="about">👤 关于</button>
+                <span class="sidebar-label">工具</span>
+                <a href="knowflow/index.html" class="sidebar-btn" style="text-decoration:none">📚 知识库</a>
+                <span class="sidebar-label">管理</span>
+                <button class="sidebar-btn admin-only hidden" id="sidebarNewBlog" data-action="new-blog">✏️ 写博客</button>
                 <span class="sidebar-spacer"></span>
-                <span class="sidebar-version">v2.0.0</span>
+                <span class="sidebar-version">v3.0</span>
             </nav>
 
             <!-- 内容区 -->
-            <main class="rinui-content">
+            <main class="rinui-content" id="mainContent" role="main">
 
-                <!-- ====== 博客内容 ====== -->
-                <section id="blog" class="content-panel active" aria-label="博客内容">
+                <!-- ====== 博客面板 ====== -->
+                <section id="blog" class="content-panel active" aria-labelledby="blogHeading">
                     <div class="panel-header">
-                        <h2 class="panel-title">📋 博客内容</h2>
+                        <h2 class="panel-title" id="blogHeading">📋 博客内容</h2>
                         <button id="addBlogBtn" class="rinui-btn primary hidden">✏️ 发布新博客</button>
                     </div>
                     <div class="search-bar">
                         <span class="search-icon" aria-hidden="true">🔍</span>
-                        <input type="text" id="blogSearch" placeholder="搜索博客标题、内容或标签..." autocomplete="off" aria-label="搜索博客">
+                        <input type="search" id="blogSearch" placeholder="搜索标题、内容或标签..." autocomplete="off" aria-label="搜索博客">
                     </div>
-                    <div id="blogList" class="blog-list" role="feed"></div>
+                    <div id="blogList" class="blog-list" role="feed" aria-label="博客文章列表"></div>
                     <div id="blogEmpty" class="empty-state hidden">
                         <span class="empty-icon" aria-hidden="true">📭</span>
-                        <p class="empty-title">暂无博客文章</p>
-                        <p class="empty-subtitle">登录后点击「新建博客」开始创作吧</p>
+                        <p class="empty-title">暂无博客</p>
+                        <p class="empty-subtitle">登录后可发布文章</p>
                     </div>
                 </section>
 
-                <!-- ====== 个人项目 ====== -->
-                <section id="projects" class="content-panel" aria-label="个人项目">
-                    <h2 class="panel-title" style="text-align:center;">📁 个人项目开发</h2>
-
+                <!-- ====== 项目面板 ====== -->
+                <section id="projects" class="content-panel" aria-labelledby="projectsHeading">
+                    <h2 class="panel-title" id="projectsHeading" style="text-align:center">📁 个人项目</h2>
                     <div class="project-card">
                         <div class="project-card-header">
                             <h3>WEB_TODO</h3>
-                            <a href="https://sunzshany.github.io/TODO/" class="rinui-btn success" target="_blank" rel="noopener">
-                                🚀 立即体验
-                            </a>
+                            <a href="https://sunzshany.github.io/TODO/" class="rinui-btn success" target="_blank" rel="noopener noreferrer">🚀 立即体验</a>
                         </div>
-                        <p class="project-desc">运用 HTML、CSS、JavaScript 以及 Python Flask 框架等技术开发的 TODO 事项管理工具，支持任务的增删改查和分类管理。</p>
+                        <p class="project-desc">基于 HTML/CSS/JavaScript + Python Flask 的 TODO 事项管理工具，支持任务增删改查与分类管理。</p>
                         <div class="project-tags">
-                            <span class="rinui-tag">HTML</span>
-                            <span class="rinui-tag">CSS</span>
-                            <span class="rinui-tag">JavaScript</span>
-                            <span class="rinui-tag">Python</span>
+                            <span class="rinui-tag">HTML</span><span class="rinui-tag">CSS</span><span class="rinui-tag">JavaScript</span><span class="rinui-tag">Python</span>
                         </div>
                     </div>
                 </section>
 
-                <!-- ====== 友链 ====== -->
-                <section id="friends" class="content-panel" aria-label="友链">
-                    <h2 class="panel-title" style="text-align:center;">🔗 友链</h2>
-                    <div class="empty-state">
-                        <span class="empty-icon" aria-hidden="true">🔗</span>
-                        <p class="empty-title">暂未添加友链</p>
-                        <p class="empty-subtitle">敬请期待...</p>
-                    </div>
+                <!-- ====== 友链面板 ====== -->
+                <section id="friends" class="content-panel" aria-labelledby="friendsHeading">
+                    <h2 class="panel-title" id="friendsHeading" style="text-align:center">🔗 友链</h2>
+                    <div class="empty-state"><span class="empty-icon" aria-hidden="true">🔗</span><p class="empty-title">暂无友链</p><p class="empty-subtitle">敬请期待</p></div>
                 </section>
 
-                <!-- ====== 个人简介 ====== -->
-                <section id="about" class="content-panel" aria-label="个人简介">
-                    <h2 class="panel-title" style="text-align:center;">👤 个人简介喵~</h2>
+                <!-- ====== 关于面板 ====== -->
+                <section id="about" class="content-panel" aria-labelledby="aboutHeading">
+                    <h2 class="panel-title" id="aboutHeading" style="text-align:center">👤 关于我</h2>
                     <div class="about-content">
-                        <img src="images/images1.jpg" alt="Omiaちゃん" class="profile-image">
-                        <p>Hello Everyone，我是Omiaちゃん，一名普通の中职生，爱好是写代码、玩FPS类游戏、音游等......</p>
-                        
-                        <p>这些是我经常使用的IDE和前端语言</p>
-                        <p>
-                            <a href="https://skillicons.dev">
-                                <img src="https://skillicons.dev/icons?i=html,css,javascript,pycharm,clion,webstorm,idea,vscode">
-                             </a>
-                        </p>
+                        <img src="images/images1.jpg" alt="Omiaちゃん" class="profile-image" width="110" height="110" loading="lazy">
+                        <p>Hello Everyone，我是Omiaちゃん，一名中职生，爱好写代码、FPS、音游。</p>
 
-                        <!-- GitHub 导航 -->
-                        <a href="https://github.com/sunZshanY" target="_blank" rel="noopener" class="github-link">
-                            <svg class="github-icon" viewBox="0 0 24 24" aria-hidden="true">
-                                <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.385-1.335-1.755-1.335-1.755-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12z"/>
+                        <!-- GitHub -->
+                        <a href="https://github.com/sunZshanY" target="_blank" rel="noopener noreferrer" class="github-link">
+                            <svg class="github-icon" viewBox="0 0 24 24" aria-hidden="true" width="22" height="22">
+                                <path fill="currentColor" d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.385-1.335-1.755-1.335-1.755-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12z"/>
                             </svg>
                             GitHub · sunZshanY
                         </a>
 
-                        <!-- 编程语言排行 -->
+                        <!-- 编程语言 -->
                         <div class="skill-card">
-                            <h3 class="skill-heading">我认为最牛逼的编程语言</h3>
+                            <h3 class="skill-heading">编程语言</h3>
                             <div class="skill-list">
-                                <div class="skill-item">
-                                    <span class="skill-rank">🥇 No.1</span>
-                                    <span class="skill-name">Python</span>
-                                    <span class="skill-desc">简洁优雅，强大灵活</span>
-                                </div>
-                                <div class="skill-item">
-                                    <span class="skill-rank">🥈 No.2</span>
-                                    <span class="skill-name">C++</span>
-                                    <span class="skill-desc">高性能系统开发</span>
-                                </div>
-                                <div class="skill-item">
-                                    <span class="skill-rank">🥉 No.3</span>
-                                    <span class="skill-name">Java</span>
-                                    <span class="skill-desc">跨平台企业级开发</span>
-                                </div>
+                                <div class="skill-item">🥇 Python<span class="skill-desc">简洁优雅</span></div>
+                                <div class="skill-item">🥈 C++<span class="skill-desc">高性能</span></div>
+                                <div class="skill-item">🥉 Java<span class="skill-desc">企业级</span></div>
                             </div>
                         </div>
 
-                        <!-- Linux 发行版排行 -->
+                        <!-- Linux -->
                         <div class="skill-card">
-                            <h3 class="skill-heading">我认为最牛逼的Linux发行版</h3>
+                            <h3 class="skill-heading">Linux 发行版</h3>
                             <div class="linux-list">
-                                <div class="linux-item">
-                                    <span class="linux-rank">🥇 No.1</span>
-                                    <span class="linux-name">Arch Linux</span>
-                                    <span class="linux-desc">BTW I USE Arch</span>
-                                </div>
-                                <div class="linux-item">
-                                    <span class="linux-rank">🥈 No.2</span>
-                                    <span class="linux-name">Ubuntu</span>
-                                    <span class="linux-desc">新手的最佳Linux发行版</span>
-                                </div>
-                                <div class="linux-item">
-                                    <span class="linux-rank">🥉 No.3</span>
-                                    <span class="linux-name">Debian</span>
-                                    <span class="linux-desc">稳定可靠的发行版系统</span>
-                                </div>
+                                <div class="linux-item">🥇 Arch Linux<span class="linux-desc">BTW</span></div>
+                                <div class="linux-item">🥈 Ubuntu<span class="linux-desc">新手首选</span></div>
+                                <div class="linux-item">🥉 Debian<span class="linux-desc">稳定可靠</span></div>
                             </div>
                         </div>
                     </div>
                 </section>
-
             </main>
         </div>
 
-        <!-- ====== 底部状态栏 (#0f0f23) ====== -->
+        <!-- 底部状态栏 -->
         <footer class="rinui-statusbar" role="contentinfo">
-            <span class="statusbar-item">🎨 雫API · sunzshany.github.io</span>
-            <span class="statusbar-item statusbar-center">
-                👥 今日浏览：<span id="visitorCount">0</span> 人
-            </span>
-            <span class="statusbar-item">
+            <span>🎨 雫API</span>
+            <span class="statusbar-center">👥 浏览：<span id="visitorCount">0</span></span>
+            <span>
                 <span id="statusUser">🔒 未登录</span>
                 <span class="statusbar-separator">|</span>
-                <span class="hidden-login" id="hiddenLogin" title="管理员登录">© sunZshanY.inc</span>
+                <span class="hidden-login" id="hiddenLogin">© sunZshanY.inc</span>
                 <span class="statusbar-separator">|</span>
                 <span>萌ICP1145141919</span>
             </span>
         </footer>
     </div>
 
-    <!-- ==================== 管理员登录弹窗 ==================== -->
+    <!-- ====== 登录弹窗 ====== -->
     <div id="loginModal" class="modal hidden" role="dialog" aria-modal="true" aria-label="管理员登录">
         <div class="modal-content">
-            <div class="modal-header">
-                <h3>🔑 管理员登录</h3>
-                <button class="modal-close" onclick="closeModal('loginModal')" aria-label="关闭">&times;</button>
-            </div>
+            <div class="modal-header"><h3>🔑 管理员登录</h3><button class="modal-close" onclick="closeModal('loginModal')" aria-label="关闭">&times;</button></div>
             <div class="modal-body">
-                <div class="form-field">
-                    <label for="username">用户名</label>
-                    <input type="text" id="username" placeholder="请输入用户名" autocomplete="username">
-                </div>
-                <div class="form-field">
-                    <label for="password">密码</label>
-                    <input type="password" id="password" placeholder="请输入密码" autocomplete="current-password">
-                </div>
+                <div class="form-field"><label for="username">用户名</label><input type="text" id="username" placeholder="用户名" autocomplete="username"></div>
+                <div class="form-field"><label for="password">密码</label><input type="password" id="password" placeholder="密码" autocomplete="current-password"></div>
                 <div class="form-error" id="loginError"></div>
             </div>
-            <div class="modal-footer">
-                <button class="rinui-btn flat" onclick="closeModal('loginModal')">取消</button>
-                <button class="rinui-btn primary" onclick="adminLogin()">登录</button>
-            </div>
+            <div class="modal-footer"><button class="rinui-btn flat" onclick="closeModal('loginModal')">取消</button><button class="rinui-btn primary" onclick="adminLogin()">登录</button></div>
         </div>
     </div>
 
-    <!-- ==================== 博客编辑弹窗 ==================== -->
+    <!-- ====== 博客编辑弹窗 ====== -->
     <div id="blogModal" class="modal hidden" role="dialog" aria-modal="true" aria-label="编辑博客">
         <div class="modal-content">
-            <div class="modal-header">
-                <h3 id="blogModalTitle">✏️ 发布新博客</h3>
-                <button class="modal-close" onclick="closeModal('blogModal')" aria-label="关闭">&times;</button>
-            </div>
+            <div class="modal-header"><h3 id="blogModalTitle">✏️ 发布新博客</h3><button class="modal-close" onclick="closeModal('blogModal')" aria-label="关闭">&times;</button></div>
             <div class="modal-body">
                 <input type="hidden" id="blogId">
-                <div class="form-field">
-                    <label for="blogTitle">标题 <span class="required">*</span></label>
-                    <input type="text" id="blogTitle" placeholder="请输入博客标题" maxlength="100" required>
-                </div>
-                <div class="form-field">
-                    <label for="blogDate">日期 <span class="required">*</span></label>
-                    <input type="date" id="blogDate" required>
-                </div>
-                <div class="form-field">
-                    <label for="blogContent">内容</label>
-                    <textarea id="blogContent" rows="6" placeholder="请输入博客内容..." maxlength="5000"></textarea>
-                    <span class="char-count" id="charCount">0 / 5000</span>
-                </div>
-                <div class="form-field">
-                    <label for="blogTags">标签（用逗号分隔）</label>
-                    <input type="text" id="blogTags" placeholder="例如：Python, Flask, CSS, Linux..." maxlength="200">
-                </div>
-                <div class="form-field">
-                    <label>图片（可选，本地文件或 URL）</label>
-                    <input type="file" id="blogImageFile" accept="image/*" style="margin-bottom:8px;">
-                    <input type="text" id="blogImage" placeholder="或输入图片 URL 地址" maxlength="500">
-                    <div id="imagePreview" class="image-preview hidden">
-                        <img id="imagePreviewImg" src="" alt="图片预览">
-                        <button type="button" id="clearImageBtn" class="image-clear-btn">✕ 清除图片</button>
-                    </div>
-                </div>
+                <div class="form-field"><label for="blogTitle">标题 *</label><input type="text" id="blogTitle" placeholder="博客标题" maxlength="100" required></div>
+                <div class="form-field"><label for="blogDate">日期 *</label><input type="date" id="blogDate" required></div>
+                <div class="form-field"><label for="blogContent">内容</label><textarea id="blogContent" rows="6" placeholder="博客内容..." maxlength="5000"></textarea><span class="char-count" id="charCount">0/5000</span></div>
+                <div class="form-field"><label for="blogTags">标签（逗号分隔）</label><input type="text" id="blogTags" placeholder="Python, CSS, Linux..." maxlength="200"></div>
+                <div class="form-field"><label>图片（可选）</label><input type="file" id="blogImageFile" accept="image/*"><input type="text" id="blogImage" placeholder="或输入图片URL" maxlength="500"><div id="imagePreview" class="image-preview hidden"><img id="imagePreviewImg" src="" alt="预览"><button type="button" id="clearImageBtn" class="image-clear-btn">✕ 清除</button></div></div>
             </div>
-            <div class="modal-footer">
-                <button class="rinui-btn flat" onclick="closeModal('blogModal')">取消</button>
-                <button class="rinui-btn primary" onclick="saveBlog()">💾 保存</button>
-            </div>
+            <div class="modal-footer"><button class="rinui-btn flat" onclick="closeModal('blogModal')">取消</button><button class="rinui-btn primary" onclick="saveBlog()">💾 保存</button></div>
         </div>
     </div>
 
-    <!-- ==================== 博客详情弹窗 ==================== -->
+    <!-- ====== 博客详情弹窗 ====== -->
     <div id="blogDetailModal" class="modal hidden" role="dialog" aria-modal="true" aria-label="博客详情">
         <div class="modal-content modal-detail">
-            <div class="modal-header detail-header">
-                <h3 id="detailTitle"></h3>
-                <button class="modal-close" onclick="closeModal('blogDetailModal')" aria-label="关闭">&times;</button>
-            </div>
-            <div class="modal-body detail-body">
-                <div id="detailMeta" class="detail-meta"></div>
-                <div id="detailImageWrapper" class="detail-image-wrapper hidden"></div>
-                <div id="detailContent" class="detail-text"></div>
-                <div id="detailTags" class="detail-tags"></div>
-            </div>
-            <div class="modal-footer detail-footer">
-                <button class="rinui-btn flat" id="detailShareBtn">📋 复制链接</button>
-                <button class="rinui-btn flat" onclick="closeModal('blogDetailModal')">关闭</button>
-            </div>
+            <div class="modal-header detail-header"><h3 id="detailTitle"></h3><button class="modal-close" onclick="closeModal('blogDetailModal')" aria-label="关闭">&times;</button></div>
+            <div class="modal-body detail-body"><div id="detailMeta" class="detail-meta"></div><div id="detailImageWrapper" class="detail-image-wrapper hidden"></div><div id="detailContent" class="detail-text"></div><div id="detailTags" class="detail-tags"></div></div>
+            <div class="modal-footer detail-footer"><button class="rinui-btn flat" id="detailShareBtn">📋 复制链接</button><button class="rinui-btn flat" onclick="closeModal('blogDetailModal')">关闭</button></div>
         </div>
     </div>
 
-    <!-- ==================== 脚本 ==================== -->
     <script src="js/alert.js" defer></script>
 </body>
 </html>
