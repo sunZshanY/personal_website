@@ -4,8 +4,8 @@
 
 <hr>
 
-## ✨ 功能展示
-
-- **个人项目展示**：记录和展示个人开发项目
-- **学习笔记**：分享技术学习心得和笔记
-- **工作经验**：总结工作中的经验教训
+<p>
+  <a href="https://skillicons.dev">
+    <img src="https://skillicons.dev/icons?i=html,css,c,vim,neovim,javascript,node.js">
+  </a>
+</p>
