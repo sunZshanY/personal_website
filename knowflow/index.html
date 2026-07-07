@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>KnowFlow · 个人知识库</title>
+    <link rel="icon" href="../images/images1.jpg" type="image/jpeg">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/knowflow.css">
+</head>
+<body>
+    <div id="toastContainer" class="toast-container" aria-live="polite"></div>
+
+    <div class="rinui-layout">
+        <!-- 顶部栏 -->
+        <header class="rinui-topbar">
+            <div class="topbar-left">
+                <a href="../index.html" class="topbar-back" title="返回博客">←</a>
+                <span class="topbar-icon">📚</span>
+                <span class="topbar-title">KnowFlow</span>
+                <span class="topbar-subtitle">个人知识库</span>
+            </div>
+            <div class="topbar-search">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="globalSearch" placeholder="搜索笔记..." autocomplete="off">
+                <button class="search-clear hidden" id="searchClear">&times;</button>
+            </div>
+            <div class="topbar-right">
+                <button class="rinui-btn flat view-toggle active" data-view="grid">⊞</button>
+                <button class="rinui-btn flat view-toggle" data-view="list">☰</button>
+                <span class="topbar-sep">|</span>
+                <span class="topbar-stat" id="noteCount">0 条笔记</span>
+                <button class="rinui-btn primary" id="newNoteBtn">✏️ 新建笔记</button>
+                <button class="rinui-btn flat" id="exportBtn" title="导出">📤</button>
+                <button class="rinui-btn flat" id="importBtn" title="导入">📥</button>
+                <input type="file" id="importFile" accept=".json" class="hidden">
+            </div>
+        </header>
+
+        <!-- 主体 -->
+        <div class="rinui-main">
+            <aside class="rinui-sidebar">
+                <span class="sidebar-label">视图</span>
+                <button class="sidebar-btn active" data-filter="all">📋 全部笔记<span class="btn-count" id="countAll">0</span></button>
+                <button class="sidebar-btn" data-filter="favorites">⭐ 收藏夹<span class="btn-count" id="countFav">0</span></button>
+
+                <span class="sidebar-label">分类<button class="sidebar-action-btn" id="addCategoryBtn" title="新建分类">+</button></span>
+                <div class="category-list" id="categoryList"></div>
+
+                <span class="sidebar-label">标签</span>
+                <div class="tag-cloud" id="tagCloud"></div>
+
+                <div class="sidebar-spacer"></div>
+                <div class="sidebar-footer">
+                    <span class="sidebar-version">KnowFlow v1.0</span>
+                    <span class="sidebar-storage" id="storageInfo"></span>
+                </div>
+            </aside>
+
+            <main class="rinui-content">
+                <div id="emptyState" class="empty-state">
+                    <span class="empty-icon">📭</span>
+                    <p class="empty-title">知识库为空</p>
+                    <p class="empty-subtitle">点击「✏️ 新建笔记」开始记录</p>
+                    <button class="rinui-btn primary" style="margin-top:16px;" id="emptyNewBtn">✏️ 创建第一条笔记</button>
+                </div>
+                <div id="noteGrid" class="note-grid hidden"></div>
+            </main>
+        </div>
+
+        <footer class="rinui-statusbar">
+            <span>💾 数据存储于浏览器本地</span>
+            <span class="statusbar-center" id="statusFilter">筛选：全部笔记</span>
+            <span><span id="statusStats"></span> | KnowFlow v1.0</span>
+        </footer>
+    </div>
+
+    <!-- 编辑器弹窗 -->
+    <div id="noteModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="noteModalTitle">✏️ 新建笔记</h3>
+                <button class="modal-close" id="closeNoteModal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="noteId">
+                <div class="form-row">
+                    <div class="form-field" style="flex:2;">
+                        <label for="noteTitle">标题 *</label>
+                        <input type="text" id="noteTitle" placeholder="笔记标题" maxlength="200">
+                    </div>
+                    <div class="form-field" style="flex:1;">
+                        <label for="noteCategory">分类</label>
+                        <div class="category-input-row">
+                            <select id="noteCategory"><option value="">无分类</option></select>
+                            <button class="rinui-btn flat" id="newCategoryInlineBtn" title="新建分类">+</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-field">
+                    <label for="noteContent">内容</label>
+                    <div class="editor-toolbar">
+                        <button class="tool-btn" data-action="bold"><b>B</b></button>
+                        <button class="tool-btn" data-action="italic"><i>I</i></button>
+                        <button class="tool-btn" data-action="heading">H</button>
+                        <button class="tool-btn" data-action="code">&lt;/&gt;</button>
+                        <button class="tool-btn" data-action="list">≡</button>
+                        <button class="tool-btn" data-action="link">🔗</button>
+                        <span class="tool-spacer"></span>
+                        <button class="tool-btn" id="previewToggle">👁 预览</button>
+                    </div>
+                    <textarea id="noteContent" rows="10" placeholder="开始记录...&#10;&#10;支持 Markdown: # 标题 **粗体** *斜体* - 列表 `代码`" maxlength="50000"></textarea>
+                    <div id="contentPreview" class="content-preview hidden"></div>
+                    <span class="char-count" id="noteCharCount">0 / 50000</span>
+                </div>
+                <div class="form-field">
+                    <label for="noteTags">标签（逗号分隔）</label>
+                    <input type="text" id="noteTags" placeholder="Python, 教程, 笔记..." maxlength="300">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="rinui-btn flat" id="cancelNoteBtn">取消</button>
+                <button class="rinui-btn flat" id="favToggleBtn" title="收藏">⭐</button>
+                <button class="rinui-btn primary" id="saveNoteBtn">💾 保存</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 删除确认弹窗 -->
+    <div id="confirmModal" class="modal hidden">
+        <div class="modal-content" style="max-width:400px;">
+            <div class="modal-header"><h3>⚠️ 确认删除</h3><button class="modal-close" id="closeConfirmModal">&times;</button></div>
+            <div class="modal-body"><p style="color:#c0c0d0;text-align:center;" id="confirmMessage"></p></div>
+            <div class="modal-footer">
+                <button class="rinui-btn flat" id="cancelConfirmBtn">取消</button>
+                <button class="rinui-btn danger" id="confirmDeleteBtn">🗑️ 删除</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- 详情弹窗 -->
+    <div id="detailModal" class="modal hidden">
+        <div class="modal-content modal-detail">
+            <div class="modal-header detail-header">
+                <h3 id="detailTitle"></h3>
+                <button class="modal-close" id="closeDetailModal">&times;</button>
+            </div>
+            <div class="modal-body detail-body">
+                <div class="detail-meta" id="detailMeta"></div>
+                <div class="detail-text" id="detailContent"></div>
+                <div class="detail-tags" id="detailTags"></div>
+            </div>
+            <div class="modal-footer detail-footer">
+                <button class="rinui-btn flat" id="detailEditBtn">✏️ 编辑</button>
+                <button class="rinui-btn flat" id="detailDeleteBtn">🗑️ 删除</button>
+                <button class="rinui-btn flat" id="closeDetailBtn">关闭</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/knowflow.js" defer></script>
+</body>
+</html>
