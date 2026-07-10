@@ -10,627 +10,330 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg: #0a0e17;
-  --bg2: #111827;
-  --card: rgba(17,24,39,0.85);
-  --card2: rgba(30,41,59,0.75);
-  --border: #1e293b;
-  --border2: #334155;
-  --text: #f1f5f9;
-  --text2: #cbd5e1;
-  --text3: #94a3b8;
-  --text4: #64748b;
-  --accent: #3b82f6;
-  --accent2: #2563eb;
-  --green: #10b981;
-  --green2: #059669;
-  --red: #ef4444;
-  --red2: #dc2626;
-  --gold: #f59e0b;
-  --purple: #8b5cf6;
-  --radius: 12px;
-  --radius-sm: 8px;
-  --shadow: 0 4px 24px rgba(0,0,0,.4);
-  --font: 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
-  --mono: 'JetBrains Mono', monospace;
-  --ease: cubic-bezier(.4,0,.2,1);
-  --spring: cubic-bezier(.34,1.56,.64,1);
+:root{
+  --bg:#0a0e17;--card:rgba(17,24,39,.85);--border:#1e293b;--border2:#334155;
+  --text:#f1f5f9;--text2:#cbd5e1;--text3:#94a3b8;--text4:#64748b;
+  --accent:#3b82f6;--green:#10b981;--red:#ef4444;--gold:#f59e0b;
+  --font:'Noto Sans SC','Microsoft YaHei',sans-serif;--mono:'JetBrains Mono',monospace;
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
-html{scroll-behavior:smooth}
-body{
-  font-family:var(--font);background:var(--bg);color:var(--text2);
-  min-height:100vh;overflow-x:hidden;
-  background-image:radial-gradient(ellipse at 50% -20%,rgba(59,130,246,.08) 0,transparent 70%),
-    radial-gradient(ellipse at 85% 50%,rgba(139,92,246,.05) 0,transparent 60%);
+body{font-family:var(--font);background:var(--bg);color:var(--text2);min-height:100vh}
+/* 门禁 */
+.gate{
+  position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
+  background:rgba(10,14,23,.97);z-index:999;
 }
-
-/* ===== 门禁 ===== */
-.gate-wrap{
-  position:fixed;inset:0;z-index:999;
-  display:flex;align-items:center;justify-content:center;
-  background:rgba(10,14,23,.97);
-  backdrop-filter:blur(20px);
+.gate-box{
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:36px 32px;width:92%;max-width:380px;text-align:center;
+  box-shadow:0 20px 60px rgba(0,0,0,.5);
 }
-.gate-card{
-  background:var(--card);border:1px solid var(--border);
-  border-radius:var(--radius);padding:40px 36px;
-  width:92%;max-width:420px;text-align:center;
-  box-shadow:var(--shadow);
-  animation:slideUp .5s var(--spring);
+.gate-box h2{color:var(--gold);font-size:20px;margin-bottom:24px}
+.gate-box input{
+  display:block;width:100%;padding:10px 14px;margin-bottom:10px;
+  background:rgba(15,23,42,.8);border:1px solid var(--border);border-radius:8px;
+  color:var(--text);font-size:14px;font-family:var(--font);outline:none;
+  transition:border-color .2s;
 }
-.gate-card h2{color:var(--text);font-size:22px;font-weight:700;margin-bottom:4px}
-.gate-card .sub{color:var(--text4);font-size:13px;margin-bottom:28px}
-.gate-card input,.gate-card button{width:100%}
-@keyframes slideUp{from{opacity:0;transform:translateY(30px) scale(.95)}to{opacity:1;transform:translateY(0) scale(1)}}
-@keyframes fadeIn{from{opacity:0}to{opacity:1}}
-@keyframes scaleIn{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
-
-/* ===== 输入框 ===== */
-.inp{
-  display:block;width:100%;padding:11px 14px;margin-bottom:12px;
-  background:rgba(15,23,42,.8);border:1px solid var(--border);
-  border-radius:var(--radius-sm);color:var(--text);font-size:14px;
-  font-family:var(--font);outline:none;
-  transition:border-color .2s var(--ease),box-shadow .2s var(--ease);
+.gate-box input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(59,130,246,.15)}
+.gate-box .err{color:var(--red);font-size:13px;min-height:20px;margin:4px 0}
+.gate-box button{
+  width:100%;padding:10px;background:var(--accent);color:#fff;border:none;
+  border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;margin-top:6px;
 }
-.inp:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(59,130,246,.15)}
-.inp::placeholder{color:var(--text4)}
-textarea.inp{resize:vertical;min-height:100px;font-family:var(--mono);font-size:13px;line-height:1.8}
-
-/* ===== 按钮 ===== */
-.btn{
-  display:inline-flex;align-items:center;justify-content:center;gap:6px;
-  padding:10px 20px;border:none;border-radius:var(--radius-sm);
-  font-size:14px;font-weight:500;font-family:var(--font);
-  cursor:pointer;transition:all .2s var(--ease);
-  text-decoration:none;white-space:nowrap;
-}
-.btn:active{transform:scale(.97)}
-.btn-p{background:var(--accent);color:#fff}
-.btn-p:hover{background:var(--accent2);box-shadow:0 4px 16px rgba(59,130,246,.35)}
-.btn-s{background:linear-gradient(135deg,var(--green),var(--green2));color:#fff}
-.btn-s:hover{box-shadow:0 4px 18px rgba(16,185,129,.35);transform:translateY(-1px)}
-.btn-o{background:transparent;color:var(--accent);border:1px solid var(--border2)}
-.btn-o:hover{border-color:var(--accent);background:rgba(59,130,246,.06)}
-.btn-d{background:rgba(239,68,68,.15);color:var(--red);border:1px solid rgba(239,68,68,.25)}
-.btn-d:hover{background:rgba(239,68,68,.25);color:#fff}
-.btn-xs{padding:5px 12px;font-size:12px;border-radius:6px}
-.btn-sm{padding:8px 16px;font-size:13px}
-.msg{font-size:13px;min-height:20px;margin:6px 0;text-align:center}
-.msg.err{color:var(--red)}.msg.ok{color:var(--green)}
-
-/* ===== 布局 ===== */
+.gate-box button:hover{background:#2563eb}
+/* 布局 */
 .shell{display:flex;flex-direction:column;min-height:100vh}
 .topbar{
   display:flex;align-items:center;justify-content:space-between;
-  height:52px;padding:0 20px;
-  background:rgba(17,24,39,.9);border-bottom:1px solid var(--border);
-  backdrop-filter:blur(12px);position:sticky;top:0;z-index:100;
+  height:48px;padding:0 20px;background:rgba(17,24,39,.9);
+  border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;
 }
-.topbar .logo{color:var(--gold);font-size:15px;font-weight:700;display:flex;align-items:center;gap:8px}
-.topbar .logo i{font-style:normal;font-size:18px}
-.topbar .acts{display:flex;align-items:center;gap:10px}
-
-/* ===== 标签导航 ===== */
-.tabs{
-  display:flex;gap:0;padding:0 16px;
-  background:rgba(17,24,39,.6);border-bottom:1px solid var(--border);
+.topbar span{color:var(--gold);font-weight:700;font-size:15px}
+.main{
+  flex:1;max-width:760px;margin:0 auto;width:100%;padding:24px 20px;
 }
-.tab{
-  padding:14px 22px;background:none;border:none;border-bottom:2px solid transparent;
-  color:var(--text3);font-size:13px;font-weight:500;font-family:var(--font);
-  cursor:pointer;transition:all .2s var(--ease);
-}
-.tab:hover{color:var(--text)}
-.tab.on{color:var(--accent);border-bottom-color:var(--accent)}
-
-/* ===== 主区 ===== */
-.main{flex:1;padding:24px 20px;max-width:900px;margin:0 auto;width:100%}
-.pane{animation:fadeIn .3s var(--ease)}
-
-/* ===== 统计卡片 ===== */
-.stat-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:16px;margin-bottom:28px}
-.stat{
-  background:var(--card);border:1px solid var(--border);border-radius:var(--radius);
-  padding:24px 20px;text-align:center;transition:all .25s var(--ease);
-}
-.stat:hover{border-color:var(--border2);transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.3)}
-.stat .n{display:block;font-size:36px;font-weight:700;color:var(--text);font-family:var(--mono)}
-.stat .l{font-size:13px;color:var(--text4);margin-top:4px}
-.stat .icon{font-size:28px;display:block;margin-bottom:8px}
-
-/* ===== 卡片 ===== */
+/* 卡片 */
 .card{
-  background:var(--card);border:1px solid var(--border);
-  border-radius:var(--radius);padding:24px 28px;margin-bottom:20px;
-  transition:border-color .2s var(--ease);
+  background:var(--card);border:1px solid var(--border);border-radius:12px;
+  padding:24px 28px;margin-bottom:20px;
 }
-.card:hover{border-color:var(--border2)}
-.card h3{color:var(--accent);font-size:16px;font-weight:600;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
-
-/* ===== 表格 ===== */
-.tbl-wrap{overflow-x:auto;margin:-4px}
-.tbl{width:100%;border-collapse:collapse}
-.tbl th{
-  background:var(--bg2);color:var(--text3);font-size:11px;font-weight:600;
-  text-transform:uppercase;letter-spacing:.5px;padding:12px 14px;text-align:left;
-  border-bottom:1px solid var(--border);font-family:var(--font);
+.card h3{color:var(--accent);font-size:15px;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border)}
+.card p,.card li{font-size:14px;line-height:2}
+.card code{background:rgba(15,23,42,.8);padding:2px 8px;border-radius:4px;font-family:var(--mono);font-size:13px;color:var(--gold)}
+/* 按钮 */
+.btn{
+  display:inline-flex;align-items:center;gap:6px;padding:9px 18px;
+  border:none;border-radius:8px;font-size:13px;font-weight:500;font-family:var(--font);
+  cursor:pointer;transition:all .2s;text-decoration:none;
 }
-.tbl td{padding:10px 14px;font-size:13px;border-bottom:1px solid rgba(30,41,59,.5);color:var(--text2)}
-.tbl tbody tr{transition:background .15s var(--ease)}
+.btn-p{background:var(--accent);color:#fff}.btn-p:hover{background:#2563eb}
+.btn-s{background:linear-gradient(135deg,var(--green),#059669);color:#fff}
+.btn-s:hover{box-shadow:0 4px 16px rgba(16,185,129,.35)}
+.btn-o{background:transparent;color:var(--accent);border:1px solid var(--border2)}
+.btn-o:hover{border-color:var(--accent);background:rgba(59,130,246,.06)}
+.btn-d{background:rgba(239,68,68,.12);color:var(--red)}
+.btn-d:hover{background:rgba(239,68,68,.25);color:#fff}
+/* 导出区 */
+.export-area{
+  width:100%;min-height:200px;max-height:400px;background:rgba(15,23,42,.8);
+  border:1px solid var(--border);border-radius:8px;padding:16px 20px;
+  font-family:var(--mono);font-size:12px;color:var(--text3);line-height:1.8;
+  resize:vertical;outline:none;margin:12px 0;
+}
+.export-area:focus{border-color:var(--accent)}
+.btn-row{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
+/* 状态徽章 */
+.badge{
+  display:inline-flex;align-items:center;gap:6px;padding:4px 14px;
+  border-radius:14px;font-size:12px;font-weight:600;
+}
+.badge.on{background:rgba(16,185,129,.12);color:var(--green)}
+.badge.off{background:rgba(100,116,139,.1);color:var(--text4)}
+.dot{width:7px;height:7px;border-radius:50%;display:inline-block}
+.badge.on .dot{background:var(--green);box-shadow:0 0 6px rgba(16,185,129,.5)}
+.badge.off .dot{background:var(--text4)}
+.stat{color:var(--text3);font-size:13px;margin-right:20px}
+.stat strong{color:var(--text);font-size:28px;font-family:var(--mono)}
+.msg{font-size:13px;min-height:20px;margin-top:6px}
+.msg.ok{color:var(--green)}.msg.err{color:var(--red)}
+.hint{color:var(--text4);font-size:12px;margin-top:8px;line-height:1.8}
+/* 表格 */
+.tbl{width:100%;border-collapse:collapse;margin-top:8px}
+.tbl th{background:rgba(30,41,59,.5);color:var(--text3);font-size:11px;text-transform:uppercase;padding:10px 12px;text-align:left;border-bottom:1px solid var(--border)}
+.tbl td{padding:8px 12px;font-size:13px;border-bottom:1px solid rgba(30,41,59,.4)}
 .tbl tbody tr:hover{background:rgba(59,130,246,.04)}
-.tbl .w-id{width:50px;text-align:center}
-.tbl .w-date{width:110px}
-.tbl .w-act{width:130px}
-.tag-dot{
-  display:inline-block;padding:3px 10px;background:rgba(59,130,246,.12);
-  color:var(--accent);border-radius:12px;font-size:11px;
-  font-family:var(--mono);margin:2px 3px;border:1px solid rgba(59,130,246,.15);
-}
-.empty{text-align:center;padding:48px 20px;color:var(--text4)}
-.empty .icon{font-size:40px;display:block;margin-bottom:12px}
-
-/* ===== 弹窗 ===== */
-.modal-mask{
-  position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;
-  background:rgba(0,0,0,.65);backdrop-filter:blur(6px);
-  animation:fadeIn .2s var(--ease);
-}
-.modal{
-  background:var(--card2);border:1px solid var(--border);
-  border-radius:var(--radius);width:92%;max-width:560px;max-height:88vh;
-  overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.5);
-  animation:scaleIn .3s var(--spring);
-}
-.modal .hd{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:18px 24px;border-bottom:1px solid var(--border);
-  background:rgba(15,23,42,.5);position:sticky;top:0;z-index:1;
-}
-.modal .hd h3{color:var(--text);font-size:16px;font-weight:600}
-.modal .bd{padding:20px 24px}
-.modal .ft{display:flex;justify-content:flex-end;gap:10px;padding:16px 24px;border-top:1px solid var(--border)}
-.modal .close{
-  background:none;border:none;color:var(--text4);font-size:22px;
-  cursor:pointer;transition:all .2s var(--ease);line-height:1;
-}
-.modal .close:hover{color:var(--red);transform:rotate(90deg)}
-
-/* ===== 发布状态 ===== */
-.pub-badge{
-  display:inline-flex;align-items:center;gap:6px;padding:6px 16px;
-  border-radius:20px;font-size:13px;font-weight:600;
-}
-.pub-badge.on{background:rgba(16,185,129,.15);color:var(--green);border:1px solid rgba(16,185,129,.25)}
-.pub-badge.off{background:rgba(100,116,139,.1);color:var(--text4);border:1px solid rgba(100,116,139,.15)}
-.pub-dot{width:8px;height:8px;border-radius:50%;display:inline-block}
-.pub-badge.on .pub-dot{background:var(--green);box-shadow:0 0 8px rgba(16,185,129,.5)}
-.pub-badge.off .pub-dot{background:var(--text4)}
-
-/* ===== Toast ===== */
-.toast-fixed{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:9999;pointer-events:none}
-.toast{
-  padding:10px 22px;border-radius:8px;font-size:14px;font-weight:500;
-  color:#fff;backdrop-filter:blur(16px);
-  animation:slideUp .35s var(--spring);pointer-events:auto;
-  margin-bottom:8px;text-align:center;white-space:nowrap;
-}
-.toast.ok{background:rgba(16,185,129,.9)}
-.toast.err{background:rgba(239,68,68,.9)}
-.toast.info{background:rgba(59,130,246,.9)}
-
-/* ===== 响应式 ===== */
+.tag{display:inline-block;padding:2px 8px;background:rgba(59,130,246,.1);color:var(--accent);border-radius:10px;font-size:11px;font-family:var(--mono);margin:1px 3px}
+.empty{text-align:center;padding:40px;color:var(--text4)}
+/* 响应式 */
 @media(max-width:640px){
-  .topbar{padding:0 14px}
-  .topbar .logo{font-size:13px}
-  .tabs{overflow-x:auto;padding:0 4px}
-  .tab{padding:12px 14px;font-size:12px;white-space:nowrap}
-  .main{padding:16px 12px}
-  .stat-grid{grid-template-columns:1fr 1fr;gap:10px}
-  .stat{padding:18px 14px}.stat .n{font-size:28px}
-  .card{padding:18px 16px}
-  .modal{max-width:100%;border-radius:var(--radius) var(--radius) 0 0;max-height:94vh}
-  .gate-card{padding:28px 24px}
+  .main{padding:16px 12px}.card{padding:18px 16px}
 }
 </style>
 </head>
 <body>
 
-<div id="app">
-
-  <!-- ======================== 门禁 ======================== -->
-  <div class="gate-wrap" v-if="!authed">
-    <div class="gate-card">
-
-      <!-- 登录模式 -->
-      <template v-if="hasCred">
-        <h2>管理认证</h2>
-        <p class="sub">请输入管理员凭证</p>
-        <input class="inp" v-model="loginUser" placeholder="用户名" @keyup.enter="doLogin" autocomplete="off">
-        <input class="inp" type="password" v-model="loginPass" placeholder="密码" @keyup.enter="doLogin">
-        <p class="msg err" v-if="loginErr">{{ loginErr }}</p>
-        <button class="btn btn-p" @click="doLogin" style="width:100%;margin-top:8px">登 录</button>
-        <p style="margin-top:14px;font-size:12px;color:var(--text4)">
-          <a @click="resetCred" style="color:var(--accent);cursor:pointer;text-decoration:underline">重置账户</a>
-        </p>
-      </template>
-
-      <!-- 首次设置 -->
-      <template v-else>
-        <h2>首次设置</h2>
-        <p class="sub">创建管理员账户</p>
-        <input class="inp" v-model="setupUser" placeholder="设置用户名" autocomplete="off">
-        <input class="inp" type="password" v-model="setupPass" placeholder="设置密码（≥4位）">
-        <input class="inp" type="password" v-model="setupPass2" placeholder="确认密码" @keyup.enter="doSetup">
-        <p class="msg err" v-if="setupErr">{{ setupErr }}</p>
-        <button class="btn btn-p" @click="doSetup" style="width:100%;margin-top:8px">创建账户</button>
-      </template>
-    </div>
+<!-- ==================== 门禁 ==================== -->
+<div id="gate" class="gate">
+  <div class="gate-box">
+    <h2>管理认证</h2>
+    <input type="text" id="gUser" placeholder="用户名" autocomplete="off">
+    <input type="password" id="gPass" placeholder="密码">
+    <p class="err" id="gErr"></p>
+    <button id="gBtn">登 录</button>
   </div>
+</div>
 
-  <!-- ======================== 主面板 ======================== -->
-  <div class="shell" v-if="authed">
+<!-- ==================== 主面板 ==================== -->
+<div id="shell" class="shell" style="display:none">
+  <header class="topbar">
+    <span>📦 控制台</span>
+    <div style="display:flex;align-items:center;gap:10px">
+      <a href="../index.html" class="btn btn-o" style="font-size:12px;padding:6px 14px">🏠 主站</a>
+      <button class="btn btn-d" style="font-size:12px;padding:6px 14px" onclick="logout()">退出</button>
+    </div>
+  </header>
 
-    <!-- 顶栏 -->
-    <header class="topbar">
-      <span class="logo"><i>📦</i> 控制台</span>
-      <div class="acts">
-        <a href="../index.html" class="btn btn-o btn-sm" style="text-decoration:none">🏠 主站</a>
-        <button class="btn btn-d btn-xs" @click="doLogout">退出</button>
-      </div>
-    </header>
+  <main class="main">
 
-    <!-- 标签导航 -->
-    <nav class="tabs">
-      <button v-for="t in tabs" :key="t.id" class="tab" :class="{on:tab===t.id}" @click="tab=t.id">
-        {{ t.label }}
-      </button>
-    </nav>
-
-    <!-- ====== 仪表盘 ====== -->
-    <main class="main">
-    <div class="pane" v-show="tab==='dash'">
-      <div class="stat-grid">
-        <div class="stat"><span class="icon">📝</span><span class="n">{{ posts.length }}</span><span class="l">文章总数</span></div>
-        <div class="stat"><span class="icon">💬</span><span class="n">{{ notes.length }}</span><span class="l">留言数</span></div>
-        <div class="stat"><span class="icon">👁</span><span class="n">{{ eyeCount }}</span><span class="l">浏览人数</span></div>
-        <div class="stat">
-          <span class="pub-badge" :class="published?'on':'off'" style="margin-top:4px">
-            <span class="pub-dot"></span>{{ published?'已发布':'未发布' }}
-          </span><span class="l" style="margin-top:8px">同步状态</span>
-        </div>
-      </div>
-      <div style="display:flex;gap:10px;flex-wrap:wrap">
-        <button class="btn btn-p" @click="openPostDlg()">✏️ 新建文章</button>
-        <button class="btn btn-s" @click="doPublish" v-if="!published">🚀 同步到主站</button>
-        <button class="btn btn-o" @click="doUnpublish" v-if="published">↩ 取消同步</button>
+    <!-- 状态栏 -->
+    <div class="card">
+      <span class="stat">文章：<strong id="cnt">—</strong></span>
+      <span class="stat">同步：</span>
+      <span class="badge off" id="pubBadge"><span class="dot"></span><span id="pubText">未发布</span></span>
+      <div class="btn-row" style="margin-top:12px;padding-top:12px;border-top:1px solid var(--border)">
+        <button class="btn btn-s" id="btnPub">🚀 同步到主站</button>
+        <button class="btn btn-o" id="btnUnpub" style="display:none">↩ 取消同步</button>
         <a href="../index.html" target="_blank" class="btn btn-o" style="text-decoration:none">👁 预览主站</a>
       </div>
     </div>
 
-    <!-- ====== 文章管理 ====== -->
-    <div class="pane" v-show="tab==='posts'">
-      <div class="card">
-        <h3>📋 文章列表</h3>
-        <div style="margin-bottom:12px">
-          <button class="btn btn-p btn-sm" @click="openPostDlg()">✏️ 新建文章</button>
-        </div>
-        <div class="tbl-wrap" v-if="posts.length">
-          <table class="tbl">
-            <thead><tr><th class="w-id">ID</th><th>标题</th><th class="w-date">日期</th><th>标签</th><th class="w-act">操作</th></tr></thead>
-            <tbody>
-              <tr v-for="p in posts" :key="p.id">
-                <td class="w-id">{{ p.id }}</td>
-                <td><strong style="color:var(--text);cursor:pointer" @click="viewPost(p)">{{ p.title }}</strong></td>
-                <td class="w-date">{{ p.date }}</td>
-                <td><span class="tag-dot" v-for="t in p.tags" :key="t">{{ t }}</span></td>
-                <td class="w-act">
-                  <button class="btn btn-o btn-xs" @click="openPostDlg(p)" style="margin-right:4px">编辑</button>
-                  <button class="btn btn-d btn-xs" @click="delPost(p)">删除</button>
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <div class="empty" v-else><span class="icon">📭</span>暂无文章，点击上方按钮创建</div>
+    <!-- 导出 -->
+    <div class="card">
+      <h3>📤 导出 posts.json</h3>
+      <textarea class="export-area" id="exportArea" readonly placeholder="加载中..."></textarea>
+      <div class="btn-row">
+        <button class="btn btn-s" id="btnDL">💾 下载</button>
+        <button class="btn btn-o" id="btnCP">📋 复制</button>
       </div>
     </div>
 
-    <!-- ====== 导入导出 ====== -->
-    <div class="pane" v-show="tab==='io'">
-      <div class="card">
-        <h3>📤 导出 posts.json</h3>
-        <textarea class="inp" :value="exportJSON" readonly style="min-height:260px;font-family:var(--mono);font-size:12px;line-height:1.7"></textarea>
-        <div style="display:flex;gap:10px;margin-top:12px;flex-wrap:wrap">
-          <button class="btn btn-s btn-sm" @click="doDownload">💾 下载 JSON 文件</button>
-          <button class="btn btn-o btn-sm" @click="doCopyExport">📋 复制到剪贴板</button>
-        </div>
-        <p style="color:var(--text4);font-size:11px;margin-top:8px">文件名：posts_{{ today }}.json</p>
-      </div>
-      <div class="card">
-        <h3>📥 导入 JSON 文件</h3>
-        <input type="file" accept=".json" @change="doImport" ref="fileInp" style="display:none">
-        <button class="btn btn-p btn-sm" @click="$refs.fileInp.click()">📂 选择 JSON 文件并导入</button>
-        <p class="msg" :class="importStat.cls" v-if="importStat.msg">{{ importStat.msg }}</p>
-        <p style="color:var(--text4);font-size:11px;margin-top:8px">导入后请点击<b>同步到主站</b>使内容生效，再 git push 永久部署。</p>
-      </div>
+    <!-- 导入 -->
+    <div class="card">
+      <h3>📥 导入 JSON 文件</h3>
+      <input type="file" id="fileInp" accept=".json" style="display:none">
+      <button class="btn btn-p" id="btnImp">📂 选择 JSON 文件导入</button>
+      <p class="msg" id="impMsg"></p>
+      <p class="hint">导入后点击 <b>同步到主站</b> 使内容在主站生效，再 git push 永久部署。</p>
     </div>
 
-    <!-- ====== 账户管理 ====== -->
-    <div class="pane" v-show="tab==='acct'">
-      <div class="card">
-        <h3>🔐 账户信息</h3>
-        <p style="color:var(--text2);margin-bottom:20px">当前管理员：<strong style="color:var(--text)">{{ acctUser }}</strong></p>
-        <div style="max-width:420px">
-          <label style="display:block;color:var(--text3);font-size:12px;margin-bottom:4px;margin-top:12px">当前密码</label>
-          <input class="inp" type="password" v-model="acctOldPass" placeholder="输入当前密码">
-          <label style="display:block;color:var(--text3);font-size:12px;margin-bottom:4px;margin-top:12px">新密码（留空不修改）</label>
-          <input class="inp" type="password" v-model="acctNewPass" placeholder="新密码（≥4位）">
-          <label style="display:block;color:var(--text3);font-size:12px;margin-bottom:4px;margin-top:12px">新用户名（留空不修改）</label>
-          <input class="inp" v-model="acctNewUser" placeholder="新用户名">
-          <p class="msg" :class="acctMsg.cls" v-if="acctMsg.msg">{{ acctMsg.msg }}</p>
-          <div style="display:flex;gap:10px;margin-top:14px">
-            <button class="btn btn-p btn-sm" @click="updateAcct">💾 更新账户</button>
-            <button class="btn btn-d btn-xs" @click="resetAcct">⚠️ 重置</button>
-          </div>
-        </div>
-      </div>
+    <!-- 文章列表 -->
+    <div class="card">
+      <h3>📋 当前文章</h3>
+      <div id="postTable"></div>
     </div>
-    </main>
-  </div>
 
-  <!-- ======================== 文章编辑弹窗 ======================== -->
-  <div class="modal-mask" v-if="dlg.show" @click.self="dlg.show=false">
-    <div class="modal">
-      <div class="hd">
-        <h3>{{ dlg.isNew?'✏️ 新建文章':'✏️ 编辑文章' }}</h3>
-        <button class="close" @click="dlg.show=false">&times;</button>
-      </div>
-      <div class="bd">
-        <label class="inp-label">标题 *</label>
-        <input class="inp" v-model="dlg.title" placeholder="文章标题">
-        <label class="inp-label">日期 *</label>
-        <input class="inp" type="date" v-model="dlg.date">
-        <label class="inp-label">内容 *</label>
-        <textarea class="inp" v-model="dlg.content" placeholder="文章正文..." rows="6"></textarea>
-        <label class="inp-label">标签（逗号分隔）</label>
-        <input class="inp" v-model="dlg.tagsStr" placeholder="编程, Python, 笔记">
-        <label class="inp-label">配图 URL（可选）</label>
-        <input class="inp" v-model="dlg.image" placeholder="images/xxx.jpg 或 https://...">
-      </div>
-      <div class="ft">
-        <button class="btn btn-o" @click="dlg.show=false">取消</button>
-        <button class="btn btn-p" @click="savePost">保存</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- ======================== 文章查看弹窗 ======================== -->
-  <div class="modal-mask" v-if="view.show" @click.self="view.show=false">
-    <div class="modal" style="max-width:660px">
-      <div class="hd">
-        <h3>{{ view.post?.title }}</h3>
-        <button class="close" @click="view.show=false">&times;</button>
-      </div>
-      <div class="bd">
-        <p style="color:var(--text4);font-size:12px;margin-bottom:16px">
-          📅 {{ view.post?.date }} &nbsp;✍️ Omia
-        </p>
-        <div style="color:var(--text2);line-height:2;font-size:14px;white-space:pre-wrap">{{ view.post?.content }}</div>
-        <div style="margin-top:16px">
-          <span class="tag-dot" v-for="t in view.post?.tags" :key="t">{{ t }}</span>
-        </div>
-      </div>
-      <div class="ft">
-        <button class="btn btn-o btn-sm" @click="view.show=false;openPostDlg(view.post)">编辑</button>
-        <button class="btn btn-o btn-sm" @click="view.show=false">关闭</button>
-      </div>
-    </div>
-  </div>
-
-  <!-- Toast -->
-  <div class="toast-fixed"><div class="toast" :class="toast.cls" v-for="t in toasts" :key="t.id">{{ t.msg }}</div></div>
-
+  </main>
 </div>
 
-<script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
 <script>
-const { createApp } = Vue;
-createApp({
-  data(){
-    var hasCred = false;
-    try{
-      var raw = localStorage.getItem('adm_credentials');
-      if(raw){ var c=JSON.parse(raw); if(c.user&&c.hash) hasCred=true; }
-    }catch(e){}
-    var posts=[];
-    try{
-      var r=localStorage.getItem('omiblog_z')||localStorage.getItem('omiblog_posts');
-      if(r) posts=JSON.parse(r);
-    }catch(e){}
-    if(!Array.isArray(posts)) posts=[];
-    return{
-      // auth
-      authed: localStorage.getItem('adm_sesFlag')==='1',
-      hasCred: hasCred,
-      loginUser:'', loginPass:'', loginErr:'',
-      setupUser:'', setupPass:'', setupPass2:'', setupErr:'',
-      // tabs
-      tab:'dash',
-      tabs:[
-        {id:'dash',label:'📊 仪表盘'},
-        {id:'posts',label:'📝 文章管理'},
-        {id:'io',label:'📦 导入导出'},
-        {id:'acct',label:'🔐 账户'}
-      ],
-      // data
-      posts: posts,
-      notes: [], eyeCount: 0,
-      published: localStorage.getItem('omi_published')==='1',
-      // dlg
-      dlg:{show:false,isNew:true,id:null,title:'',date:'',content:'',tagsStr:'',image:''},
-      view:{show:false,post:null},
-      importStat:{msg:'',cls:''},
-      // acct
-      acctOldPass:'',acctNewPass:'',acctNewUser:'',
-      acctUser: hasCred?JSON.parse(localStorage.getItem('adm_credentials')).user:'—',
-      acctMsg:{msg:'',cls:''},
-      // toast
-      toasts:[], tid:0
-    }
-  },
-  computed:{
-    exportJSON(){
-      var data={version:'4.0',updatedAt:new Date().toISOString(),posts:this.posts};
-      return JSON.stringify(data,null,2);
-    },
-    today(){return new Date().toISOString().slice(0,10)}
-  },
-  methods:{
-    // ====== 工具 ======
-    toast(msg,cls){var id=++this.tid;this.toasts.push({id,msg,cls});setTimeout(()=>{this.toasts=this.toasts.filter(t=>t.id!==id)},2600);},
-    sha256(str){
-      return crypto.subtle.digest('SHA-256',new TextEncoder().encode(str))
-        .then(h=>Array.from(new Uint8Array(h)).map(b=>b.toString(16).padStart(2,'0')).join(''));
-    },
-    loadData(){
-      try{var r=localStorage.getItem('omi_comments');this.notes=r?JSON.parse(r):[]}catch(e){this.notes=[]}
-      this.eyeCount=parseInt(localStorage.getItem('kaze_count'))||0;
-    },
+(function(){
+'use strict';
+var DATA_URL = '../data/posts.json';
+var BOX_KEY = 'omiblog_z';
+var PUB_KEY = 'omi_published';
+var BOSS_KEY = 'adm_sesFlag';
+var PASS_KEY = 'adm_pass';  // 简单密码存储
+var DEF_USER = 'admin';
+var DEF_PASS = '123456';
 
-    // ====== 认证 ======
-    doLogin(){
-      this.loginErr='';var u=this.loginUser.trim(),p=this.loginPass;
-      if(!u||!p){this.loginErr='请填写用户名和密码';return}
-      var cred=JSON.parse(localStorage.getItem('adm_credentials'));
-      this.sha256(p).then(h=>{
-        if(u===cred.user&&h===cred.hash){this.authed=true;localStorage.setItem('adm_sesFlag','1');this.loginUser='';this.loginPass='';this.loadData();this.acctUser=cred.user}
-        else this.loginErr='凭证错误，请重试';
-      });
-    },
-    doSetup(){
-      this.setupErr='';var u=this.setupUser.trim(),p=this.setupPass,p2=this.setupPass2;
-      if(!u||u.length<2){this.setupErr='用户名至少2个字符';return}
-      if(!p||p.length<4){this.setupErr='密码至少4位';return}
-      if(p!==p2){this.setupErr='两次密码不一致';return}
-      this.sha256(p).then(h=>{
-        localStorage.setItem('adm_credentials',JSON.stringify({user:u,hash:h}));
-        localStorage.setItem('adm_sesFlag','1');
-        this.authed=true;this.hasCred=true;this.setupUser='';this.setupPass='';this.setupPass2='';
-        this.acctUser=u;this.loadData();this.toast('账户创建成功','ok');
-      });
-    },
-    doLogout(){
-      localStorage.removeItem('adm_sesFlag');this.authed=false;
-      this.loginUser='';this.loginPass='';this.loginErr='';
-    },
-    resetCred(){
-      if(!confirm('确定要重置管理员账户吗？'))return;
-      localStorage.removeItem('adm_credentials');localStorage.removeItem('adm_sesFlag');
-      this.hasCred=false;this.authed=false;this.acctUser='—';
-    },
+var g_posts = [];
 
-    // ====== 文章 CRUD ======
-    openPostDlg(post){
-      if(post){this.dlg={show:true,isNew:false,id:post.id,title:post.title,date:post.date,content:post.content,tagsStr:(post.tags||[]).join(', '),image:post.image||''}}
-      else{var today=new Date().toISOString().slice(0,10);this.dlg={show:true,isNew:true,id:null,title:'',date:today,content:'',tagsStr:'',image:''}}
-    },
-    savePost(){
-      var d=this.dlg;if(!d.title.trim()){this.toast('标题不能为空','err');return}
-      if(!d.content.trim()){this.toast('内容不能为空','err');return}
-      var tags=d.tagsStr.split(/[,，]/).map(t=>t.trim()).filter(Boolean);
-      var obj={id:d.id||0,title:d.title.trim(),date:d.date,content:d.content.trim(),tags:tags,image:d.image.trim()||undefined};
-      if(!obj.image)delete obj.image;
-      if(d.isNew){
-        obj.id=this.posts.length?Math.max(...this.posts.map(p=>p.id))+1:1;
-        this.posts.unshift(obj);this.toast('文章已创建','ok');
-      }else{
-        var idx=this.posts.findIndex(p=>p.id===d.id);
-        if(~idx){this.posts.splice(idx,1,obj);this.toast('文章已更新','ok')}
-      }
-      this.savePosts();this.dlg.show=false;
-    },
-    delPost(post){
-      if(!confirm('确定删除「'+post.title+'」吗？此操作不可恢复。'))return;
-      this.posts=this.posts.filter(p=>p.id!==post.id);
-      this.savePosts();this.toast('文章已删除','info');
-    },
-    viewPost(post){this.view={show:true,post:post}},
-    savePosts(){
-      try{localStorage.setItem('omiblog_z',JSON.stringify(this.posts))}catch(e){this.toast('存储空间不足','err')}
-    },
+// ===== 门禁 =====
+function initGate(){
+  if(localStorage.getItem(BOSS_KEY)==='1'){ showShell();return; }
+  document.getElementById('gate').style.display='';
+  document.getElementById('shell').style.display='none';
+}
 
-    // ====== 导入导出 ======
-    doDownload(){
-      var b=new Blob([this.exportJSON],{type:'application/json'});
-      var a=document.createElement('a');a.href=URL.createObjectURL(b);
-      a.download='posts_'+this.today+'.json';a.click();URL.revokeObjectURL(a.href);
-      this.toast('文件已下载','ok');
-    },
-    doCopyExport(){
-      navigator.clipboard.writeText(this.exportJSON).then(()=>this.toast('已复制到剪贴板','ok'))
-        .catch(()=>{var ta=document.querySelector('.pane textarea');if(ta){ta.select();document.execCommand('copy');this.toast('已复制','ok')}});
-    },
-    doImport(e){
-      this.importStat={msg:'',cls:''};var f=e.target.files[0];if(!f)return;
-      var reader=new FileReader(),self=this;
-      reader.onload=function(ev){
-        try{var data=JSON.parse(ev.target.result)}catch(err){self.importStat={msg:'❌ JSON格式错误: '+err.message,cls:'err'};return}
-        if(!data.posts||!Array.isArray(data.posts)){self.importStat={msg:'❌ 缺少 posts 数组',cls:'err'};return}
-        for(var i=0;i<data.posts.length;i++){var p=data.posts[i];if(!p.id||!p.title||!p.date||!p.content){self.importStat={msg:'❌ 第'+(i+1)+'篇文章缺少必要字段',cls:'err'};return}}
-        self.posts=data.posts;self.savePosts();self.importStat={msg:'✅ 导入成功！共 '+data.posts.length+' 篇文章',cls:'ok'};
-        self.toast('导入成功，请点击同步到主站','ok');
-      };
-      reader.onerror=function(){self.importStat={msg:'❌ 文件读取失败',cls:'err'}};
-      reader.readAsText(f);e.target.value='';
-    },
+function login(){
+  var u = document.getElementById('gUser').value.trim();
+  var p = document.getElementById('gPass').value;
+  var stored = localStorage.getItem(PASS_KEY);
+  var ok = false;
 
-    // ====== 发布 ======
-    doPublish(){
-      this.savePosts();localStorage.setItem('omi_published','1');this.published=true;
-      this.toast('🚀 已同步到主站！','ok');
-    },
-    doUnpublish(){
-      localStorage.removeItem('omi_published');this.published=false;
-      this.toast('↩ 已取消同步，主站恢复服务器数据','info');
-    },
-
-    // ====== 账户 ======
-    updateAcct(){
-      this.acctMsg={msg:'',cls:''};var op=this.acctOldPass;
-      if(!op){this.acctMsg={msg:'请输入当前密码',cls:'err'};return}
-      var cred=JSON.parse(localStorage.getItem('adm_credentials'));
-      this.sha256(op).then(h=>{
-        if(h!==cred.hash){this.acctMsg={msg:'当前密码错误',cls:'err'};return}
-        var nu=this.acctNewUser.trim()||cred.user;
-        var self=this;
-        if(this.acctNewPass.trim()){
-          this.sha256(this.acctNewPass.trim()).then(nh=>{
-            localStorage.setItem('adm_credentials',JSON.stringify({user:nu,hash:nh}));
-            self.acctUser=nu;self.acctOldPass='';self.acctNewPass='';self.acctNewUser='';
-            self.acctMsg={msg:'✅ 账户已更新',cls:'ok'};
-          });
-        }else if(nu!==cred.user){
-          localStorage.setItem('adm_credentials',JSON.stringify({user:nu,hash:cred.hash}));
-          this.acctUser=nu;this.acctOldPass='';this.acctNewPass='';this.acctNewUser='';
-          this.acctMsg={msg:'✅ 用户名已更新',cls:'ok'};
-        }else{this.acctMsg={msg:'未做任何修改',cls:'err'}}
-      });
-    },
-    resetAcct(){
-      if(!confirm('确定重置账户？所有登录信息将被清除。'))return;
-      if(!confirm('再次确认'))return;
-      localStorage.removeItem('adm_credentials');localStorage.removeItem('adm_sesFlag');
-      this.hasCred=false;this.authed=false;this.acctMsg={msg:'',cls:''};
-      this.acctOldPass='';this.acctNewPass='';this.acctNewUser='';
-    }
-  },
-  mounted(){
-    if(this.authed)this.loadData();
+  if(stored){
+    var cred = JSON.parse(stored);
+    if(u===cred.u && p===cred.p) ok=true;
+  } else {
+    // 首次：用默认密码，然后保存
+    if(u===DEF_USER && p===DEF_PASS){ ok=true; localStorage.setItem(PASS_KEY,JSON.stringify({u:u,p:p})); }
   }
-}).mount('#app');
+  if(ok){
+    localStorage.setItem(BOSS_KEY,'1');
+    document.getElementById('gate').style.display='none';
+    document.getElementById('gUser').value='';document.getElementById('gPass').value='';
+    document.getElementById('gErr').textContent='';
+    showShell();
+  } else {
+    document.getElementById('gErr').textContent='凭证错误';
+  }
+}
+
+function logout(){
+  localStorage.removeItem(BOSS_KEY);
+  document.getElementById('gate').style.display='';
+  document.getElementById('shell').style.display='none';
+}
+
+// ===== 数据 =====
+function fetchData(cb){
+  fetch(DATA_URL+'?_t='+Date.now())
+    .then(function(r){if(!r.ok)throw Error('HTTP '+r.status);return r.json()})
+    .then(function(d){
+      if(d&&Array.isArray(d.posts)){g_posts=d.posts;try{localStorage.setItem(BOX_KEY,JSON.stringify(d.posts))}catch(e){}}
+      if(cb)cb(null,d);
+    })
+    .catch(function(e){
+      try{var r=localStorage.getItem(BOX_KEY);g_posts=r?JSON.parse(r):[]}catch(ex){g_posts=[]}
+      if(cb)cb(e,null);
+    });
+}
+
+// ===== 渲染 =====
+function render(){
+  document.getElementById('cnt').textContent=g_posts.length;
+  updatePubBadge();
+
+  // 导出区
+  var ex={version:'4.0',updatedAt:new Date().toISOString(),posts:g_posts};
+  document.getElementById('exportArea').value=JSON.stringify(ex,null,2);
+
+  // 文章表
+  var t=document.getElementById('postTable');
+  if(!g_posts.length){t.innerHTML='<div class="empty">暂无文章</div>';return}
+  var h='<table class="tbl"><thead><tr><th>ID</th><th>标题</th><th>日期</th><th>标签</th></tr></thead><tbody>';
+  g_posts.forEach(function(p){
+    h+='<tr><td>'+p.id+'</td><td><strong style="color:var(--text)">'+esc(p.title)+'</strong></td><td>'+esc(p.date)+'</td><td>'+(p.tags||[]).map(function(t){return'<span class="tag">'+esc(t)+'</span>'}).join(' ')+'</td></tr>';
+  });
+  h+='</tbody></table>';t.innerHTML=h;
+}
+
+function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
+
+function updatePubBadge(){
+  var on=localStorage.getItem(PUB_KEY)==='1';
+  var b=document.getElementById('pubBadge');var t=document.getElementById('pubText');
+  var bp=document.getElementById('btnPub');var bu=document.getElementById('btnUnpub');
+  if(on){b.className='badge on';t.textContent='已发布';bp.style.display='none';bu.style.display=''}
+  else{b.className='badge off';t.textContent='未发布';bp.style.display='';bu.style.display='none'}
+}
+
+// ===== 导出 =====
+function download(){
+  var c=document.getElementById('exportArea').value;
+  if(!c){alert('无数据');return}
+  var b=new Blob([c],{type:'application/json'});
+  var a=document.createElement('a');a.href=URL.createObjectURL(b);
+  a.download='posts_'+new Date().toISOString().slice(0,10)+'.json';a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+function copyExport(){
+  var c=document.getElementById('exportArea').value;
+  navigator.clipboard.writeText(c).then(function(){alert('已复制')})
+    .catch(function(){var ta=document.getElementById('exportArea');ta.select();document.execCommand('copy');alert('已复制')});
+}
+
+// ===== 导入 =====
+function importFile(f){
+  var m=document.getElementById('impMsg');m.textContent='';m.className='msg';
+  var r=new FileReader();
+  r.onload=function(e){
+    try{var d=JSON.parse(e.target.result)}catch(err){m.textContent='❌ JSON格式错误';m.className='msg err';return}
+    if(!d.posts||!Array.isArray(d.posts)){m.textContent='❌ 缺少 posts 数组';m.className='msg err';return}
+    for(var i=0;i<d.posts.length;i++){var p=d.posts[i];if(!p.id||!p.title||!p.date||!p.content){m.textContent='❌ 第'+(i+1)+'篇文章缺少必要字段';m.className='msg err';return}}
+    g_posts=d.posts;
+    try{localStorage.setItem(BOX_KEY,JSON.stringify(d.posts))}catch(e){m.textContent='❌ 存储不足';m.className='msg err';return}
+    render();m.textContent='✅ 导入成功！共 '+d.posts.length+' 篇';m.className='msg ok';
+    updatePubBadge();
+  };
+  r.onerror=function(){m.textContent='❌ 读取失败';m.className='msg err'};
+  r.readAsText(f);
+}
+
+// ===== 发布 =====
+function publish(){
+  try{localStorage.setItem(BOX_KEY,JSON.stringify(g_posts))}catch(e){alert('存储失败');return}
+  localStorage.setItem(PUB_KEY,'1');updatePubBadge();alert('✅ 已同步到主站！');
+}
+
+function unpublish(){
+  localStorage.removeItem(PUB_KEY);updatePubBadge();alert('↩ 已取消同步');
+}
+
+// ===== 事件 =====
+function wire(){
+  document.getElementById('gBtn').addEventListener('click',login);
+  document.getElementById('gPass').addEventListener('keydown',function(e){if(e.key==='Enter')login()});
+  document.getElementById('btnDL').addEventListener('click',download);
+  document.getElementById('btnCP').addEventListener('click',copyExport);
+  document.getElementById('btnImp').addEventListener('click',function(){document.getElementById('fileInp').click()});
+  document.getElementById('fileInp').addEventListener('change',function(){if(this.files[0]){importFile(this.files[0]);this.value=''}});
+  document.getElementById('btnPub').addEventListener('click',publish);
+  document.getElementById('btnUnpub').addEventListener('click',unpublish);
+}
+
+function showShell(){
+  document.getElementById('gate').style.display='none';
+  document.getElementById('shell').style.display='';
+  fetchData(function(){render()});
+}
+
+// 启动
+initGate();wire();
+if(localStorage.getItem(BOSS_KEY)==='1'){fetchData(function(){render()})}
+})();
 </script>
 </body>
 </html>
