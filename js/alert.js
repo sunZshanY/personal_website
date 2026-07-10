@@ -81,26 +81,39 @@
     }
 
     // ========== 背景 (雫API) ==========
-    function _fetchBg() {
+    var FALLBACK_BG = ['images/columbina-5k-3840x2160-25922.jpg','images/oshi-no-ko-3840x2160-25261.jpg','images/sparxie-honkai-star-3840x2160-26290.jpg','images/zhuang-fangyi-3840x2160-26226.jpg'];
+
+    function _setBg(src) {
+        if (!E.bgLayer) return;
+        E.bgLayer.style.backgroundImage = "url('"+src+"')";
+        E.bgLayer.style.opacity = '1';
+    }
+
+    function _randFallback() {
+        return FALLBACK_BG[Math.floor(Math.random()*FALLBACK_BG.length)];
+    }
+
+    function _tryApiBg() {
         return new Promise(function(ok) {
             var img = new Image();
-            var bomb = setTimeout(function(){ img.src=''; ok(null); }, 8000);
-            img.onload = function() { clearTimeout(bomb); ok(img.currentSrc||img.src); };
-            img.onerror = function() { clearTimeout(bomb); ok(null); };
+            var done = false;
+            var bomb = setTimeout(function(){ if(!done){done=true;ok(null)} }, 5000);
+            img.onload = function() { if(!done){done=true;clearTimeout(bomb);ok(img.currentSrc||img.src)} };
+            img.onerror = function() { if(!done){done=true;clearTimeout(bomb);ok(null)} };
             img.src = IMG_API_WIDE + '?_t=' + Date.now();
         });
     }
 
     async function _paintBg() {
         if (!E.bgLayer) return;
-        var src = await _fetchBg();
-        if (src && !~src.indexOf('data:')) {
-            E.bgLayer.style.backgroundImage = "url('"+src+"')";
-            E.bgLayer.style.opacity = '1';
-        } else if (!E.bgLayer.style.backgroundImage || E.bgLayer.style.backgroundImage === 'none') {
-            var fb = ['images/columbina-5k-3840x2160-25922.jpg','images/oshi-no-ko-3840x2160-25261.jpg','images/sparxie-honkai-star-3840x2160-26290.jpg','images/zhuang-fangyi-3840x2160-26226.jpg'];
-            E.bgLayer.style.backgroundImage = "url('"+fb[Math.floor(Math.random()*fb.length)]+"')";
-            E.bgLayer.style.opacity = '1';
+        // 立即显示本地壁纸兜底
+        if (!E.bgLayer.style.backgroundImage || E.bgLayer.style.backgroundImage === 'none') {
+            _setBg(_randFallback());
+        }
+        // 尝试从 API 获取新图片
+        var src = await _tryApiBg();
+        if (src && src.indexOf('data:') === -1) {
+            _setBg(src);
         }
     }
 
