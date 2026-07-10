@@ -385,31 +385,7 @@
             if(e.key==='Escape'){
                 if(E.detailModal&&!E.detailModal.classList.contains('hidden'))window.closeModal('blogDetailModal');
             }
-            // ---- 管理后门：Ctrl+Shift+A ----
-            if((e.ctrlKey||e.metaKey)&&e.shiftKey&&e.key==='.'){
-                e.preventDefault();
-                _pop('管理パネル已解锁，正在跳转...','info');
-                setTimeout(function(){location.href='_p/index.html';},600);
-            }
         });
-
-        // ---- 管理后门：版本号五连击 ----
-        (function(){
-            var verEl=document.querySelector('.sidebar-version');
-            if(!verEl)return;
-            var clicks=0,timer=null;
-            verEl.style.cursor='pointer';
-            verEl.addEventListener('click',function(){
-                clicks++; if(timer)clearTimeout(timer);
-                if(clicks>=5){
-                    clicks=0;
-                    _pop('管理パネル已解锁，正在跳转...','info');
-                    setTimeout(function(){location.href='_p/index.html';},600);
-                    return;
-                }
-                timer=setTimeout(function(){clicks=0;},3000);
-            });
-        })();
 
         window.addEventListener('storage', _onStoreChange, false);
 

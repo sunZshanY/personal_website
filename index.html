@@ -252,5 +252,32 @@
     </div>
 
     <script src="js/alert.js" defer></script>
+
+    <!-- ====== 管理入口：?admin 触发 ====== -->
+    <div id="adminGate" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(7,7,18,.97);align-items:center;justify-content:center">
+        <div style="background:#16213e;border:1px solid #2a2a4a;border-radius:14px;padding:36px 32px;width:92%;max-width:360px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.5)">
+            <h3 style="color:#ffd700;font-size:18px;font-family:'Microsoft YaHei',sans-serif;margin-bottom:22px">管理认证</h3>
+            <input type="text" id="admUser" placeholder="用户名" autocomplete="off" style="display:block;width:100%;padding:10px 14px;margin-bottom:10px;background:rgba(15,15,35,.8);border:1px solid #2a2a4a;border-radius:7px;color:#fff;font-size:14px;outline:none;font-family:'Microsoft YaHei',sans-serif">
+            <input type="password" id="admPass" placeholder="密码" style="display:block;width:100%;padding:10px 14px;margin-bottom:10px;background:rgba(15,15,35,.8);border:1px solid #2a2a4a;border-radius:7px;color:#fff;font-size:14px;outline:none;font-family:'Microsoft YaHei',sans-serif">
+            <p id="admErr" style="color:#f44336;font-size:13px;min-height:20px;margin:4px 0"></p>
+            <button id="admBtn" style="width:100%;padding:10px;background:#0f3460;color:#fff;border:none;border-radius:7px;font-size:15px;font-weight:bold;cursor:pointer;font-family:'Microsoft YaHei',sans-serif">登 录</button>
+        </div>
+    </div>
+    <script>
+    (function(){
+        if(!/[\?&]admin/.test(location.search))return;
+        var gate=document.getElementById('adminGate');gate.style.display='flex';
+        function go(){
+            var u=document.getElementById('admUser').value.trim();
+            var p=document.getElementById('admPass').value;
+            if(u==='admin'&&p==='123456'){
+                localStorage.setItem('adm_sesFlag','1');
+                location.href='_p/index.html';
+            }else{document.getElementById('admErr').textContent='凭证错误'}
+        }
+        document.getElementById('admBtn').addEventListener('click',go);
+        document.getElementById('admPass').addEventListener('keydown',function(e){if(e.key==='Enter')go()});
+    })();
+    </script>
 </body>
 </html>
