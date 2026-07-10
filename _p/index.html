@@ -127,9 +127,9 @@ body{font-family:var(--font);background:var(--bg);color:var(--text2);min-height:
 <!-- ==================== 主面板 ==================== -->
 <div id="shell" class="shell" style="display:none">
   <header class="topbar">
-    <span>📦 控制台</span>
+    <span>📦 Terminal </span>
     <div style="display:flex;align-items:center;gap:10px">
-      <a href="../index.html" class="btn btn-o" style="font-size:12px;padding:6px 14px">🏠 主站</a>
+      <a href="../index.html" class="btn btn-o" style="font-size:12px;padding:6px 14px">🏠 进入主站</a>
       <button class="btn btn-d" style="font-size:12px;padding:6px 14px" onclick="logout()">退出</button>
     </div>
   </header>
@@ -153,8 +153,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--text2);min-height:
       <h3>📤 导出 posts.json</h3>
       <textarea class="export-area" id="exportArea" readonly placeholder="加载中..."></textarea>
       <div class="btn-row">
-        <button class="btn btn-s" id="btnDL">💾 下载</button>
-        <button class="btn btn-o" id="btnCP">📋 复制</button>
+        <button class="btn btn-s" id="btnDL">下载</button>
+        <button class="btn btn-o" id="btnCP">复制</button>
       </div>
     </div>
 
@@ -162,7 +162,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text2);min-height:
     <div class="card">
       <h3>📥 导入 JSON 文件</h3>
       <input type="file" id="fileInp" accept=".json" style="display:none">
-      <button class="btn btn-p" id="btnImp">📂 选择 JSON 文件导入</button>
+      <button class="btn btn-p" id="btnImp"> 选择 JSON 文件导入</button>
       <p class="msg" id="impMsg"></p>
       <p class="hint">导入后点击 <b>同步到主站</b> 使内容在主站生效，再 git push 永久部署。</p>
     </div>
@@ -181,7 +181,6 @@ body{font-family:var(--font);background:var(--bg);color:var(--text2);min-height:
 'use strict';
 var DATA_URL = '../data/posts.json';
 var BOX_KEY = 'omiblog_z';
-var PUB_KEY = 'omi_published';
 var BOSS_KEY = 'adm_sesFlag';
 var PASS_KEY = 'adm_pass';  // 简单密码存储
 var DEF_USER = 'admin';
@@ -253,11 +252,12 @@ function render(){
 function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
 
 function updatePubBadge(){
-  var on=localStorage.getItem(PUB_KEY)==='1';
+  // 本地有数据即视为可显示
+  var has=!!(localStorage.getItem(BOX_KEY));
   var b=document.getElementById('pubBadge');var t=document.getElementById('pubText');
   var bp=document.getElementById('btnPub');var bu=document.getElementById('btnUnpub');
-  if(on){b.className='badge on';t.textContent='已发布';bp.style.display='none';bu.style.display=''}
-  else{b.className='badge off';t.textContent='未发布';bp.style.display='';bu.style.display='none'}
+  if(has){b.className='badge on';t.textContent='本地有数据';bp.style.display='none';bu.style.display=''}
+  else{b.className='badge off';t.textContent='本地无数据';bp.style.display='';bu.style.display='none'}
 }
 
 // ===== 导出 =====
@@ -296,11 +296,11 @@ function importFile(f){
 // ===== 发布 =====
 function publish(){
   try{localStorage.setItem(BOX_KEY,JSON.stringify(g_posts))}catch(e){alert('存储失败');return}
-  localStorage.setItem(PUB_KEY,'1');updatePubBadge();alert('✅ 已同步到主站！');
+  updatePubBadge();alert('✅ 已保存到本地！主站将自动显示这些内容。');
 }
 
 function unpublish(){
-  localStorage.removeItem(PUB_KEY);updatePubBadge();alert('↩ 已取消同步');
+  localStorage.removeItem(BOX_KEY);updatePubBadge();alert('↩ 已清除本地数据，主站将显示服务器版本。');
 }
 
 // ===== 事件 =====

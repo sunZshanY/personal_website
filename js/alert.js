@@ -118,23 +118,25 @@
     var EYE_FLAG = 'kaze_flag';
 
     function _loadPosts() {
-        // 优先检查管理员是否发布了本地更新（未 git push 的版本）
-        var PUB_FLAG = 'omi_published';
-        if (localStorage.getItem(PUB_FLAG) === '1') {
-            try {
-                var r = localStorage.getItem(BOX_KEY);
-                if (r) {
-                    var parsed = JSON.parse(r);
-                    if (Array.isArray(parsed) && parsed.length > 0) {
-                        g_postHeap = parsed;
-                        console.log('📦 使用管理员发布的本地数据（' + parsed.length + ' 篇）');
-                        return Promise.resolve();
-                    }
+        // 最简逻辑：本地有数据优先用，没有则从服务器取
+        try {
+            var r = localStorage.getItem(BOX_KEY);
+            if (r) {
+                var parsed = JSON.parse(r);
+                if (Array.isArray(parsed) && parsed.length > 0) {
+                    g_postHeap = parsed;
+                    console.log('📦 使用本地数据（' + parsed.length + ' 篇）');
+                    // 后台异步刷新服务器数据
+                    fetch(DATA_URL + '?_t=' + Date.now())
+                        .then(function(resp){ if(resp.ok) return resp.json() })
+                        .then(function(data){ if(data&&Array.isArray(data.posts)){localStorage.setItem(BOX_KEY,JSON.stringify(data.posts))} })
+                        .catch(function(){});
+                    return Promise.resolve();
                 }
-            } catch(e) { /* 回退到服务器加载 */ }
-        }
+            }
+        } catch(e) {}
 
-        // 优先从 JSON 文件加载（GitHub 托管的最新数据）
+        // 本地无数据，从服务器加载
         return fetch(DATA_URL + '?_t=' + Date.now())
             .then(function(r) {
                 if (!r.ok) throw new Error('HTTP ' + r.status);
@@ -143,21 +145,14 @@
             .then(function(data) {
                 if (data && Array.isArray(data.posts)) {
                     g_postHeap = data.posts;
-                    // 同步到 localStorage 作为缓存（供 read.html 使用）
                     try { localStorage.setItem(BOX_KEY, JSON.stringify(g_postHeap)); } catch(e) {}
                 } else {
                     throw new Error('Invalid format');
                 }
             })
             .catch(function(err) {
-                console.warn('⚠️ 无法加载 data/posts.json，使用 localStorage 缓存:', err.message);
-                // 降级：从 localStorage 读取缓存
-                try {
-                    var r = localStorage.getItem(BOX_KEY);
-                    g_postHeap = r ? JSON.parse(r) : [];
-                } catch(e) {
-                    g_postHeap = [];
-                }
+                console.warn('⚠️ 无法加载 data/posts.json:', err.message);
+                g_postHeap = [];
             });
     }
 

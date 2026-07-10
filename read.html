@@ -253,43 +253,33 @@
         function safeHTML(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
         function safeAttr(s) { return s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
-        // 读取文章：优先检查管理员本地发布，再尝试 JSON 文件，降级到 localStorage 缓存
+        // 读取文章：本地优先 → 服务器 → 404
         function getPost(id, cb) {
-            var PUB_FLAG = 'omi_published';
-
-            // 优先检查管理员是否发布了本地更新
-            if (localStorage.getItem(PUB_FLAG) === '1') {
-                try {
-                    var localRaw = localStorage.getItem(BOX_KEY);
-                    if (localRaw) {
-                        var localPosts = JSON.parse(localRaw);
-                        if (Array.isArray(localPosts)) {
-                            var localPost = localPosts.find(function(b) { return b.id === id; }) || null;
-                            if (localPost) { cb(localPost); return; }
-                        }
+            // 本地有数据直接用
+            try {
+                var localRaw = localStorage.getItem(BOX_KEY);
+                if (localRaw) {
+                    var localPosts = JSON.parse(localRaw);
+                    if (Array.isArray(localPosts) && localPosts.length > 0) {
+                        var localPost = localPosts.find(function(b) { return b.id === id; }) || null;
+                        if (localPost) { cb(localPost); return; }
                     }
-                } catch(e) { /* 回退 */ }
-            }
+                }
+            } catch(e) {}
 
-            // 尝试从 JSON 文件加载
+            // 从服务器加载
             fetch(DATA_URL + '?_t=' + Date.now())
-                .then(function(r) {
-                    if (!r.ok) throw new Error('HTTP ' + r.status);
-                    return r.json();
-                })
+                .then(function(r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
                 .then(function(data) {
                     if (data && Array.isArray(data.posts)) {
-                        // 同步到 localStorage 缓存
                         try { localStorage.setItem(BOX_KEY, JSON.stringify(data.posts)); } catch(e) {}
                         var post = data.posts.find(function(b) { return b.id === id; }) || null;
                         cb(post);
-                    } else {
-                        throw new Error('Invalid format');
-                    }
+                    } else { cb(null); }
                 })
                 .catch(function(err) {
-                    console.warn('⚠️ 无法加载 data/posts.json，使用 localStorage 缓存:', err.message);
-                    // 降级：从 localStorage 读取
+                    console.warn('⚠️ 无法加载文章:', err.message);
+                    // 最后尝试 localStorage
                     try {
                         var raw = localStorage.getItem(BOX_KEY);
                         if (!raw) { cb(null); return; }
