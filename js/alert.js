@@ -15,9 +15,10 @@
     'use strict';
 
     // ========== 常量 ==========
-    var IMG_API_WIDE = 'https://api.imlazy.ink/img/';
+    var IMG_API_WIDE = 'https://api.imlazy.ink/v1/img/';
     var DATA_URL = 'data/posts.json';
     var BG_TICK = 60000;
+    var API_TIMEOUT = 8000;
 
     var TYPE_LINE = 'Hello My name is Omiaちゃん';
     var TYPE_TICK = 100, TYPE_REST = 3000, TYPE_DEL = 90, TYPE_GAP = 1500;
@@ -98,6 +99,8 @@
 
     // ========== 背景 (雫API) ==========
     var FALLBACK_BG = ['images/columbina-5k-3840x2160-25922.jpg','images/oshi-no-ko-3840x2160-25261.jpg','images/sparxie-honkai-star-3840x2160-26290.jpg','images/zhuang-fangyi-3840x2160-26226.jpg'];
+    var _fallbackIdx = -1;  // 本地轮播指针
+    var _apiOnline = false; // 记录上次 API 状态
 
     function _setApiStatus(online) {
         if (!E.apiDot || !E.apiLabel) return;
@@ -114,15 +117,28 @@
 
     function _setBg(src, fromApi) {
         if (!E.bgLayer) return;
-        E.bgLayer.style.backgroundImage = "url('"+src+"')";
-        E.bgLayer.style.opacity = '1';
-        g_currentBgSrc = src;
-        g_currentBgIsApi = !!fromApi;
-        _updateWallpaperInfo();
+        // 淡入淡出交叉过渡
+        E.bgLayer.style.opacity = '0';
+        setTimeout(function() {
+            E.bgLayer.style.backgroundImage = "url('"+src+"')";
+            E.bgLayer.style.opacity = '1';
+            g_currentBgSrc = src;
+            g_currentBgIsApi = !!fromApi;
+            _updateWallpaperInfo();
+        }, 400);
+    }
+
+    function _nextFallback() {
+        _fallbackIdx = (_fallbackIdx + 1) % FALLBACK_BG.length;
+        return FALLBACK_BG[_fallbackIdx];
     }
 
     function _randFallback() {
-        return FALLBACK_BG[Math.floor(Math.random()*FALLBACK_BG.length)];
+        // 首次随机选一张，避免总从第一张开始
+        if (_fallbackIdx < 0) {
+            _fallbackIdx = Math.floor(Math.random() * FALLBACK_BG.length);
+        }
+        return FALLBACK_BG[_fallbackIdx];
     }
 
     function _tryApiBg() {
@@ -131,12 +147,13 @@
             var done = false;
             var bomb = setTimeout(function(){
                 if (!done) { done = true; _setApiStatus(false); ok(null); }
-            }, 8000);
+            }, API_TIMEOUT);
             img.onload = function() {
                 if (!done) {
                     done = true;
                     clearTimeout(bomb);
                     _setApiStatus(true);
+                    // 优先使用 currentSrc（重定向后的真实 CDN URL），降级使用 src
                     ok(img.currentSrc || img.src);
                 }
             };
@@ -153,16 +170,21 @@
         var currentBg = E.bgLayer.style.backgroundImage;
         if (!currentBg || currentBg === 'none') {
             var fb = _randFallback();
-            g_currentBgSrc = fb;
-            g_currentBgIsApi = false;
             E.bgLayer.style.backgroundImage = "url('"+fb+"')";
             E.bgLayer.style.opacity = '1';
+            g_currentBgSrc = fb;
+            g_currentBgIsApi = false;
             _updateWallpaperInfo();
         }
         // 尝试从雫API获取新图片
         var src = await _tryApiBg();
         if (src && src.indexOf('data:') === -1) {
             _setBg(src, true);
+            _apiOnline = true;
+        } else {
+            // API 离线 → 启用本地轮播
+            _apiOnline = false;
+            _setBg(_nextFallback(), false);
         }
     }
 

@@ -52,6 +52,7 @@
                 <span class="sidebar-label">导航</span>
                 <button type="button" class="sidebar-btn active" data-panel="blog" aria-current="page"> ブログ(博客)</button>
                 <button type="button" class="sidebar-btn" data-panel="projects"> プロジェクト(项目)</button>
+                <button type="button" class="sidebar-btn" data-panel="stack"> 技術スタック</button>
                 <button type="button" class="sidebar-btn disabled" data-panel="friends" disabled> 友链</button>
                 <button type="button" class="sidebar-btn" data-panel="about"> About ME</button>
                 <span class="sidebar-spacer"></span>
@@ -103,6 +104,53 @@
                     </div>
                 </section>
 
+                <!-- ====== 技术栈面板 ====== -->
+                <section id="stack" class="content-panel" aria-labelledby="stackHeading">
+                    <h2 class="panel-title" id="stackHeading" style="text-align:center"> 技術スタック (技术栈)</h2>
+
+                    <!-- 编程语言 & 工具 -->
+                    <div class="stack-section">
+                        <h3 class="stack-section-title">
+                            <span class="stack-section-icon">💻</span> 语言 & 工具
+                        </h3>
+                        <div class="stack-icons-grid">
+                            <img src="https://skillicons.dev/icons?i=python,c,cpp,cs,java,html,css,js,ts,nodejs,git,markdown,bash,powershell,linux"
+                                 alt="编程语言与工具" class="stack-skill-icons" loading="lazy">
+                        </div>
+                    </div>
+
+                    <!-- 最爱 IDE -->
+                    <div class="stack-section">
+                        <h3 class="stack-section-title">
+                            <span class="stack-section-icon">🔧</span> 最爱的 IDE / 编辑器
+                        </h3>
+                        <div class="stack-icons-grid">
+                            <img src="https://skillicons.dev/icons?i=pycharm,idea,clion,webstorm,helix,vim,neovim"
+                                 alt="IDE 和编辑器" class="stack-skill-icons" loading="lazy">
+                        </div>
+                        <div class="stack-ide-labels">
+                            <span class="stack-ide-tag">🐍 PyCharm</span>
+                            <span class="stack-ide-tag">☕ IntelliJ IDEA</span>
+                            <span class="stack-ide-tag">⚙️ CLion</span>
+                            <span class="stack-ide-tag">🌐 WebStorm</span>
+                            <span class="stack-ide-tag">🦀 Helix</span>
+                            <span class="stack-ide-tag">⌨️ Vim</span>
+                            <span class="stack-ide-tag">🧠 Neovim</span>
+                        </div>
+                    </div>
+
+                    <!-- 其他工具 -->
+                    <div class="stack-section">
+                        <h3 class="stack-section-title">
+                            <span class="stack-section-icon">🛠️</span> 其他常用工具
+                        </h3>
+                        <div class="stack-icons-grid">
+                            <img src="https://skillicons.dev/icons?i=vscode,visualstudio,github,githubactions,docker,regex,md,latex"
+                                 alt="其他常用工具" class="stack-skill-icons" loading="lazy">
+                        </div>
+                    </div>
+                </section>
+
                 <!-- ====== 友链面板 ====== -->
                 <section id="friends" class="content-panel" aria-labelledby="friendsHeading">
                     <h2 class="panel-title" id="friendsHeading" style="text-align:center"> 友链</h2>
@@ -111,7 +159,7 @@
 
                 <!-- ====== 关于面板 ====== -->
                 <section id="about" class="content-panel" aria-labelledby="aboutHeading">
-                    <h2 class="panel-title" id="aboutHeading" style="text-align:center">👤 About ME</h2>
+                    <h2 class="panel-title" id="aboutHeading" style="text-align:center"> About ME</h2>
                     <div class="about-content">
                         <img src="images/images1.jpg" alt="Omiaちゃん" class="profile-image" width="110" height="110" loading="lazy">
 
@@ -125,7 +173,7 @@
                             <span class="intro-tag"><span class="intro-tag-icon"></span>玩蔚蓝档案</span>
                         </div>
                         <button type="button" class="intro-more-btn" onclick="openModal('introModal')">
-                            ✨ 了解更多关于我
+                                点击了解更多关于我
                         </button>
 
                         <!-- GitHub -->
@@ -138,7 +186,7 @@
 
                         <!-- ========== 许可协议 ========== -->
                         <div class="license-block">
-                            <p class="license-title">📜 许可协议</p>
+                            <p class="license-title">📜 许可协议(LICENSE)</p>
                             <p class="license-text">
                                 本站所有原创内容采用
                                 <a href="https://github.com/sunZshanY/sunZshanY.github.io/blob/main/LICENSE" target="_blank" rel="noopener noreferrer">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
@@ -146,7 +194,7 @@
                             </p>
                             <p class="license-summary">
                                 这意味着你可以自由地分享、改编本站内容，但必须：<br>
-                                ① 给出适当的署名（标注原作者 Omiaちゃん）<br>
+                                ① 给出适当的署名（标注原作者 Omia Sun）<br>
                                 ② 不得用于商业目的<br>
                                 ③ 改编后的作品必须以相同方式共享
                             </p>
@@ -207,15 +255,23 @@
                         <span class="intro-card-icon"></span>
                         <span class="intro-card-title">兴趣爱好</span>
                     </div>
+                        <div class="code">
+                            <p align="center">
+                                <a href="https://skillicons.dev">
+                                    <img src="https://skillicons.dev/icons?i=python,c,cpp,cs,java,html,css,js,nodejs,git,markdown" alt="编程技能图标" width="90" height="90"/>
+                                </a>
+                        </div>
                     <div class="intro-card-content">
-                        <p>💻 <strong>写代码</strong> — Python / C++ / Java / 前端三件套，享受造轮子的快乐</p>
+                        <p>
+                            💻 <strong>写代码</strong> 
+                        </p>
                         <p> <strong>舞萌DX</strong> — <del>出勤即正义，打歌如呼吸</del></p>
                         <p><strong>纯爱番</strong> — 总之就是非常可爱</p>
                         <p> <strong>魔爪</strong> — 想成为小南娘了说是</p>
                     </div>
                 </div>
 
-                <!-- 游戏世界 -->
+                <!-- 游戏 -->
                 <div class="intro-card">
                     <div class="intro-card-head">
                         <span class="intro-card-icon"></span>
@@ -224,7 +280,7 @@
                     <div class="intro-card-content">
                         <strong>蔚蓝档案</strong> <del>忠实玩家</del> <b>嗯对！</b></p>
                         <p style="text-decoration:line-through;opacity:0.5;">是一名白子厨</p>
-                        <p>🎵 音游爱好者，舞萌DX<del>重度玩家</del></p>
+                        <p>臭打音游的，舞萌DX<del>重度玩家</del></p>
                     </div>
                 </div>
 
@@ -236,10 +292,10 @@
                     </div>
                     <div class="intro-card-content">
                         <div class="intro-fun-tags">
-                            <span> Windows/Linux 用户</span>
-                            <span> Java 写累了换 Python</span>
-                            <span>🌙 <del>深夜 coding 选手</del></span>
-                            <span>📝 博客即日记</span>
+                            <span> Windows/<del>Mac</del>/Linux 用户</span>
+                            <span> <del>Java 写累了换 Python </del> </span>
+                            <span> <del>深夜 coding 佬</del></span>
+                            <span> 博客即日记</span>
                             <span>前端设计摸索中</span>
                         </div>
                     </div>

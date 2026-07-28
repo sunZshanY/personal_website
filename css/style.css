@@ -316,6 +316,13 @@ body.loaded { opacity: 1; }
     font-size: 15px; line-height: 1.8;
     margin: 16px 0 12px;
 }
+.code{
+    color: #0f3460;
+    font-size: 15px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 16px 0 12px;
+    border-radius: 10px;
+}
 .about-intro strong {
     color: var(--rinui-text);
     font-weight: bold;
@@ -770,6 +777,107 @@ body.loaded { opacity: 1; }
 .note-gh-link { text-decoration: none; font-size: 14px; transition: transform 0.2s ease; display: inline-block; }
 .note-gh-link:hover { transform: scale(1.2); }
 
+/* ---- 技术栈面板 ---- */
+.stack-section {
+    background: rgba(22,33,62,0.65);
+    border: 1px solid var(--rinui-border);
+    border-radius: 12px;
+    padding: 24px 28px;
+    margin-bottom: 20px;
+    transition: border-color 0.3s var(--ease-out-quart), transform 0.4s var(--ease-out-expo), box-shadow 0.4s var(--ease-out-quart);
+    backdrop-filter: blur(10px);
+    will-change: transform, box-shadow;
+    backface-visibility: hidden;
+    animation: introCardIn 0.5s var(--ease-out-expo) forwards;
+}
+.stack-section:nth-child(1) { animation-delay: 0.05s; }
+.stack-section:nth-child(2) { animation-delay: 0.12s; }
+.stack-section:nth-child(3) { animation-delay: 0.19s; }
+.stack-section:hover {
+    border-color: var(--rinui-border-hov);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(0,0,0,0.35);
+}
+
+.stack-section-title {
+    color: var(--rinui-text);
+    font-size: 18px;
+    font-weight: bold;
+    font-family: var(--font-cn);
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid rgba(42,42,74,0.35);
+}
+.stack-section-icon {
+    font-size: 22px;
+    width: 40px; height: 40px;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: rgba(15,52,96,0.4);
+    border-radius: 10px;
+    border: 1px solid rgba(128,176,224,0.12);
+    flex-shrink: 0;
+    transition: background 0.3s var(--ease-out-quart), box-shadow 0.3s var(--ease-out-quart);
+}
+.stack-section:hover .stack-section-icon {
+    background: rgba(15,52,96,0.65);
+    box-shadow: 0 0 16px rgba(15,52,96,0.3);
+}
+
+.stack-icons-grid {
+    display: flex;
+    justify-content: center;
+    padding: 8px 0;
+}
+.stack-skill-icons {
+    max-width: 100%;
+    height: auto;
+    filter: drop-shadow(0 4px 12px rgba(0,0,0,0.3));
+    transition: transform 0.4s var(--ease-out-expo), filter 0.4s var(--ease-out-quart);
+    will-change: transform;
+    backface-visibility: hidden;
+}
+.stack-skill-icons:hover {
+    transform: scale(1.04);
+    filter: drop-shadow(0 6px 20px rgba(128,176,224,0.3));
+}
+
+/* IDE 标签行 */
+.stack-ide-labels {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(42,42,74,0.25);
+}
+.stack-ide-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 8px 18px;
+    background: rgba(15,52,96,0.35);
+    border: 1px solid rgba(128,176,224,0.18);
+    border-radius: 20px;
+    font-size: 13px;
+    color: var(--rinui-tag-text);
+    font-family: var(--font-cn);
+    transition: background 0.25s var(--ease-out-quart), border-color 0.25s var(--ease-out-quart), transform 0.3s var(--ease-spring), color 0.2s var(--ease-out-quart), box-shadow 0.3s var(--ease-out-quart);
+    cursor: default;
+    will-change: transform;
+    backface-visibility: hidden;
+}
+.stack-ide-tag:hover {
+    background: rgba(15,52,96,0.6);
+    border-color: rgba(128,176,224,0.4);
+    color: #a0d0ff;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.3);
+}
+
 /* ---- 响应式 ---- */
 @media (max-width: 768px) {
     .rinui-main { flex-direction: column; }
@@ -833,4 +941,10 @@ body.loaded { opacity: 1; }
     .github-link { padding: 10px 20px; font-size: 13px; gap: 7px; }
     .github-icon { width: 20px; height: 20px; }
     .github-user { font-size: 13px; }
+    /* 技术栈移动端 */
+    .stack-section { padding: 16px; margin-bottom: 14px; }
+    .stack-section-title { font-size: 15px; gap: 8px; margin-bottom: 14px; }
+    .stack-section-icon { width: 34px; height: 34px; font-size: 18px; border-radius: 8px; }
+    .stack-ide-labels { gap: 6px; margin-top: 12px; padding-top: 12px; }
+    .stack-ide-tag { padding: 6px 12px; font-size: 11px; }
 }
