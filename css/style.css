@@ -736,6 +736,12 @@ body.loaded { opacity: 1; }
 @keyframes toastIn { from{opacity:0;transform:translateY(-30px) scale(0.9);} to{opacity:1;transform:translateY(0) scale(1);} }
 @keyframes toastOut { from{opacity:1;transform:translateY(0) scale(1);} to{opacity:0;transform:translateY(-30px) scale(0.9);} }
 
+/* ---- 🐧 凑企鹅彩蛋 ---- */
+#penguinEE {
+    position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+    z-index: 99999; pointer-events: none; overflow: hidden;
+}
+
 /* ---- 抖动 ---- */
 @keyframes shake { 0%,100%{transform:translateX(0);} 20%{transform:translateX(-8px);} 40%{transform:translateX(8px);} 60%{transform:translateX(-6px);} 80%{transform:translateX(6px);} }
 
