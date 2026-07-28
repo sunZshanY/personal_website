@@ -86,8 +86,10 @@ body.loaded { opacity: 1; }
 .status-indicator { display: flex; align-items: center; gap: 6px; }
 .status-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--rinui-red); transition: background 0.3s ease; }
 .status-dot.connected { background: var(--rinui-green); }
+.status-dot.fallback { background: var(--rinui-gold); }
 .status-label { font-size: 12px; font-family: var(--font-cn); color: var(--rinui-red); transition: color 0.3s ease; }
 .status-label.connected { color: var(--rinui-green); }
+.status-label.fallback { color: var(--rinui-gold); }
 
 .admin-badge { font-size: 12px; color: var(--rinui-gold); font-family: var(--font-cn); font-weight: bold; }
 

@@ -88,15 +88,19 @@
     var _fallbackIdx = -1;  // 本地轮播指针
     var _apiOnline = false; // 记录上次 API 状态
 
-    function _setApiStatus(online) {
+    function _setApiStatus(state) {
         if (!E.apiDot || !E.apiLabel) return;
-        if (online) {
+        E.apiDot.classList.remove('connected', 'fallback');
+        E.apiLabel.classList.remove('connected', 'fallback');
+        if (state === 'online') {
             E.apiDot.classList.add('connected');
             E.apiLabel.classList.add('connected');
             E.apiLabel.textContent = '雫API在线';
+        } else if (state === 'fallback') {
+            E.apiDot.classList.add('fallback');
+            E.apiLabel.classList.add('fallback');
+            E.apiLabel.textContent = '本地壁纸';
         } else {
-            E.apiDot.classList.remove('connected');
-            E.apiLabel.classList.remove('connected');
             E.apiLabel.textContent = '离线';
         }
     }
@@ -132,19 +136,17 @@
             var img = new Image();
             var done = false;
             var bomb = setTimeout(function(){
-                if (!done) { done = true; _setApiStatus(false); ok(null); }
+                if (!done) { done = true; ok(null); }
             }, API_TIMEOUT);
             img.onload = function() {
                 if (!done) {
                     done = true;
                     clearTimeout(bomb);
-                    _setApiStatus(true);
-                    // 优先使用 currentSrc（重定向后的真实 CDN URL），降级使用 src
                     ok(img.currentSrc || img.src);
                 }
             };
             img.onerror = function() {
-                if (!done) { done = true; clearTimeout(bomb); _setApiStatus(false); ok(null); }
+                if (!done) { done = true; clearTimeout(bomb); ok(null); }
             };
             img.src = IMG_API_WIDE + '?_t=' + Date.now();
         });
@@ -167,10 +169,12 @@
         if (src && src.indexOf('data:') === -1) {
             _setBg(src, true);
             _apiOnline = true;
+            _setApiStatus('online');
         } else {
-            // API 离线 → 启用本地轮播
+            // API 不可用 → 本地壁纸轮播
             _apiOnline = false;
             _setBg(_nextFallback(), false);
+            _setApiStatus('fallback');
         }
     }
 
