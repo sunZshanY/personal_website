@@ -1,15 +1,10 @@
 /**
- * Omiaちゃん Blog — 主脚本 v5.1
+ * Omiaちゃん Blog — 主脚本 v5.2
  * ==============================
  * 背景：雫API (api.imlazy.ink)
  * 数据：data/posts.json（GitHub 托管，每日更新）
- * 留言 & 访客：localStorage 本地存储
- *
- * 更新 v5.1:
- *   - 雫API状态指示器实时更新
- *   - 壁纸来源信息展示（状态栏可点击查看原图）
- *   - API超时从5秒延长至8秒，提高慢网下的成功率
- *   - 首次加载使用本地壁纸兜底，API异步替换
+ * 留言：Giscus（基于 GitHub Discussions）
+ * 访客：localStorage 本地存储
  */
 (function() {
     'use strict';
@@ -25,7 +20,6 @@
 
     // ========== 全局态 ==========
     var g_postHeap = [];
-    var g_noteHeap = [];
     var bgLooper = null;
     var g_currentBgSrc = null;
     var g_currentBgIsApi = false;
@@ -48,14 +42,6 @@
         blogList:       $('#blogList'),
         blogEmpty:      $('#blogEmpty'),
         blogSearch:     $('#blogSearch'),
-        // 留言板（动态注入到HTML）
-        gbAuthor:       null,
-        gbContact:      null,
-        gbBody:         null,
-        gbTally:        null,
-        btnPostNote:    null,
-        noteWall:       null,
-        noteVoid:       null,
         // 状态栏
         visitorCount:   $('#visitorCount'),
         // 详情弹窗
@@ -220,7 +206,6 @@
     // ========== 数据层 ==========
     // 博客数据：从 data/posts.json 加载（GitHub 托管）
     var BOX_KEY = 'omiblog_z';       // 保留作为缓存
-    var NOTE_KEY = 'omi_comments';
     var EYE_KEY = 'kaze_count';
     var EYE_FLAG = 'kaze_flag';
 
@@ -265,12 +250,6 @@
             });
     }
 
-    function _loadNotes() {
-        try { var r=localStorage.getItem(NOTE_KEY); g_noteHeap=r?JSON.parse(r):[]; }
-        catch(e){ g_noteHeap=[]; }
-    }
-    function _dumpNotes() { try{localStorage.setItem(NOTE_KEY,JSON.stringify(g_noteHeap));}catch(e){_pop('存储不足','error');} }
-
     // ========== 访客计数 ==========
     function _eyeBump() {
         var c = parseInt(localStorage.getItem(EYE_KEY),10)||0;
@@ -313,7 +292,7 @@
                 panes.forEach(function(p){p.classList.remove('active');});
                 var t=document.getElementById(tid);
                 if(t){t.classList.add('active');t.style.animation='none';void t.offsetWidth;t.style.animation='';}
-                if(tid==='guestbook')_paintNotes();
+                if(tid==='guestbook')_loadGiscus();
             });
         });
     }
@@ -365,28 +344,22 @@
         if(id) location.href = 'read.html?post=' + id;
     }
 
-    // ========== 留言板 ==========
+    // ========== 留言板 (Giscus) ==========
+    var GISCUS_REPO = 'sunZshanY/personal_website';
+    var GISCUS_REPO_ID = '';       // TODO: 在 https://giscus.app 获取后填入
+    var GISCUS_CATEGORY = '';      // TODO: 选择 Discussions 分类名称
+    var GISCUS_CATEGORY_ID = '';   // TODO: 在 https://giscus.app 获取后填入
+    var _giscusLoaded = false;
+
     function _buildGuestbookPanel() {
-        // 动态注入留言板面板到 #friends 的位置（替换友链占位）
         var friendsPanel = $('#friends');
         if (!friendsPanel) return;
 
-        // 替换友链面板为留言板
         friendsPanel.id = 'guestbook';
         friendsPanel.setAttribute('aria-labelledby', 'gbHeading');
         friendsPanel.innerHTML = '<h2 class="panel-title" id="gbHeading" style="text-align:center">💬 留言板</h2>'
-            + '<div class="gb-write">'
-            + '<div class="form-row dual">'
-            + '<div class="form-field"><label for="gbAuthor">昵称 *</label><input type="text" id="gbAuthor" placeholder="你的昵称" maxlength="30" required></div>'
-            + '<div class="form-field"><label for="gbContact">联系方式（选填）</label><input type="text" id="gbContact" placeholder="QQ / 邮箱 / GitHub" maxlength="60"></div>'
-            + '</div>'
-            + '<div class="form-field"><label for="gbBody">留言内容 *</label><textarea id="gbBody" rows="4" placeholder="说点什么吧～" maxlength="800"></textarea><span class="char-count" id="gbTally">0 / 800</span></div>'
-            + '<button type="button" id="btnPostNote" class="rinui-btn primary">📝 提交留言</button>'
-            + '</div>'
-            + '<div id="noteWall" class="note-wall"></div>'
-            + '<div id="noteVoid" class="empty-state"><span class="empty-icon">💭</span><p class="empty-title">暂无留言</p><p class="empty-subtitle">成为第一个留言的人吧～</p></div>';
+            + '<div class="giscus" id="giscusContainer"></div>';
 
-        // 更新侧栏友链按钮为留言板
         var friendsBtn = document.querySelector('.sidebar-btn[data-panel="friends"]');
         if (friendsBtn) {
             friendsBtn.dataset.panel = 'guestbook';
@@ -394,64 +367,31 @@
             friendsBtn.classList.remove('disabled');
             friendsBtn.removeAttribute('disabled');
         }
-
-        // 重新缓存留言相关的DOM引用
-        E.gbAuthor = $('#gbAuthor');
-        E.gbContact = $('#gbContact');
-        E.gbBody = $('#gbBody');
-        E.gbTally = $('#gbTally');
-        E.btnPostNote = $('#btnPostNote');
-        E.noteWall = $('#noteWall');
-        E.noteVoid = $('#noteVoid');
     }
 
-    function _submitNote() {
-        if (!E.gbAuthor || !E.gbBody) return;
-        var nick = E.gbAuthor.value.trim();
-        var contact = E.gbContact ? E.gbContact.value.trim() : '';
-        var msg = E.gbBody.value.trim();
+    function _loadGiscus() {
+        if (_giscusLoaded) return;
+        var container = $('#giscusContainer');
+        if (!container) return;
+        _giscusLoaded = true;
 
-        if (!nick || nick.length < 2) { _pop('昵称至少需要2个字哦～','error'); E.gbAuthor.focus(); return; }
-        if (!msg) { _pop('说点什么吧～','error'); E.gbBody.focus(); return; }
-
-        var lastTs = 0;
-        g_noteHeap.forEach(function(n){ if(n.nick===nick&&n.ts>lastTs)lastTs=n.ts; });
-        if (Date.now() - lastTs < 30000) { _pop('发得太快了，过30秒再来吧～','error'); return; }
-
-        var cid = g_noteHeap.length ? Math.max.apply(null, g_noteHeap.map(function(n){ return n.cid; })) + 1 : 1;
-        var note = { cid: cid, nick: nick, msg: msg, contact: contact, ts: Date.now(), star: 0 };
-        g_noteHeap.unshift(note);
-        _dumpNotes(); _paintNotes();
-        E.gbBody.value = '';
-        if(E.gbTally)E.gbTally.textContent = '0 / 800';
-        E.gbAuthor.value = '';
-        if(E.gbContact)E.gbContact.value = '';
-        _pop('留言成功！感谢你的支持～','success');
+        var script = document.createElement('script');
+        script.src = 'https://giscus.app/client.js';
+        script.setAttribute('data-repo', GISCUS_REPO);
+        script.setAttribute('data-repo-id', GISCUS_REPO_ID);
+        script.setAttribute('data-category', GISCUS_CATEGORY);
+        script.setAttribute('data-category-id', GISCUS_CATEGORY_ID);
+        script.setAttribute('data-mapping', 'pathname');
+        script.setAttribute('data-strict', '0');
+        script.setAttribute('data-reactions-enabled', '1');
+        script.setAttribute('data-emit-metadata', '0');
+        script.setAttribute('data-input-position', 'bottom');
+        script.setAttribute('data-theme', 'dark');
+        script.setAttribute('data-lang', 'zh-CN');
+        script.setAttribute('crossorigin', 'anonymous');
+        script.async = true;
+        container.appendChild(script);
     }
-
-    function _paintNotes() {
-        if (!E.noteWall) return;
-        E.noteWall.innerHTML = '';
-        if (!g_noteHeap.length) { if(E.noteVoid)E.noteVoid.style.display=''; return; }
-        if(E.noteVoid)E.noteVoid.style.display='none';
-
-        g_noteHeap.forEach(function(n){
-            var slab = document.createElement('div');
-            slab.className = 'note-slab' + (n.star ? ' is-starred' : '');
-            var timeStr = new Date(n.ts).toLocaleString('zh-CN');
-            var starIcon = n.star ? ' ⭐' : '';
-            var avatarHTML = n.avatar
-                ? '<img src="' + _safeAttr(n.avatar) + '" alt="" class="note-avatar" loading="lazy" onerror="this.style.display=\'none\'">'
-                : '<span class="note-avatar" style="display:inline-flex;align-items:center;justify-content:center;font-size:14px;color:var(--rinui-tag-text)">' + _safeHTML(n.nick.charAt(0).toUpperCase()) + '</span>';
-            var contactHTML = n.contact ? '<div class="note-contact">📬 ' + _safeHTML(n.contact) + '</div>' : '';
-            var ghLink = n.githubUser ? ' <a href="https://github.com/' + _safeAttr(n.githubUser) + '" target="_blank" rel="noopener noreferrer" class="note-gh-link" title="GitHub 主页">🐙</a>' : '';
-            slab.innerHTML = '<div class="note-top"><div class="note-top-left">' + avatarHTML + '<span class="note-author">' + _safeHTML(n.nick) + starIcon + ghLink + '</span></div><span class="note-time">' + timeStr + '</span></div>'
-                + '<div class="note-body">' + _safeHTML(n.msg) + '</div>' + contactHTML;
-            E.noteWall.appendChild(slab);
-        });
-    }
-
-    function _updateTallyNote() { if(E.gbTally){E.gbTally.textContent=E.gbBody.value.length+' / 800';} }
 
     // ========== 灯箱 ==========
     window.openLightbox = function(src) { var ex=document.querySelector('.lightbox-overlay'); if(ex)ex.remove(); var o=document.createElement('div'); o.className='lightbox-overlay'; o.innerHTML='<img src="'+_safeAttr(src)+'" alt="放大查看">'; o.addEventListener('click',function(){o.remove();}); document.body.appendChild(o); };
@@ -469,7 +409,6 @@
         if(!evt.key)return;
         switch(evt.key){
             case BOX_KEY: _loadPosts().then(function(){ _paintPosts(); }); break;
-            case NOTE_KEY: _loadNotes(); _paintNotes(); break;
             case EYE_KEY: _eyeShow(null); break;
         }
     }
@@ -487,10 +426,6 @@
         });
         $$('.modal').forEach(function(m){ m.addEventListener('click', _backdropClick); });
 
-        // 留言板事件 (在 _buildGuestbookPanel 之后绑定)
-        if (E.btnPostNote) E.btnPostNote.addEventListener('click', _submitNote);
-        if (E.gbBody) E.gbBody.addEventListener('input', _updateTallyNote);
-
         window.addEventListener('keydown', function(e){
             if(e.key==='Escape'){
                 if(E.detailModal&&!E.detailModal.classList.contains('hidden'))window.closeModal('blogDetailModal');
@@ -506,9 +441,7 @@
 
     // ========== 入口 ==========
     async function _kickstart() {
-        _loadNotes();
-        _buildGuestbookPanel(); // 动态构建留言板
-        _paintNotes();
+        _buildGuestbookPanel();
         _eyeBump();
         _wireItUp();
 
