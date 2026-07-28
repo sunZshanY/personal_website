@@ -233,11 +233,13 @@
                 if (Array.isArray(parsed) && parsed.length > 0) {
                     g_postHeap = parsed;
                     console.log('Using localStorage, ' + parsed.length + ' posts');
-                    // 后台异步刷新服务器数据
-                    fetch(DATA_URL + '?_t=' + Date.now())
-                        .then(function(resp){ if(resp.ok) return resp.json() })
-                        .then(function(data){ if(data&&Array.isArray(data.posts)){localStorage.setItem(BOX_KEY,JSON.stringify(data.posts))} })
-                        .catch(function(){});
+                    // 后台异步刷新服务器数据（仅当没有管理员本地同步标志时）
+                    if (!localStorage.getItem('omiblog_admin_sync')) {
+                        fetch(DATA_URL + '?_t=' + Date.now())
+                            .then(function(resp){ if(resp.ok) return resp.json() })
+                            .then(function(data){ if(data&&Array.isArray(data.posts)){localStorage.setItem(BOX_KEY,JSON.stringify(data.posts))} })
+                            .catch(function(){});
+                    }
                     return Promise.resolve();
                 }
             }

@@ -296,17 +296,19 @@ function importFile(f){
 // ===== 发布 =====
 function publish(){
   try{localStorage.setItem(BOX_KEY,JSON.stringify(g_posts))}catch(e){alert('存储失败');return}
+  localStorage.setItem('omiblog_admin_sync','1');
   updatePubBadge();alert('✅ 已保存到本地！主站将自动显示这些内容。');
 }
 
 function unpublish(){
-  localStorage.removeItem(BOX_KEY);updatePubBadge();alert('↩ 已清除本地数据，主站将显示服务器版本。');
+  localStorage.removeItem(BOX_KEY);localStorage.removeItem('omiblog_admin_sync');updatePubBadge();alert('↩ 已清除本地数据，主站将显示服务器版本。');
 }
 
 function deletePost(id){
   if(!confirm('确定删除 ID='+id+' 的博文吗？此操作不可恢复。')) return;
   g_posts = g_posts.filter(function(p){ return p.id !== id; });
   try{localStorage.setItem(BOX_KEY,JSON.stringify(g_posts))}catch(e){}
+  localStorage.setItem('omiblog_admin_sync','1');
   render();
 }
 
