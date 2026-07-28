@@ -1,3 +1,1 @@
-# omiaちゃんのブログ（博客）网站可shijian
-
-Welcome
+# Welcome to my BLOG
