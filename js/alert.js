@@ -346,9 +346,9 @@
 
     // ========== 留言板 (Giscus) ==========
     var GISCUS_REPO = 'sunZshanY/personal_website';
-    var GISCUS_REPO_ID = '';       // TODO: 在 https://giscus.app 获取后填入
-    var GISCUS_CATEGORY = '';      // TODO: 选择 Discussions 分类名称
-    var GISCUS_CATEGORY_ID = '';   // TODO: 在 https://giscus.app 获取后填入
+    var GISCUS_REPO_ID = 'R_kgDOTLFsVw';
+    var GISCUS_CATEGORY = 'General';
+    var GISCUS_CATEGORY_ID = 'DIC_kwDOTLFsV84DCJlw';
     var _giscusLoaded = false;
 
     function _buildGuestbookPanel() {
