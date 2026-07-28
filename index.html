@@ -40,7 +40,7 @@
             <nav class="topbar-right" aria-label="工具栏">
                 <span class="status-indicator" title="API连接状态" role="status">
                     <span class="status-dot" id="apiStatusDot"></span>
-                    <span class="status-label" id="apiStatusText">离线</span>
+                    <span class="status-label" id="apiStatusText">雫API检测中</span>
                 </span>
             </nav>
         </header>
@@ -159,7 +159,7 @@
 
         <!-- ====== 底部状态栏 ====== -->
         <footer class="rinui-statusbar" role="contentinfo">
-            <span class="statusbar-item">API：雫API</span>
+            <span class="statusbar-item" id="wallpaperInfo" title="点击查看原图" onclick="openCurrentWallpaper()" style="cursor:pointer;transition:color 0.2s ease">等待加载...</span>
             <span class="statusbar-item statusbar-center">
                 浏览人数：<span id="visitorCount">0</span>
             </span>

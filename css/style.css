@@ -560,6 +560,7 @@ body.loaded { opacity: 1; }
 .statusbar-center { flex: 1; text-align: center; }
 .statusbar-separator { color: var(--rinui-border-hov); }
 #visitorCount { color: var(--rinui-gold); font-weight: bold; }
+#wallpaperInfo:hover { color: var(--rinui-tag-text) !important; }
 #statusUser.logged-in { color: var(--rinui-green); }
 
 /* ---- 弹窗 ---- */

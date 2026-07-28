@@ -1,9 +1,15 @@
 /**
- * Omiaちゃん Blog — 主脚本 v5.0
+ * Omiaちゃん Blog — 主脚本 v5.1
  * ==============================
  * 背景：雫API (api.imlazy.ink)
  * 数据：data/posts.json（GitHub 托管，每日更新）
  * 留言 & 访客：localStorage 本地存储
+ *
+ * 更新 v5.1:
+ *   - 雫API状态指示器实时更新
+ *   - 壁纸来源信息展示（状态栏可点击查看原图）
+ *   - API超时从5秒延长至8秒，提高慢网下的成功率
+ *   - 首次加载使用本地壁纸兜底，API异步替换
  */
 (function() {
     'use strict';
@@ -20,6 +26,9 @@
     var g_postHeap = [];
     var g_noteHeap = [];
     var bgLooper = null;
+    var g_currentBgSrc = null;
+    var g_currentBgIsApi = false;
+    var watchingId = null;
 
     // ========== DOM 缓取 ==========
     function $(s) { return document.querySelector(s); }
@@ -47,7 +56,14 @@
         noteWall:       null,
         noteVoid:       null,
         // 状态栏
-        visitorCount:   $('#visitorCount')
+        visitorCount:   $('#visitorCount'),
+        // 详情弹窗
+        detailModal:    $('#blogDetailModal'),
+        detailTitle:    $('#detailTitle'),
+        detailContent:  $('#detailContent'),
+        detailTags:     $('#detailTags'),
+        detailImgWrap:  $('#detailImageWrapper'),
+        detailShareBtn: $('#detailShareBtn')
     };
 
     // ========== 工具 ==========
@@ -83,10 +99,26 @@
     // ========== 背景 (雫API) ==========
     var FALLBACK_BG = ['images/columbina-5k-3840x2160-25922.jpg','images/oshi-no-ko-3840x2160-25261.jpg','images/sparxie-honkai-star-3840x2160-26290.jpg','images/zhuang-fangyi-3840x2160-26226.jpg'];
 
-    function _setBg(src) {
+    function _setApiStatus(online) {
+        if (!E.apiDot || !E.apiLabel) return;
+        if (online) {
+            E.apiDot.classList.add('connected');
+            E.apiLabel.classList.add('connected');
+            E.apiLabel.textContent = '雫API在线';
+        } else {
+            E.apiDot.classList.remove('connected');
+            E.apiLabel.classList.remove('connected');
+            E.apiLabel.textContent = '离线';
+        }
+    }
+
+    function _setBg(src, fromApi) {
         if (!E.bgLayer) return;
         E.bgLayer.style.backgroundImage = "url('"+src+"')";
         E.bgLayer.style.opacity = '1';
+        g_currentBgSrc = src;
+        g_currentBgIsApi = !!fromApi;
+        _updateWallpaperInfo();
     }
 
     function _randFallback() {
@@ -97,23 +129,40 @@
         return new Promise(function(ok) {
             var img = new Image();
             var done = false;
-            var bomb = setTimeout(function(){ if(!done){done=true;ok(null)} }, 5000);
-            img.onload = function() { if(!done){done=true;clearTimeout(bomb);ok(img.currentSrc||img.src)} };
-            img.onerror = function() { if(!done){done=true;clearTimeout(bomb);ok(null)} };
+            var bomb = setTimeout(function(){
+                if (!done) { done = true; _setApiStatus(false); ok(null); }
+            }, 8000);
+            img.onload = function() {
+                if (!done) {
+                    done = true;
+                    clearTimeout(bomb);
+                    _setApiStatus(true);
+                    ok(img.currentSrc || img.src);
+                }
+            };
+            img.onerror = function() {
+                if (!done) { done = true; clearTimeout(bomb); _setApiStatus(false); ok(null); }
+            };
             img.src = IMG_API_WIDE + '?_t=' + Date.now();
         });
     }
 
     async function _paintBg() {
         if (!E.bgLayer) return;
-        // 立即显示本地壁纸兜底
-        if (!E.bgLayer.style.backgroundImage || E.bgLayer.style.backgroundImage === 'none') {
-            _setBg(_randFallback());
+        // 首次加载：立即显示本地壁纸兜底
+        var currentBg = E.bgLayer.style.backgroundImage;
+        if (!currentBg || currentBg === 'none') {
+            var fb = _randFallback();
+            g_currentBgSrc = fb;
+            g_currentBgIsApi = false;
+            E.bgLayer.style.backgroundImage = "url('"+fb+"')";
+            E.bgLayer.style.opacity = '1';
+            _updateWallpaperInfo();
         }
-        // 尝试从 API 获取新图片
+        // 尝试从雫API获取新图片
         var src = await _tryApiBg();
         if (src && src.indexOf('data:') === -1) {
-            _setBg(src);
+            _setBg(src, true);
         }
     }
 
@@ -122,6 +171,29 @@
         _paintBg();
         bgLooper = setInterval(_paintBg, BG_TICK);
     }
+
+    // ========== 壁纸信息展示 ==========
+    function _updateWallpaperInfo() {
+        var infoEl = document.getElementById('wallpaperInfo');
+        if (!infoEl) return;
+        if (g_currentBgSrc) {
+            var label = g_currentBgIsApi ? '雫API' : '本地壁纸';
+            var fileName = g_currentBgSrc.split('/').pop().split('?')[0];
+            if (fileName.length > 28) fileName = fileName.slice(0, 25) + '...';
+            infoEl.textContent = label + ' | ' + fileName;
+            infoEl.title = g_currentBgSrc;
+        } else {
+            infoEl.textContent = '等待加载...';
+            infoEl.title = '';
+        }
+    }
+
+    // 点击状态栏壁纸信息可打开原图
+    window.openCurrentWallpaper = function() {
+        if (g_currentBgSrc) {
+            window.openLightbox(g_currentBgSrc);
+        }
+    };
 
     // ========== 数据层 ==========
     // 博客数据：从 data/posts.json 加载（GitHub 托管）
@@ -138,7 +210,7 @@
                 var parsed = JSON.parse(r);
                 if (Array.isArray(parsed) && parsed.length > 0) {
                     g_postHeap = parsed;
-                    console.log('📦 使用本地数据（' + parsed.length + ' 篇）');
+                    console.log('Using localStorage, ' + parsed.length + ' posts');
                     // 后台异步刷新服务器数据
                     fetch(DATA_URL + '?_t=' + Date.now())
                         .then(function(resp){ if(resp.ok) return resp.json() })
@@ -164,7 +236,7 @@
                 }
             })
             .catch(function(err) {
-                console.warn('⚠️ 无法加载 data/posts.json:', err.message);
+                console.warn('Cannot load data/posts.json:', err.message);
                 g_postHeap = [];
             });
     }
@@ -195,7 +267,13 @@
     window.closeModal = function(id) {
         var m=document.getElementById(id); if(!m)return;
         m.classList.add('hidden'); document.body.style.overflow='';
-        if(id==='blogDetailModal'){ E.detailTitle.textContent='';E.detailContent.innerHTML='';E.detailTags.innerHTML='';E.detailImgWrap.innerHTML='';E.detailImgWrap.classList.add('hidden');watchingId=null; }
+        if(id==='blogDetailModal'){
+            if(E.detailTitle) E.detailTitle.textContent='';
+            if(E.detailContent) E.detailContent.innerHTML='';
+            if(E.detailTags) E.detailTags.innerHTML='';
+            if(E.detailImgWrap){ E.detailImgWrap.innerHTML=''; E.detailImgWrap.classList.add('hidden'); }
+            watchingId = null;
+        }
     };
 
     function _backdropClick(e) { if(e.target.classList.contains('modal'))window.closeModal(e.target.id); }
