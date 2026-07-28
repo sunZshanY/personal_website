@@ -242,9 +242,9 @@ function render(){
   // 文章表
   var t=document.getElementById('postTable');
   if(!g_posts.length){t.innerHTML='<div class="empty">暂无文章</div>';return}
-  var h='<table class="tbl"><thead><tr><th>ID</th><th>标题</th><th>日期</th><th>标签</th></tr></thead><tbody>';
+  var h='<table class="tbl"><thead><tr><th>ID</th><th>标题</th><th>日期</th><th>标签</th><th>操作</th></tr></thead><tbody>';
   g_posts.forEach(function(p){
-    h+='<tr><td>'+p.id+'</td><td><strong style="color:var(--text)">'+esc(p.title)+'</strong></td><td>'+esc(p.date)+'</td><td>'+(p.tags||[]).map(function(t){return'<span class="tag">'+esc(t)+'</span>'}).join(' ')+'</td></tr>';
+    h+='<tr><td>'+p.id+'</td><td><strong style="color:var(--text)">'+esc(p.title)+'</strong></td><td>'+esc(p.date)+'</td><td>'+(p.tags||[]).map(function(t){return'<span class="tag">'+esc(t)+'</span>'}).join(' ')+'</td><td><button class="btn btn-d" data-del="'+p.id+'" style="font-size:12px;padding:4px 10px">删除</button></td></tr>';
   });
   h+='</tbody></table>';t.innerHTML=h;
 }
@@ -303,6 +303,13 @@ function unpublish(){
   localStorage.removeItem(BOX_KEY);updatePubBadge();alert('↩ 已清除本地数据，主站将显示服务器版本。');
 }
 
+function deletePost(id){
+  if(!confirm('确定删除 ID='+id+' 的博文吗？此操作不可恢复。')) return;
+  g_posts = g_posts.filter(function(p){ return p.id !== id; });
+  try{localStorage.setItem(BOX_KEY,JSON.stringify(g_posts))}catch(e){}
+  render();
+}
+
 // ===== 事件 =====
 function wire(){
   document.getElementById('gBtn').addEventListener('click',login);
@@ -313,6 +320,10 @@ function wire(){
   document.getElementById('fileInp').addEventListener('change',function(){if(this.files[0]){importFile(this.files[0]);this.value=''}});
   document.getElementById('btnPub').addEventListener('click',publish);
   document.getElementById('btnUnpub').addEventListener('click',unpublish);
+  document.getElementById('postTable').addEventListener('click',function(e){
+    var btn = e.target.closest('[data-del]');
+    if(btn) deletePost(parseInt(btn.dataset.del));
+  });
 }
 
 function showShell(){
