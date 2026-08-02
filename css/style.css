@@ -904,6 +904,60 @@ body.loaded { opacity: 1; }
     text-decoration: underline;
 }
 
+/* ---- 友链引导卡片 ---- */
+.friend-guide-card {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    max-width: 440px;
+    margin: 20px auto 28px;
+    padding: 18px 24px;
+    background: rgba(128, 176, 224, 0.04);
+    border: 1px solid rgba(128, 176, 224, 0.15);
+    border-radius: 12px;
+    text-decoration: none;
+    transition: border-color 0.3s var(--ease-out-quart),
+                background 0.3s var(--ease-out-quart),
+                transform 0.3s var(--ease-spring),
+                box-shadow 0.3s var(--ease-out-quart);
+}
+
+.friend-guide-card:hover {
+    border-color: rgba(128, 176, 224, 0.35);
+    background: rgba(128, 176, 224, 0.08);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(128, 176, 224, 0.12);
+}
+
+.friend-guide-icon {
+    font-size: 32px;
+    flex-shrink: 0;
+}
+
+.friend-guide-text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.friend-guide-title {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 700;
+    color: #d0d8f0;
+}
+
+.friend-guide-subtitle {
+    font-family: var(--font-cn);
+    font-size: 12px;
+    color: var(--rinui-text-muted);
+    transition: color 0.25s var(--ease-out-quart);
+}
+
+.friend-guide-card:hover .friend-guide-subtitle {
+    color: var(--rinui-tag-text);
+}
+
 .friends-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
