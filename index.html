@@ -246,7 +246,6 @@
                             <span class="intro-tag"><span class="intro-tag-icon">💕</span>纯爱番</span>
                             <span class="intro-tag"><span class="intro-tag-icon">🥤</span>魔爪</span>
                             <span class="intro-tag"><span class="intro-tag-icon">📱</span>蔚蓝档案</span>
-                            <span class="intro-tag"><span class="intro-tag-icon">🐧</span>凑企鹅</span>
                         </div>
                         <button type="button" class="intro-more-btn" onclick="openModal('introModal')">
                                 点击了解更多关于我
@@ -290,11 +289,10 @@
             <span class="statusbar-item">
                 <span>© sunZshanY.inc</span>
                 <span class="statusbar-separator" aria-hidden="true">|</span>
-                <a href="https://icp.gov.moe/?keyword=20266671" target="_blank" rel="noopener noreferrer">萌ICP备20266671号</a>
+                <a href="https://icp.gov.moe/?keyword=20266671" target="_blank" rel="noopener noreferrer" style="text-decoration:none;color:inherit">萌ICP备20266671号</a>
                 <span class="statusbar-separator" aria-hidden="true">|</span>
                 <span style="opacity:0.35;font-size:12px"><a href="https://www.bilibili.com/video/BV1CkN66eEtV/?spm_id_from=333.1391.0.0&vd_source=7c847222bc0c98bdec924409f34d4677" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:none">请输入文本</a></span>
                 <span class="statusbar-separator" aria-hidden="true">|</span>
-                <span style="opacity:0.25;font-size:11px"><a href="https://www.bilibili.com/video/BV1e7gz68EcB/" target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:none">🐧</a></span>
             </span>
         </footer>
     </div>
@@ -341,7 +339,6 @@
                         <p>🎮 <strong>舞萌DX</strong> —— <del>出勤即正义，打歌如呼吸</del></p>
                         <p>💕 <strong>纯爱番</strong> —— 总之就是非常可爱（高松灯我老婆）</p>
                         <p>🥤 <strong>魔爪</strong> —— 每天一罐，赛博提神</p>
-                        <p>🐧 <strong>凑企鹅</strong> —— 45只转圈圈太魔性了根本停不下来</p>
                     </div>
                 </div>
 
@@ -355,7 +352,6 @@
                         <p><strong>蔚蓝档案</strong> <del>忠实玩家</del> <b>嗯对！</b></p>
                         <p style="text-decoration:line-through;opacity:0.5;">是一名白子厨（现在不是了）</p>
                         <p>臭打音游的，舞萌DX <del>重度患者</del> 轻度摸鱼</p>
-                        <p>邦多利老凳</p>
                     </div>
                 </div>
 
@@ -372,7 +368,6 @@
                             <span> 深夜 coding 然后第二天后悔</span>
                             <span> 博客就是公开日记本</span>
                             <span> 前端设计苦手但硬着头皮上</span>
-                            <span> 🐧 凑企鹅教信徒</span>
                         </div>
                     </div>
                 </div>
@@ -384,100 +379,6 @@
     </div>
 
     <script src="js/alert.js" defer></script>
-
-    <!-- ====== 🐧 凑企鹅彩蛋 ====== -->
-    <script>
-    (function(){
-        var konami = ['ArrowUp','ArrowUp','ArrowDown','ArrowDown','ArrowLeft','ArrowRight','ArrowLeft','ArrowRight','b','a'];
-        var seq = 0;
-        var clicks = 0;
-        var cTimer = null;
-
-        function goPenguin() {
-            if (document.getElementById('penguinEE')) return;
-            var el = document.getElementById('penguinEE');
-            if (el) return;
-
-            var c = document.createElement('div');
-            c.id = 'penguinEE';
-            document.body.appendChild(c);
-
-            var W = window.innerWidth, H = window.innerHeight;
-            var cx = W / 2, cy = H / 2;
-
-            // 简版 toast
-            var t = document.createElement('div');
-            t.style.cssText = 'position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:100000;font-size:28px;font-weight:bold;color:#ffd700;text-shadow:0 0 30px rgba(0,0,0,0.8);pointer-events:none;font-family:Microsoft YaHei,sans-serif;transition:opacity 0.8s ease;';
-            t.textContent = '🎵 元祖！凑企鹅のテーマ 🎵';
-            document.body.appendChild(t);
-            setTimeout(function(){ t.style.opacity = '0'; setTimeout(function(){ t.remove(); }, 800); }, 2500);
-
-            var pens = [];
-            for (var i = 0; i < 45; i++) {
-                var p = document.createElement('div');
-                p.textContent = '🐧';
-                var sz = 18 + Math.random() * 20;
-                var angle = (i / 45) * Math.PI * 2;
-                var radius = 80 + Math.random() * 100;
-                var spd = 0.6 + Math.random() * 0.8;
-                p.style.cssText = 'position:absolute;font-size:' + sz + 'px;transform:translate(-50%,-50%);opacity:0;';
-                p.dataset.angle = angle;
-                p.dataset.radius = radius;
-                p.dataset.speed = spd;
-                pens.push(p);
-                c.appendChild(p);
-            }
-
-            var start = performance.now();
-            var dur = 6000;
-
-            function frame(now) {
-                var t = Math.min((now - start) / dur, 1);
-                for (var j = 0; j < 45; j++) {
-                    var pk = pens[j];
-                    var a = parseFloat(pk.dataset.angle) + t * Math.PI * 4 * parseFloat(pk.dataset.speed);
-                    var r = parseFloat(pk.dataset.radius);
-                    var s = t < 0.15 ? t / 0.15 : (t > 0.85 ? (1 - t) / 0.15 : 1);
-                    s = Math.max(0, Math.min(1, s));
-                    pk.style.left = (cx + Math.cos(a) * r) + 'px';
-                    pk.style.top = (cy + Math.sin(a) * r) + 'px';
-                    pk.style.opacity = s * 1.2;
-                    pk.style.transform = 'translate(-50%,-50%) scale(' + s + ')';
-                }
-                if (t < 1) requestAnimationFrame(frame);
-                else { c.remove(); }
-            }
-            requestAnimationFrame(frame);
-        }
-
-        // Konami
-        document.addEventListener('keydown', function(e) {
-            var k = e.key;
-            if (k === konami[seq]) { seq++; if (seq === konami.length) { seq = 0; goPenguin(); } }
-            else { seq = 0; }
-        });
-
-        // 点头像7次
-        document.addEventListener('DOMContentLoaded', function() {
-            var logo = document.querySelector('.topbar-logo');
-            if (logo) {
-                logo.addEventListener('click', function() {
-                    clicks++;
-                    clearTimeout(cTimer);
-                    cTimer = setTimeout(function(){ clicks = 0; }, 2000);
-                    if (clicks >= 7) { clicks = 0; goPenguin(); }
-                });
-            }
-        });
-
-        // Console 提示
-        setTimeout(function(){
-            console.log('%c🐧 凑企鹅！', 'font-size:24px;font-weight:bold;');
-            console.log('%c试试 ↑↑↓↓←→←→BA 或者点头像7次', 'color:#80b0e0;font-size:14px;');
-            console.log('%cBV1e7gz68EcB', 'color:#606070;font-size:11px;');
-        }, 1000);
-    })();
-    </script>
 
     <!-- ====== 管理入口：?admin 触发 ====== -->
     <div id="adminGate" style="display:none;position:fixed;inset:0;z-index:9999;background:rgba(7,7,18,.97);align-items:center;justify-content:center">
