@@ -206,6 +206,54 @@
             color: var(--accent);
         }
 
+        /* -------- Header Home Link -------- */
+        .header-home-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            font-family: var(--font-mono);
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--accent);
+            text-decoration: none;
+            padding: 7px 15px;
+            border-radius: var(--radius-sm);
+            border: 1px solid rgba(128, 176, 224, 0.20);
+            transition: color 0.2s var(--ease-smooth),
+                        background 0.2s var(--ease-smooth),
+                        border-color 0.2s var(--ease-smooth),
+                        gap 0.25s var(--ease-smooth);
+        }
+
+        .header-home-link:hover {
+            color: #a0d0ff;
+            background: rgba(128, 176, 224, 0.08);
+            border-color: rgba(128, 176, 224, 0.35);
+            gap: 12px;
+        }
+
+        .header-home-arrow {
+            font-size: 15px;
+            transition: transform 0.25s var(--ease-smooth);
+        }
+
+        .header-home-link:hover .header-home-arrow {
+            transform: translateX(-3px);
+        }
+
+        .header-home-label {
+            white-space: nowrap;
+        }
+
+        @media (max-width: 768px) {
+            .header-home-label {
+                display: none;
+            }
+            .header-home-link {
+                padding: 7px 12px;
+            }
+        }
+
         /* ============================================================
            Main
            ============================================================ */
@@ -896,15 +944,16 @@
              ============================================================ -->
         <header class="site-header">
             <div class="header-left">
-                <!-- <img class="header-logo" src="" alt=""> -->
-                <!-- <span class="header-title"></span> -->
+                <a href="../index.html" class="header-home-link" title="返回主页">
+                    <span class="header-home-arrow">←</span>
+                    <span class="header-home-label">返回主页</span>
+                </a>
             </div>
             <div class="header-center">
                 <span class="typing-text" id="typingOutput"></span><span class="typing-cursor" id="typingCursor"></span>
             </div>
             <nav class="header-nav">
-                <!-- <a href="#" class="active"></a> -->
-                <!-- <a href="#"></a> -->
+                <a href="../index.html">🏠 主页</a>
             </nav>
         </header>
 
@@ -1029,7 +1078,9 @@
              Footer
              ============================================================ -->
         <footer class="site-footer">
-            <!-- <span></span> -->
+            <a href="../index.html">← 返回主页</a>
+            <span class="footer-sep">|</span>
+            <span>© sunZshanY.inc</span>
         </footer>
 
     </div>

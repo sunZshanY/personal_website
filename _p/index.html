@@ -150,12 +150,18 @@ body{font-family:var(--font);background:var(--bg);color:var(--text2);min-height:
 
     <!-- 导出 -->
     <div class="card">
-      <h3>📤 导出 posts.json</h3>
+      <h3>📤 导出 JSON 文件（删除文章后请下载并替换仓库文件）</h3>
       <textarea class="export-area" id="exportArea" readonly placeholder="加载中..."></textarea>
       <div class="btn-row">
-        <button class="btn btn-s" id="btnDL">下载</button>
-        <button class="btn btn-o" id="btnCP">复制</button>
+        <button class="btn btn-s" id="btnDLData">📥 下载 data/posts.json（完整版）</button>
+        <button class="btn btn-s" id="btnDLMain">📥 下载 main.json（摘要版）</button>
+        <button class="btn btn-o" id="btnCP">📋 复制</button>
       </div>
+      <p class="hint" style="margin-top:10px">
+        ⚠️ <b>重要</b>：在管理面板删除文章后，请下载上述两个 JSON 文件，<br>
+        替换仓库中的 <code>data/posts.json</code> 和 <code>main.json</code>，<br>
+        然后 <code>git commit</code> + <code>git push</code> 以同步到 GitHub 和 Cloudflare。
+      </p>
     </div>
 
     <!-- 导入 -->
@@ -234,10 +240,7 @@ function fetchData(cb){
 function render(){
   document.getElementById('cnt').textContent=g_posts.length;
   updatePubBadge();
-
-  // 导出区
-  var ex={version:'4.0',updatedAt:new Date().toISOString(),posts:g_posts};
-  document.getElementById('exportArea').value=JSON.stringify(ex,null,2);
+  updateExportArea();
 
   // 文章表
   var t=document.getElementById('postTable');
@@ -250,6 +253,62 @@ function render(){
 }
 
 function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
+
+// 截取内容为摘要（取前150字或第一段）
+function excerpt(content, maxLen){
+  if(!content) return '';
+  maxLen = maxLen || 150;
+  // 按换行取第一段
+  var firstPara = content.split('\n').filter(function(p){return p.trim();})[0] || content;
+  if(firstPara.length <= maxLen) return firstPara;
+  return firstPara.slice(0, maxLen).replace(/\s+\S*$/, '') + '...';
+}
+
+// 生成 main.json 格式（内容为摘要版）
+function generateMainJson(){
+  var mainPosts = g_posts.map(function(p){
+    return {
+      id: p.id,
+      title: p.title,
+      date: p.date,
+      content: excerpt(p.content, 150),
+      tags: p.tags
+    };
+  });
+  return { version: '5.1', updatedAt: new Date().toISOString(), posts: mainPosts };
+}
+
+// 生成 data/posts.json 格式（内容为完整版）
+function generateDataJson(){
+  return { version: '5.1', updatedAt: new Date().toISOString(), posts: g_posts };
+}
+
+// 更新导出文本区
+function updateExportArea(){
+  document.getElementById('exportArea').value = JSON.stringify(generateDataJson(), null, 2);
+}
+
+// 下载 main.json
+function downloadMainJson(){
+  var jsonStr = JSON.stringify(generateMainJson(), null, 2);
+  var b = new Blob([jsonStr], {type: 'application/json'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(b);
+  a.download = 'main.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+// 下载 data/posts.json
+function downloadDataJson(){
+  var jsonStr = JSON.stringify(generateDataJson(), null, 2);
+  var b = new Blob([jsonStr], {type: 'application/json'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(b);
+  a.download = 'data_posts.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
 
 function updatePubBadge(){
   // 本地有数据即视为可显示
@@ -297,7 +356,9 @@ function importFile(f){
 function publish(){
   try{localStorage.setItem(BOX_KEY,JSON.stringify(g_posts))}catch(e){alert('存储失败');return}
   localStorage.setItem('omiblog_admin_sync','1');
-  updatePubBadge();alert('✅ 已保存到本地！主站将自动显示这些内容。');
+  updatePubBadge();
+  updateExportArea();
+  alert('✅ 已同步到本地存储！当前浏览器访问主站将显示更新后的内容。\n\n📌 如需同步到所有用户，请下载下方 JSON 文件并替换仓库中的 data/posts.json 和 main.json，然后 git commit & push。');
 }
 
 function unpublish(){
@@ -310,13 +371,17 @@ function deletePost(id){
   try{localStorage.setItem(BOX_KEY,JSON.stringify(g_posts))}catch(e){}
   localStorage.setItem('omiblog_admin_sync','1');
   render();
+  // 自动更新导出区并提示
+  updateExportArea();
+  alert('✅ 博文已删除！\n\n📌 请点击下方「下载 data/posts.json」和「下载 main.json」按钮，\n然后将下载的文件替换到项目根目录的对应文件，\n最后 git commit & push 以同步到所有端。');
 }
 
 // ===== 事件 =====
 function wire(){
   document.getElementById('gBtn').addEventListener('click',login);
   document.getElementById('gPass').addEventListener('keydown',function(e){if(e.key==='Enter')login()});
-  document.getElementById('btnDL').addEventListener('click',download);
+  document.getElementById('btnDLData').addEventListener('click',downloadDataJson);
+  document.getElementById('btnDLMain').addEventListener('click',downloadMainJson);
   document.getElementById('btnCP').addEventListener('click',copyExport);
   document.getElementById('btnImp').addEventListener('click',function(){document.getElementById('fileInp').click()});
   document.getElementById('fileInp').addEventListener('change',function(){if(this.files[0]){importFile(this.files[0]);this.value=''}});
