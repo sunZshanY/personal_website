@@ -10,7 +10,7 @@
     'use strict';
 
     // ========== 常量 ==========
-    var IMG_API_WIDE = 'https://api.imlazy.ink/v1/img/';
+    var IMG_API_WIDE = '/api/bg';
     var DATA_URL = 'data/posts.json';
     var BG_TICK = 60000;
     var API_TIMEOUT = 8000;
@@ -254,6 +254,50 @@
             });
     }
 
+    // ========== 实时访客心跳 ==========
+    var VISITOR_API = '/api/visitors/heartbeat';
+    var HEARTBEAT_MS = 30000; // 30秒一次心跳
+
+    function _getSessionId() {
+        var id = sessionStorage.getItem('visitor_sid');
+        if (!id) {
+            id = 'v_' + Date.now().toString(36) + '_' + Math.random().toString(36).slice(2, 8);
+            sessionStorage.setItem('visitor_sid', id);
+        }
+        return id;
+    }
+
+    function _sendHeartbeat() {
+        try {
+            var data = {
+                sessionId: _getSessionId(),
+                page: location.pathname,
+                referrer: document.referrer || ''
+            };
+            // 优先使用 sendBeacon（不阻塞页面卸载），降级到 fetch
+            if (navigator.sendBeacon) {
+                var blob = new Blob([JSON.stringify(data)], { type: 'application/json' });
+                navigator.sendBeacon(VISITOR_API, blob);
+            } else {
+                fetch(VISITOR_API, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data),
+                    keepalive: true
+                }).catch(function(){});
+            }
+        } catch(e) {}
+    }
+
+    function _startHeartbeat() {
+        _sendHeartbeat();
+        setInterval(_sendHeartbeat, HEARTBEAT_MS);
+        // 用户切回标签页时立即上报
+        document.addEventListener('visibilitychange', function() {
+            if (!document.hidden) _sendHeartbeat();
+        });
+    }
+
     // ========== 访客计数 ==========
     function _eyeBump() {
         var c = parseInt(localStorage.getItem(EYE_KEY),10)||0;
@@ -448,6 +492,7 @@
         _buildGuestbookPanel();
         _eyeBump();
         _wireItUp();
+        _startHeartbeat();
 
         // 加载博客数据（从 JSON 文件）
         await _loadPosts();

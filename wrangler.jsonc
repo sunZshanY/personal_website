@@ -1,14 +1,18 @@
 {
   "$schema": "node_modules/wrangler/config-schema.json",
-  "name": "omia-web",
+  "name": "omiasun",
+  "pages_build_output_dir": ".",
   "compatibility_date": "2026-07-28",
   "observability": {
     "enabled": true
   },
-  "assets": {
-    "directory": "."
-  },
   "compatibility_flags": [
     "nodejs_compat"
+  ],
+  "kv_namespaces": [
+    {
+      "binding": "VISITOR_STORE",
+      "id": "0f7f3ab0dc3541e3ad845a07d9819d00"
+    }
   ]
 }

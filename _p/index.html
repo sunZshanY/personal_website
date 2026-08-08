@@ -105,6 +105,22 @@ body{font-family:var(--font);background:var(--bg);color:var(--text2);min-height:
 .tbl tbody tr:hover{background:rgba(59,130,246,.04)}
 .tag{display:inline-block;padding:2px 8px;background:rgba(59,130,246,.1);color:var(--accent);border-radius:10px;font-size:11px;font-family:var(--mono);margin:1px 3px}
 .empty{text-align:center;padding:40px;color:var(--text4)}
+/* 访客监控 */
+.visitor-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.visitor-count{font-size:36px;font-weight:700;font-family:var(--mono);color:var(--green)}
+.visitor-count.zero{color:var(--text4)}
+.visitor-poll{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--text4)}
+.visitor-poll-dot{width:6px;height:6px;border-radius:50%;background:var(--green);animation:pulse-dot 1.5s ease-in-out infinite}
+@keyframes pulse-dot{0%,100%{opacity:1}50%{opacity:0.3}}
+.visitor-tbl{width:100%;border-collapse:collapse;margin-top:8px;font-size:12px}
+.visitor-tbl th{background:rgba(30,41,59,.5);color:var(--text4);font-size:11px;text-transform:uppercase;padding:8px 10px;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap}
+.visitor-tbl td{padding:7px 10px;border-bottom:1px solid rgba(30,41,59,.4);white-space:nowrap;font-family:var(--mono)}
+.visitor-tbl td.page-cell{max-width:120px;overflow:hidden;text-overflow:ellipsis}
+.visitor-tbl tbody tr:hover{background:rgba(59,130,246,.04)}
+.visitor-tbl tbody tr.new-row{animation:rowIn .4s ease}
+@keyframes rowIn{from{background:rgba(16,185,129,.15)}to{background:transparent}}
+.visitor-live{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--green);margin-right:3px;animation:pulse-dot 1.2s ease-in-out infinite}
+.visitor-online-badge{display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--green);font-weight:500}
 /* 响应式 */
 @media(max-width:640px){
   .main{padding:16px 12px}.card{padding:18px 16px}
@@ -145,6 +161,28 @@ body{font-family:var(--font);background:var(--bg);color:var(--text2);min-height:
         <button class="btn btn-s" id="btnPub">🚀 同步到主站</button>
         <button class="btn btn-o" id="btnUnpub" style="display:none">↩ 取消同步</button>
         <a href="../index.html" target="_blank" class="btn btn-o" style="text-decoration:none">👁 预览主站</a>
+      </div>
+    </div>
+
+    <!-- 实时访客监控 -->
+    <div class="card" id="visitorCard">
+      <div class="visitor-header">
+        <h3 style="margin:0;padding:0;border:none">👁 实时访客</h3>
+        <div class="visitor-poll">
+          <span class="visitor-poll-dot"></span>
+          <span id="pollStatus">监控中…</span>
+        </div>
+      </div>
+      <div style="display:flex;align-items:baseline;gap:12px;margin-bottom:4px">
+        <span class="visitor-count zero" id="visitorOnlineCount">0</span>
+        <span style="color:var(--text4);font-size:14px">人在线</span>
+      </div>
+      <div id="visitorTableWrap" style="max-height:360px;overflow-y:auto">
+        <div class="empty" id="visitorEmpty">暂无访客在线</div>
+        <table class="visitor-tbl" id="visitorTbl" style="display:none">
+          <thead><tr><th>IP</th><th>地区</th><th>浏览器</th><th>页面</th><th>在线时长</th></tr></thead>
+          <tbody id="visitorTbody"></tbody>
+        </table>
       </div>
     </div>
 
@@ -218,9 +256,91 @@ function login(){
 
 function logout(){
   localStorage.removeItem(BOSS_KEY);
+  stopVisitorPoll();
   document.getElementById('gate').style.display='';
   document.getElementById('shell').style.display='none';
 }
+
+// ===== 实时访客监控 =====
+var VISITOR_API_ONLINE = '/api/visitors/online';
+var VISITOR_POLL_MS = 3000; // 3秒轮询
+var ADMIN_AUTH = 'omia_admin_2024';
+var _visitorTimer = null;
+var _prevSids = {}; // 用于检测新访客
+
+function startVisitorPoll(){
+  _fetchVisitors();
+  _visitorTimer = setInterval(_fetchVisitors, VISITOR_POLL_MS);
+}
+
+function stopVisitorPoll(){
+  if(_visitorTimer){ clearInterval(_visitorTimer); _visitorTimer = null; }
+}
+
+function _fetchVisitors(){
+  fetch(VISITOR_API_ONLINE, {
+    headers: { 'X-Admin-Auth': ADMIN_AUTH },
+    cache: 'no-cache'
+  })
+  .then(function(r){ if(!r.ok) throw Error('HTTP '+r.status); return r.json(); })
+  .then(function(data){
+    _renderVisitors(data);
+    document.getElementById('pollStatus').textContent = '监控中 ' + new Date().toLocaleTimeString('zh-CN', {hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  })
+  .catch(function(err){
+    document.getElementById('pollStatus').textContent = '⚠ 连接异常';
+    console.warn('Visitor poll error:', err.message);
+  });
+}
+
+function _renderVisitors(data){
+  var count = data.online || 0;
+  var visitors = data.visitors || [];
+  var countEl = document.getElementById('visitorOnlineCount');
+  var emptyEl = document.getElementById('visitorEmpty');
+  var tblEl = document.getElementById('visitorTbl');
+  var tbody = document.getElementById('visitorTbody');
+
+  countEl.textContent = count;
+  countEl.className = 'visitor-count' + (count === 0 ? ' zero' : '');
+
+  if(count === 0){
+    emptyEl.style.display = '';
+    tblEl.style.display = 'none';
+    _prevSids = {};
+    return;
+  }
+
+  emptyEl.style.display = 'none';
+  tblEl.style.display = '';
+
+  var now = Date.now();
+  var curSids = {};
+  var rows = '';
+
+  visitors.forEach(function(v){
+    curSids[v.sessionId] = true;
+    var isNew = !_prevSids[v.sessionId];
+    var onlineSec = Math.floor((now - v.lastSeen) / 1000);
+    var durationSec = Math.floor((now - v.firstSeen) / 1000);
+    var onlineStr = onlineSec < 60 ? onlineSec + 's前' : Math.floor(onlineSec/60) + 'm前';
+    var durStr = durationSec < 60 ? durationSec + 's' : (durationSec < 3600 ? Math.floor(durationSec/60) + 'm' : Math.floor(durationSec/3600) + 'h' + Math.floor((durationSec%3600)/60) + 'm');
+    var rowClass = isNew ? ' class="new-row"' : '';
+
+    rows += '<tr' + rowClass + '>'
+      + '<td><span class="visitor-live"></span>' + esc(v.ip) + '</td>'
+      + '<td>' + esc(v.country) + '</td>'
+      + '<td>' + esc(v.userAgent) + '</td>'
+      + '<td class="page-cell" title="' + escAttr(v.page) + '">' + esc(v.page) + '</td>'
+      + '<td>' + durStr + '</td>'
+      + '</tr>';
+  });
+
+  tbody.innerHTML = rows;
+  _prevSids = curSids;
+}
+
+function escAttr(s){ return s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
 // ===== 数据 =====
 function fetchData(cb){
@@ -397,6 +517,7 @@ function showShell(){
   document.getElementById('gate').style.display='none';
   document.getElementById('shell').style.display='';
   fetchData(function(){render()});
+  startVisitorPoll();
 }
 
 // 启动
