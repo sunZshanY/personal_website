@@ -1,0 +1,1015 @@
+/* ============================================================
+   KnowFlow · 个人知识库 — RinUI Fluent Design Dark Theme
+   ============================================================
+   色彩体系 (与 Omiaちゃん Blog 共享 RinUI 主题):
+     #1a1a2e  顶部标题栏
+     #16213e  侧边栏 / 卡片 / GroupBox 背景
+     #0f3460  激活高亮 / 标签背景
+     #0f0f23  底部状态栏
+     #2a2a4a  边框色 (默认)
+     #3a3a5c  边框色 (悬停)
+     #ffffff  主文字
+     #c0c0d0  常规文字
+     #a0a0b8  次要文字
+     #808090  弱化文字
+     #707080  状态栏文字
+     #606070  禁用文字
+     #505060  版本文字
+     #4caf50  成功绿
+     #f44336  错误红
+     #80b0e0  标签文字色
+     #ffd700  收藏/高亮金
+   ============================================================ */
+
+/* ==================== Reset ==================== */
+*, *::before, *::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+    min-height: 100vh;
+    font-family: 'JetBrains Mono', 'Microsoft YaHei', 'SimHei', sans-serif;
+    background: #0a0a1a;
+    color: #c0c0d0;
+    overflow: hidden;
+}
+
+/* ==================== 隐藏类 ==================== */
+.hidden { display: none !important; }
+
+/* ==================== RinUI 布局 ==================== */
+.rinui-layout {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}
+
+/* ---- 顶部标题栏 (#1a1a2e) ---- */
+.rinui-topbar {
+    display: flex;
+    align-items: center;
+    height: 48px;
+    min-height: 48px;
+    padding: 0 16px;
+    background: #1a1a2e;
+    border-bottom: 1px solid #2a2a4a;
+    z-index: 50;
+    gap: 16px;
+}
+
+.topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-shrink: 0;
+}
+
+.topbar-logo-icon {
+    font-size: 22px;
+}
+
+.topbar-title {
+    color: #ffffff;
+    font-size: 18px;
+    font-weight: bold;
+    font-family: 'Microsoft YaHei', 'SimHei', sans-serif;
+}
+
+.topbar-subtitle {
+    color: #808090;
+    font-size: 12px;
+    font-family: 'Microsoft YaHei', 'SimHei', sans-serif;
+}
+
+/* 搜索栏 */
+.topbar-search {
+    flex: 1;
+    max-width: 480px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(22, 33, 62, 0.6);
+    border: 1px solid #2a2a4a;
+    border-radius: 8px;
+    padding: 0 12px;
+    transition: border-color 0.2s ease;
+}
+.topbar-search:focus-within {
+    border-color: #0f3460;
+    box-shadow: 0 0 0 3px rgba(15, 52, 96, 0.2);
+}
+.topbar-search .search-icon {
+    color: #808090;
+    font-size: 14px;
+    flex-shrink: 0;
+}
+.topbar-search input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    padding: 8px 0;
+    color: #ffffff;
+    font-size: 13px;
+    font-family: 'Microsoft YaHei', 'SimHei', sans-serif;
+}
+.topbar-search input::placeholder { color: #606070; }
+
+.search-clear {
+    background: none;
+    border: none;
+    color: #808090;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0 4px;
+    line-height: 1;
+    flex-shrink: 0;
+}
+.search-clear:hover { color: #f44336; }
+
+.topbar-right {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    flex-shrink: 0;
+}
+
+.topbar-divider {
+    color: #3a3a5c;
+    margin: 0 4px;
+}
+
+.topbar-stat {
+    color: #a0a0b8;
+    font-size: 13px;
+    font-family: 'Microsoft YaHei', 'SimHei', sans-serif;
+    white-space: nowrap;
+}
+
+/* 视图切换 */
+.view-toggle {
+    font-size: 16px;
+    padding: 6px 10px;
+    border-radius: 4px;
+}
+.view-toggle.active {
+    background: #0f3460;
+    color: #ffffff;
+}
+
+/* ---- 主体区域 ---- */
+.rinui-main {
+    display: flex;
+    flex: 1;
+    min-height: 0;
+    overflow: hidden;
+}
+
+/* ---- 侧边栏 (#16213e) ---- */
+.rinui-sidebar {
+    width: 220px;
+    min-width: 220px;
+    background: #16213e;
+    border-right: 1px solid #2a2a4a;
+    display: flex;
+    flex-direction: column;
+    padding: 8px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.sidebar-section-label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: #808090;
+    font-size: 10px;
+    font-family: 'Microsoft YaHei', 'SimHei', sans-serif;
+    padding: 10px 8px 4px;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+}
+
+.category-add-btn {
+    background: none;
+    border: 1px solid #3a3a5c;
+    border-radius: 4px;
+    color: #808090;
+    width: 20px; height: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+    line-height: 1;
+}
+.category-add-btn:hover {
+    color: #ffffff;
+    border-color: #80b0e0;
+    background: rgba(128, 176, 224, 0.1);
+}
+
+.sidebar-nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    height: 36px;
+    padding: 0 10px;
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    color: #c0c0d0;
+    font-size: 13px;
+    font-family: 'Microsoft YaHei', 'SimHei', sans-serif;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-align: left;
+    position: relative;
+}
+.sidebar-nav-btn:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #ffffff;
+}
+.sidebar-nav-btn.active {
+    background: #0f3460;
+    color: #ffffff;
+}
+
+.nav-icon {
+    font-size: 15px;
+    width: 22px;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+.nav-count {
+    margin-left: auto;
+    font-size: 11px;
+    color: #808090;
+    background: rgba(255, 255, 255, 0.06);
+    padding: 1px 7px;
+    border-radius: 10px;
+    font-family: 'JetBrains Mono', monospace;
+}
+.sidebar-nav-btn.active .nav-count {
+    background: rgba(255, 255, 255, 0.15);
+    color: #ffffff;
+}
+
+.sidebar-divider {
+    height: 1px;
+    background: #2a2a4a;
+    margin: 8px 4px;
+}
+
+/* 分类列表 */
+.category-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.category-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    width: 100%;
+    height: 32px;
+    padding: 0 10px;
+    background: transparent;
+    border: none;
+    border-radius: 6px;
+    color: #a0a0b8;
+    font-size: 13px;
+    font-family: 'Microsoft YaHei', 'SimHei', sans-serif;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    text-align: left;
+}
+.category-item:hover {
+    background: rgba(255, 255, 255, 0.05);
+    color: #ffffff;
+}
+.category-item.active {
+    background: #0f3460;
+    color: #ffffff;
+}
+.category-item .cat-count {
+    margin-left: auto;
+    font-size: 11px;
+    color: #808090;
+    font-family: 'JetBrains Mono', monospace;
+}
+.category-item .cat-delete {
+    display: none;
+    background: none;
+    border: none;
+    color: #606070;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 0 2px;
+}
+.category-item:hover .cat-delete { display: inline; }
+.category-item .cat-delete:hover { color: #f44336; }
+
+/* 标签云 */
+.tag-cloud {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    padding: 4px 6px;
+}
+
+.tag-cloud-item {
+    padding: 3px 8px;
+    background: rgba(15, 52, 96, 0.5);
+    border: 1px solid rgba(128, 176, 224, 0.12);
+    border-radius: 10px;
+    color: #80b0e0;
+    font-size: 11px;
+    font-family: 'JetBrains Mono', monospace;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+}
+.tag-cloud-item:hover {
+    background: #0f3460;
+    color: #ffffff;
+    transform: translateY(-1px);
+}
+.tag-cloud-item.active {
+    background: #1a4a80;
+    color: #ffffff;
+    border-color: #80b0e0;
+}
+
+.sidebar-spacer { flex: 1; }
+
+.sidebar-footer {
+    padding: 8px 4px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.sidebar-version {
+    color: #505060;
+    font-size: 10px;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.sidebar-storage {
+    color: #505060;
+    font-size: 10px;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+/* ---- 内容区 ---- */
+.rinui-content {
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 20px;
+    background: rgba(10, 10, 26, 0.3);
+}
+
+/* 笔记网格 */
+.note-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 14px;
+    align-items: start;
+}
+
+/* 列表视图 */
+.note-grid.list-view {
+    grid-template-columns: 1fr;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+/* 笔记卡片 */
+.note-card {
+    background: rgba(22, 33, 62, 0.75);
+    border: 1px solid #2a2a4a;
+    border-radius: 10px;
+    padding: 18px 20px;
+    transition: all 0.25s ease;
+    backdrop-filter: blur(10px);
+    cursor: pointer;
+    animation: cardSlideIn 0.35s ease forwards;
+    position: relative;
+}
+.note-card:hover {
+    border-color: #3a3a5c;
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    background: rgba(22, 33, 62, 0.9);
+}
+
+@keyframes cardSlideIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.note-card .card-fav-star {
+    position: absolute;
+    top: 12px;
+    right: 14px;
+    font-size: 16px;
+    cursor: pointer;
+    opacity: 0.4;
+    transition: all 0.2s ease;
+    background: none;
+    border: none;
+    color: #ffd700;
+}
+.note-card .card-fav-star.active { opacity: 1; }
+.note-card .card-fav-star:hover { opacity: 1; transform: scale(1.2); }
+
+.note-card .card-category {
+    display: inline-block;
+    font-size: 10px;
+    color: #80b0e0;
+    background: rgba(15, 52, 96, 0.5);
+    padding: 2px 8px;
+    border-radius: 8px;
+    margin-bottom: 8px;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.note-card .card-title {
+    color: #ffffff;
+    font-size: 16px;
+    font-weight: bold;
+    font-family: 'Microsoft YaHei', 'SimHei', sans-serif;
+    margin-bottom: 10px;
+    line-height: 1.4;
+    padding-right: 28px;
+}
+
+.note-card .card-preview {
+    color: #a0a0b8;
+    font-size: 13px;
+    line-height: 1.6;
+    margin-bottom: 12px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.note-card .card-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    padding-top: 10px;
+    border-top: 1px solid #2a2a4a;
+    font-size: 11px;
+    color: #707080;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.note-card .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    margin-top: 8px;
+}
+
+.note-card .card-tag {
+    font-size: 10px;
+    color: #80b0e0;
+    background: rgba(15, 52, 96, 0.4);
+    padding: 1px 7px;
+    border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace;
+}
+
+.note-card .card-actions {
+    display: flex;
+    gap: 4px;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+}
+.note-card:hover .card-actions { opacity: 1; }
+
+/* ==================== 空状态 ==================== */
+.empty-state {
+    text-align: center;
+    padding: 80px 20px;
+    background: rgba(22, 33, 62, 0.3);
+    border: 1px dashed #3a3a5c;
+    border-radius: 12px;
+    max-width: 500px;
+    margin: 60px auto;
+}
+
+.empty-icon {
+    font-size: 56px;
+    margin-bottom: 16px;
+}
+
+.empty-title {
+    font-size: 18px;
+    color: #808090;
+    font-weight: bold;
+    font-family: 'Microsoft YaHei', 'SimHei', sans-serif;
+    margin-bottom: 6px;
+}
+
+.empty-subtitle {
+    font-size: 14px;
+    color: #606070;
+    font-family: 'Microsoft YaHei', 'SimHei', sans-serif;
+}
+
+/* ==================== RinUI 按钮系统 ==================== */
+.rinui-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 7px 14px;
+    border: none;
+    border-radius: 6px;
+    font-size: 13px;
+    font-family: 'Microsoft YaHei', 'SimHei', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    outline: none;
+    white-space: nowrap;
+}
+
+.rinui-btn.flat {
+    background: transparent;
+    color: #c0c0d0;
+}
+.rinui-btn.flat:hover {
+    background: rgba(255, 255, 255, 0.06);
+    color: #ffffff;
+}
+
+.rinui-btn.primary {
+    background: #0f3460;
+    color: #ffffff;
+}
+.rinui-btn.primary:hover {
+    background: #1a4a80;
+    box-shadow: 0 4px 12px rgba(15, 52, 96, 0.45);
+}
+
+.rinui-btn.danger {
+    background: rgba(244, 67, 54, 0.8);
+    color: #ffffff;
+}
+.rinui-btn.danger:hover {
+    background: rgba(244, 67, 54, 1);
+    box-shadow: 0 4px 12px rgba(244, 67, 54, 0.4);
+}
+
+.rinui-btn.small {
+    padding: 4px 10px;
+    font-size: 11px;
+}
+
+/* ---- 底部状态栏 (#0f0f23) ---- */
+.rinui-statusbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 24px;
+    min-height: 24px;
+    padding: 0 12px;
+    background: #0f0f23;
+    border-top: 1px solid #2a2a4a;
+    font-size: 11px;
+    font-family: 'JetBrains Mono', 'Microsoft YaHei', monospace;
+    color: #707080;
+    gap: 16px;
+}
+
+.statusbar-left,
+.statusbar-center,
+.statusbar-right {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    white-space: nowrap;
+}
+
+.statusbar-center { flex: 1; justify-content: center; }
+.statusbar-divider { color: #3a3a5c; }
+
+/* ==================== 模态框 ==================== */
+.modal {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 200;
+    animation: fadeIn 0.2s ease;
+    backdrop-filter: blur(6px);
+}
+
+.modal-content {
+    background: rgba(22, 33, 62, 0.97);
+    border: 1px solid #2a2a4a;
+    border-radius: 12px;
+    width: 92%;
+    max-width: 680px;
+    max-height: 90vh;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6);
+    animation: modalSlideIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.detail-content { max-width: 720px; }
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+@keyframes modalSlideIn {
+    from { opacity: 0; transform: translateY(-30px) scale(0.94); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 22px;
+    border-bottom: 1px solid #2a2a4a;
+    background: #1a1a2e;
+}
+
+.modal-header h3 {
+    color: #ffffff;
+    font-size: 17px;
+    font-weight: bold;
+    font-family: 'Microsoft YaHei', 'SimHei', sans-serif;
+}
+
+.close-modal {
+    background: none;
+    border: none;
+    color: #808090;
+    font-size: 24px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    line-height: 1;
+}
+.close-modal:hover {
+    color: #f44336;
+    transform: rotate(90deg);
+}
+
+.modal-body {
+    padding: 20px 22px;
+    overflow-y: auto;
+    flex: 1;
+}
+
+.modal-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    padding: 14px 22px;
+    border-top: 1px solid #2a2a4a;
+    background: rgba(15, 15, 35, 0.5);
+}
+
+/* 表单 */
+.form-group {
+    margin-bottom: 16px;
+}
+
+.form-group label {
+    display: block;
+    color: #c0c0d0;
+    font-size: 12px;
+    font-weight: 500;
+    font-family: 'Microsoft YaHei', 'SimHei', sans-serif;
+    margin-bottom: 5px;
+}
+
+.form-row {
+    display: flex;
+    gap: 14px;
+}
+
+.form-group input,
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 9px 12px;
+    background: rgba(15, 15, 35, 0.6);
+    border: 1px solid #2a2a4a;
+    border-radius: 7px;
+    color: #ffffff;
+    font-size: 14px;
+    font-family: 'Microsoft YaHei', 'SimHei', sans-serif;
+    outline: none;
+    transition: all 0.2s ease;
+}
+.form-group select {
+    cursor: pointer;
+}
+.form-group select option {
+    background: #16213e;
+    color: #c0c0d0;
+}
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+    border-color: #0f3460;
+    box-shadow: 0 0 0 3px rgba(15, 52, 96, 0.2);
+    background: rgba(15, 15, 35, 0.8);
+}
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+    color: #606070;
+}
+
+.form-group textarea {
+    resize: vertical;
+    min-height: 140px;
+    font-size: 13px;
+    line-height: 1.7;
+    font-family: 'JetBrains Mono', 'Microsoft YaHei', monospace;
+}
+
+/* 分类选择 */
+.category-select-wrapper {
+    display: flex;
+    gap: 4px;
+}
+.category-select-wrapper select { flex: 1; }
+
+/* 编辑器工具栏 */
+.editor-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    padding: 6px 8px;
+    background: rgba(15, 15, 35, 0.5);
+    border: 1px solid #2a2a4a;
+    border-bottom: none;
+    border-radius: 7px 7px 0 0;
+}
+
+.toolbar-btn {
+    background: none;
+    border: none;
+    border-radius: 4px;
+    color: #c0c0d0;
+    font-size: 13px;
+    font-family: 'JetBrains Mono', monospace;
+    padding: 4px 8px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+}
+.toolbar-btn:hover {
+    background: rgba(255, 255, 255, 0.08);
+    color: #ffffff;
+}
+
+.toolbar-spacer { flex: 1; }
+
+.editor-toolbar + textarea {
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+/* Markdown 预览 */
+.content-preview {
+    min-height: 140px;
+    max-height: 350px;
+    overflow-y: auto;
+    padding: 14px;
+    background: rgba(15, 15, 35, 0.4);
+    border: 1px solid #2a2a4a;
+    border-radius: 7px;
+    color: #c0c0d0;
+    font-size: 14px;
+    line-height: 1.8;
+    font-family: 'Microsoft YaHei', 'SimHei', sans-serif;
+}
+.content-preview h1, .content-preview h2, .content-preview h3 {
+    color: #ffffff;
+    margin: 12px 0 8px;
+}
+.content-preview h1 { font-size: 20px; border-bottom: 1px solid #2a2a4a; padding-bottom: 6px; }
+.content-preview h2 { font-size: 17px; }
+.content-preview h3 { font-size: 15px; }
+.content-preview p { margin-bottom: 10px; }
+.content-preview ul, .content-preview ol { margin: 8px 0; padding-left: 24px; }
+.content-preview li { margin-bottom: 4px; }
+.content-preview code {
+    background: rgba(15, 52, 96, 0.5);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: #80b0e0;
+}
+.content-preview pre {
+    background: rgba(10, 10, 26, 0.6);
+    border: 1px solid #2a2a4a;
+    border-radius: 6px;
+    padding: 12px;
+    overflow-x: auto;
+    margin: 10px 0;
+}
+.content-preview pre code {
+    background: none;
+    padding: 0;
+    color: #c0c0d0;
+}
+.content-preview a { color: #80b0e0; }
+.content-preview strong { color: #ffffff; }
+.content-preview blockquote {
+    border-left: 3px solid #0f3460;
+    padding-left: 12px;
+    color: #a0a0b8;
+    margin: 10px 0;
+}
+
+.char-count {
+    display: block;
+    text-align: right;
+    color: #606070;
+    font-size: 11px;
+    margin-top: 4px;
+    font-family: 'JetBrains Mono', monospace;
+}
+.char-count.warning { color: #ffd700; }
+.char-count.danger  { color: #f44336; }
+
+/* 详情视图 */
+.detail-header { position: sticky; top: 0; z-index: 10; }
+.detail-header h3 { font-size: 20px; line-height: 1.4; padding-right: 8px; }
+.detail-meta {
+    color: #808090;
+    font-size: 12px;
+    margin-bottom: 18px;
+    font-family: 'JetBrains Mono', monospace;
+}
+.detail-text {
+    color: #c0c0d0;
+    font-size: 15px;
+    line-height: 1.9;
+    word-break: break-word;
+}
+.detail-text p { margin-bottom: 14px; }
+.detail-tags {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid #2a2a4a;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+}
+.detail-tags:empty { display: none; }
+.detail-footer { display: flex; justify-content: space-between; align-items: center; }
+
+/* ==================== Toast 通知 ==================== */
+.toast-container {
+    position: fixed;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 999;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    pointer-events: none;
+}
+
+.toast-item {
+    pointer-events: auto;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 14px;
+    font-weight: 500;
+    font-family: 'Microsoft YaHei', 'SimHei', sans-serif;
+    color: #ffffff;
+    backdrop-filter: blur(15px);
+    animation: toastSlideIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
+    white-space: nowrap;
+}
+
+.toast-success { background: rgba(46, 125, 50, 0.9); border: 1px solid rgba(76, 175, 80, 0.4); }
+.toast-error   { background: rgba(198, 40, 40, 0.9); border: 1px solid rgba(244, 67, 54, 0.4); }
+.toast-info    { background: rgba(21, 101, 192, 0.9); border: 1px solid rgba(33, 150, 243, 0.4); }
+
+@keyframes toastSlideIn {
+    from { opacity: 0; transform: translateY(-30px) scale(0.9); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes toastSlideOut {
+    from { opacity: 1; transform: translateY(0) scale(1); }
+    to   { opacity: 0; transform: translateY(-30px) scale(0.9); }
+}
+
+/* ==================== 滚动条 ==================== */
+.rinui-content::-webkit-scrollbar,
+.rinui-sidebar::-webkit-scrollbar,
+.modal-body::-webkit-scrollbar,
+.content-preview::-webkit-scrollbar {
+    width: 5px;
+}
+.rinui-content::-webkit-scrollbar-thumb,
+.rinui-sidebar::-webkit-scrollbar-thumb,
+.modal-body::-webkit-scrollbar-thumb,
+.content-preview::-webkit-scrollbar-thumb {
+    background: #3a3a5c;
+    border-radius: 3px;
+}
+.rinui-content::-webkit-scrollbar-track,
+.rinui-sidebar::-webkit-scrollbar-track,
+.modal-body::-webkit-scrollbar-track,
+.content-preview::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+/* ==================== 响应式 ==================== */
+@media (max-width: 768px) {
+    .rinui-sidebar {
+        width: 100%;
+        min-width: 100%;
+        height: auto;
+        flex-direction: row;
+        flex-wrap: wrap;
+        padding: 6px;
+        gap: 4px;
+        overflow-y: visible;
+        border-right: none;
+        border-bottom: 1px solid #2a2a4a;
+    }
+
+    .sidebar-section-label,
+    .sidebar-divider,
+    .sidebar-spacer,
+    .sidebar-footer,
+    .tag-cloud,
+    .category-list,
+    .nav-count { display: none; }
+
+    .sidebar-nav-btn {
+        width: auto;
+        flex: 0 0 auto;
+        height: 32px;
+        padding: 0 12px;
+        font-size: 12px;
+    }
+
+    .rinui-main { flex-direction: column; }
+    .rinui-content { padding: 14px; }
+
+    .topbar-subtitle { display: none; }
+    .topbar-search { max-width: 200px; }
+
+    .note-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .form-row { flex-direction: column; gap: 0; }
+
+    .detail-content { max-width: 96%; max-height: 94vh; }
+}
+
+@media (max-width: 480px) {
+    .rinui-topbar { padding: 0 8px; gap: 8px; }
+    .topbar-title { font-size: 15px; }
+    .topbar-search { max-width: 140px; }
+    .topbar-right { gap: 2px; }
+    .topbar-stat { font-size: 11px; }
+    .rinui-btn { padding: 5px 10px; font-size: 11px; }
+
+    .note-card { padding: 14px; }
+    .note-card .card-title { font-size: 14px; }
+
+    .detail-content {
+        max-width: 100%;
+        width: 100%;
+        height: 100%;
+        max-height: 100vh;
+        border-radius: 0;
+    }
+}
