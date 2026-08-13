@@ -17,7 +17,7 @@
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
 </head>
-<body data-theme="rinui-dark">
+<body data-theme="dark">
     <!-- 背景层 -->
     <div class="bg-layer" id="bgLayer" aria-hidden="true"></div>
     <div class="bg-overlay" aria-hidden="true"></div>
@@ -38,6 +38,7 @@
                 <span id="typed-text" class="typed-text"></span><span class="cursor">|</span>
             </div>
             <nav class="topbar-right" aria-label="工具栏">
+                <button type="button" class="theme-toggle" id="themeToggle" aria-label="切换主题" title="切换深浅主题">🌙</button>
                 <span class="status-indicator" title="API连接状态" role="status">
                     <span class="status-dot" id="apiStatusDot"></span>
                     <span class="status-label" id="apiStatusText">雫API检测中</span>

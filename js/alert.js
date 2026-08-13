@@ -38,6 +38,7 @@
         typeWriter:     $('#typed-text'),
         apiDot:         $('#apiStatusDot'),
         apiLabel:       $('#apiStatusText'),
+        themeToggle:    $('#themeToggle'),
         // 博客
         blogList:       $('#blogList'),
         blogEmpty:      $('#blogEmpty'),
@@ -212,6 +213,7 @@
     var BOX_KEY = 'omiblog_z';       // 保留作为缓存
     var EYE_KEY = 'kaze_count';
     var EYE_FLAG = 'kaze_flag';
+    var THEME_KEY = 'omiblog_theme';
 
     function _loadPosts() {
         // 最简逻辑：本地有数据优先用，没有则从服务器取
@@ -399,6 +401,28 @@
     var GISCUS_CATEGORY_ID = 'DIC_kwDOTLFsV84DCJlw';
     var _giscusLoaded = false;
 
+    // ========== 主题管理 ==========
+    function _currentTheme() {
+        return document.body.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
+    }
+
+    function _syncGiscusTheme(mode) {
+        var iframe = document.querySelector('iframe.giscus-frame');
+        if (!iframe || !iframe.contentWindow) return;
+        iframe.contentWindow.postMessage({ giscus: { setConfig: { theme: mode } } }, 'https://giscus.app');
+    }
+
+    function _applyTheme(mode) {
+        if (mode !== 'light') mode = 'dark';
+        document.body.setAttribute('data-theme', mode);
+        try { localStorage.setItem(THEME_KEY, mode); } catch (e) {}
+        if (E.themeToggle) {
+            E.themeToggle.textContent = mode === 'light' ? '☀️' : '🌙';
+            E.themeToggle.title = mode === 'light' ? '切换到深色主题' : '切换到浅色主题';
+        }
+        _syncGiscusTheme(mode);
+    }
+
     function _buildGuestbookPanel() {
         var friendsPanel = $('#friends');
         if (!friendsPanel) return;
@@ -434,7 +458,7 @@
         script.setAttribute('data-reactions-enabled', '1');
         script.setAttribute('data-emit-metadata', '0');
         script.setAttribute('data-input-position', 'bottom');
-        script.setAttribute('data-theme', 'dark');
+        script.setAttribute('data-theme', _currentTheme());
         script.setAttribute('data-lang', 'zh-CN');
         script.setAttribute('crossorigin', 'anonymous');
         script.async = true;
@@ -464,6 +488,12 @@
     // ========== 事件绑线 ==========
     function _wireItUp() {
         _wireNav();
+
+        if (E.themeToggle) {
+            E.themeToggle.addEventListener('click', function() {
+                _applyTheme(_currentTheme() === 'dark' ? 'light' : 'dark');
+            });
+        }
 
         E.blogSearch.addEventListener('input', _debounce(_paintPosts, 300));
         E.blogList.addEventListener('click', _cardClick);
@@ -500,6 +530,9 @@
     }
 
     window.addEventListener('DOMContentLoaded', async function() {
+        var savedTheme = null;
+        try { savedTheme = localStorage.getItem(THEME_KEY); } catch (e) {}
+        _applyTheme(savedTheme || 'dark');
         document.body.classList.add('loaded');
         await _kickstart();
         _typeLoop();
