@@ -215,6 +215,18 @@
     var EYE_FLAG = 'kaze_flag';
     var THEME_KEY = 'omiblog_theme';
 
+    var g_logo = null;
+
+    function _applyLogo(logo) {
+        if (!logo) return;
+        g_logo = logo;
+        document.querySelectorAll('.topbar-logo, .profile-image').forEach(function(el) {
+            el.src = logo;
+        });
+        var favicon = document.querySelector('link[rel="icon"]');
+        if (favicon) favicon.href = logo;
+    }
+
     function _loadPosts() {
         // 最简逻辑：本地有数据优先用，没有则从服务器取
         try {
@@ -228,7 +240,12 @@
                     if (!localStorage.getItem('omiblog_admin_sync')) {
                         fetch(DATA_URL + '?_t=' + Date.now())
                             .then(function(resp){ if(resp.ok) return resp.json() })
-                            .then(function(data){ if(data&&Array.isArray(data.posts)){localStorage.setItem(BOX_KEY,JSON.stringify(data.posts))} })
+                            .then(function(data){
+                                if(data){
+                                    if(data.logo) _applyLogo(data.logo);
+                                    if(Array.isArray(data.posts)) localStorage.setItem(BOX_KEY,JSON.stringify(data.posts));
+                                }
+                            })
                             .catch(function(){});
                     }
                     return Promise.resolve();
@@ -243,9 +260,14 @@
                 return r.json();
             })
             .then(function(data) {
-                if (data && Array.isArray(data.posts)) {
-                    g_postHeap = data.posts;
-                    try { localStorage.setItem(BOX_KEY, JSON.stringify(g_postHeap)); } catch(e) {}
+                if (data) {
+                    if (data.logo) _applyLogo(data.logo);
+                    if (Array.isArray(data.posts)) {
+                        g_postHeap = data.posts;
+                        try { localStorage.setItem(BOX_KEY, JSON.stringify(g_postHeap)); } catch(e) {}
+                    } else {
+                        throw new Error('Invalid format');
+                    }
                 } else {
                     throw new Error('Invalid format');
                 }

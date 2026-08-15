@@ -1,6 +1,7 @@
 {
   "version": "5.1",
   "updatedAt": "2026-08-14T03:42:28.322Z",
+  "logo": "images/images1.jpg",
   "posts": [
     {
       "id": 1,
@@ -26,10 +27,14 @@
       ]
     },
     {
-      "id":4,
-      "title":"一日使用Ubuntu系统体验",
-      "date":"2026-08-14",
-      "content":"怎么说呢，Ubuntu系统确实还挺好用的，除了snap包以及还要配置博通网卡（有的时候配置完网还是有点卡.....），其他还算可以，我的那台Windows主机可以使用ssh连接我的Ubuntu主机, 版本号：Ubuntu26.04LTS 电脑配置：i5-4260U 4+120G，MacBook Air （2014early）13inch。 "
+      "id": 4,
+      "title": "一日使用Ubuntu系统体验",
+      "date": "2026-08-14",
+      "content": "怎么说呢，Ubuntu系统确实还挺好用的，除了snap包以及还要配置博通网卡（有的时候配置完网还是有点卡.....），其他还算可以，我的那台Windows主机可以使用ssh连接我的Ubuntu主机, 版本号：Ubuntu26.04LTS 电脑配置：i5-4260U 4+120G，MacBook Air （2014early）13inch。",
+      "tags": [
+        "Ubuntu",
+        "Ubuntu26.04LTS"
+      ]
     }
   ]
 }
