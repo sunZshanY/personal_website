@@ -11,7 +11,8 @@
 
     // ========== 常量 ==========
     var IMG_API_WIDE = '/api/bg';
-    var DATA_URL = 'data/posts.json';
+    var DATA_URL_API = '/api/posts-data';   // KV 实时数据（管理面板提交后即时生效）
+    var DATA_URL = 'data/posts.json';       // 静态兜底
     var BG_TICK = 60000;
     var API_TIMEOUT = 8000;
 
@@ -228,33 +229,29 @@
     }
 
     function _loadPosts() {
-        // 最简逻辑：本地有数据优先用，没有则从服务器取
-        try {
-            var r = localStorage.getItem(BOX_KEY);
-            if (r) {
-                var parsed = JSON.parse(r);
-                if (Array.isArray(parsed) && parsed.length > 0) {
-                    g_postHeap = parsed;
-                    console.log('Using localStorage, ' + parsed.length + ' posts');
-                    // 后台异步刷新服务器数据（仅当没有管理员本地同步标志时）
-                    if (!localStorage.getItem('omiblog_admin_sync')) {
-                        fetch(DATA_URL + '?_t=' + Date.now())
-                            .then(function(resp){ if(resp.ok) return resp.json() })
-                            .then(function(data){
-                                if(data){
-                                    if(data.logo) _applyLogo(data.logo);
-                                    if(Array.isArray(data.posts)) localStorage.setItem(BOX_KEY,JSON.stringify(data.posts));
-                                }
-                            })
-                            .catch(function(){});
+        // 服务器优先：KV 接口最新数据 → 静态 JSON → 本地缓存
+        return _fetchPosts(DATA_URL_API + '?_t=' + Date.now())
+            .catch(function() {
+                return _fetchPosts(DATA_URL + '?_t=' + Date.now());
+            })
+            .catch(function(err) {
+                console.warn('Cannot load posts:', err.message);
+                try {
+                    var raw = localStorage.getItem(BOX_KEY);
+                    if (raw) {
+                        var cached = JSON.parse(raw);
+                        if (Array.isArray(cached) && cached.length > 0) {
+                            g_postHeap = cached;
+                            return;
+                        }
                     }
-                    return Promise.resolve();
-                }
-            }
-        } catch(e) {}
+                } catch(e) {}
+                g_postHeap = [];
+            });
+    }
 
-        // 本地无数据，从服务器加载
-        return fetch(DATA_URL + '?_t=' + Date.now())
+    function _fetchPosts(url) {
+        return fetch(url)
             .then(function(r) {
                 if (!r.ok) throw new Error('HTTP ' + r.status);
                 return r.json();
@@ -265,16 +262,10 @@
                     if (Array.isArray(data.posts)) {
                         g_postHeap = data.posts;
                         try { localStorage.setItem(BOX_KEY, JSON.stringify(g_postHeap)); } catch(e) {}
-                    } else {
-                        throw new Error('Invalid format');
+                        return;
                     }
-                } else {
-                    throw new Error('Invalid format');
                 }
-            })
-            .catch(function(err) {
-                console.warn('Cannot load data/posts.json:', err.message);
-                g_postHeap = [];
+                throw new Error('Invalid format');
             });
     }
 

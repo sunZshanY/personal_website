@@ -249,6 +249,17 @@
 
         var BOX_KEY = 'omiblog_z';
         var DATA_URL = 'data/posts.json';
+        var API_DATA_URL = '/api/posts-data';
+
+        // 服务器数据：KV 接口优先，静态 JSON 兜底
+        function _fetchRemotePosts() {
+            return fetch(API_DATA_URL + '?_t=' + Date.now())
+                .then(function(r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+                .catch(function() {
+                    return fetch(DATA_URL + '?_t=' + Date.now())
+                        .then(function(r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); });
+                });
+        }
 
         function safeHTML(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
         function safeAttr(s) { return s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
@@ -268,8 +279,7 @@
             } catch(e) {}
 
             // 从服务器加载
-            fetch(DATA_URL + '?_t=' + Date.now())
-                .then(function(r) { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+            _fetchRemotePosts()
                 .then(function(data) {
                     if (data && Array.isArray(data.posts)) {
                         try { localStorage.setItem(BOX_KEY, JSON.stringify(data.posts)); } catch(e) {}

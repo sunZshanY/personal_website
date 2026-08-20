@@ -121,6 +121,27 @@ body{font-family:var(--font);background:var(--bg);color:var(--text2);min-height:
 @keyframes rowIn{from{background:rgba(16,185,129,.15)}to{background:transparent}}
 .visitor-live{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--green);margin-right:3px;animation:pulse-dot 1.2s ease-in-out infinite}
 .visitor-online-badge{display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--green);font-weight:500}
+/* 选项卡 */
+.tabs{display:flex;gap:8px;margin-bottom:20px}
+.tab{padding:9px 22px;border-radius:8px;border:1px solid var(--border);background:var(--card);color:var(--text3);font-size:14px;cursor:pointer;font-family:var(--font);transition:all .2s}
+.tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+/* TXT 发布 */
+.txt-area{
+  width:100%;min-height:280px;resize:vertical;background:rgba(15,23,42,.8);
+  border:1px solid var(--border);border-radius:8px;padding:14px 16px;
+  color:var(--text);font-family:var(--mono);font-size:13px;line-height:1.8;outline:none;
+}
+.txt-area:focus{border-color:var(--accent)}
+.preview-box{background:rgba(15,23,42,.6);border:1px dashed var(--border2);border-radius:8px;padding:14px 16px;margin:12px 0}
+.pv-title{color:var(--text);font-size:16px;font-weight:700;margin-bottom:6px}
+.pv-meta{color:var(--text4);font-size:12px;margin-bottom:10px}
+.pv-content{color:var(--text2);font-size:13px;line-height:1.9;word-break:break-word}
+.token-input{
+  display:block;width:100%;padding:10px 14px;background:rgba(15,23,42,.8);
+  border:1px solid var(--border);border-radius:8px;color:var(--text);
+  font-family:var(--mono);font-size:13px;outline:none;margin-top:10px;
+}
+.token-input:focus{border-color:var(--accent)}
 /* 响应式 */
 @media(max-width:640px){
   .main{padding:16px 12px}.card{padding:18px 16px}
@@ -151,6 +172,43 @@ body{font-family:var(--font);background:var(--bg);color:var(--text2);min-height:
   </header>
 
   <main class="main">
+
+    <!-- 选项卡 -->
+    <div class="tabs">
+      <button class="tab active" id="tabPublish">✍️ 发布博客</button>
+      <button class="tab" id="tabManage">⚙️ 内容管理</button>
+    </div>
+
+    <!-- ==================== 发布博客（纯 TXT 提交页） ==================== -->
+    <div id="panePublish">
+      <div class="card">
+        <h3>✍️ 发布新博文（TXT 提交）</h3>
+        <textarea class="txt-area" id="txtArea" spellcheck="false" placeholder="---&#10;title: 文章标题&#10;date: 2026-08-15&#10;tags: 标签1, 标签2&#10;images: images/xx.jpg（可选）&#10;---&#10;&#10;正文内容……&#10;可以多段。&#10;&#10;不带头部时：第一行将作为标题，其余为正文。"></textarea>
+        <div class="btn-row" style="margin-top:12px">
+          <input type="file" id="txtFile" accept=".txt,text/plain" style="display:none">
+          <button class="btn btn-o" id="btnTxtFile">📂 上传 .txt</button>
+          <button class="btn btn-o" id="btnPreview">👁 解析预览</button>
+          <button class="btn btn-s" id="btnSubmit">🚀 提交到 GitHub + 网站</button>
+        </div>
+        <div id="previewBox" class="preview-box" style="display:none"></div>
+        <p class="msg" id="pubMsg"></p>
+        <p class="hint">
+          提交后：① 立即更新到网站（KV，全站访客可见）② 自动推送到 GitHub 仓库 <code>data/posts.json</code> + <code>main.json</code>（触发 Cloudflare 自动部署）。
+        </p>
+      </div>
+
+      <div class="card">
+        <h3>🔑 GitHub Token（仓库自动提交凭据）</h3>
+        <input type="password" class="token-input" id="ghToken" placeholder="ghp_xxxx…（仅保存在本浏览器，不会上传到网站）" autocomplete="off">
+        <p class="hint">
+          获取方式：GitHub → Settings → Developer settings → Personal access tokens → Tokens (classic) → 新建，勾选 <code>repo</code> 权限。
+          若服务器（Cloudflare Pages 环境变量 <code>GITHUB_TOKEN</code>）已配置，此处可留空。
+        </p>
+      </div>
+    </div>
+
+    <!-- ==================== 内容管理 ==================== -->
+    <div id="paneManage" style="display:none">
 
     <!-- 状态栏 -->
     <div class="card">
@@ -216,6 +274,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--text2);min-height:
       <h3>📋 当前文章</h3>
       <div id="postTable"></div>
     </div>
+
+    </div><!-- /paneManage -->
 
   </main>
 </div>
@@ -496,6 +556,126 @@ function deletePost(id){
   alert('✅ 博文已删除！\n\n📌 请点击下方「下载 data/posts.json」和「下载 main.json」按钮，\n然后将下载的文件替换到项目根目录的对应文件，\n最后 git commit & push 以同步到所有端。');
 }
 
+// ===== 选项卡 =====
+function switchTab(which){
+  var p=document.getElementById('tabPublish'), m=document.getElementById('tabManage');
+  var pp=document.getElementById('panePublish'), pm=document.getElementById('paneManage');
+  if(which==='publish'){
+    p.className='tab active';m.className='tab';
+    pp.style.display='';pm.style.display='none';
+  }else{
+    m.className='tab active';p.className='tab';
+    pm.style.display='';pp.style.display='none';
+  }
+}
+
+// ===== TXT 发布 =====
+var GH_TOKEN_KEY = 'omia_gh_token';
+
+// 解析 TXT（与服务端一致）：带 --- 头部 或 首行标题
+function parseTxtLocal(txt){
+  txt = (txt||'').replace(/^\uFEFF/,'');
+  if(!txt.trim()) throw new Error('内容为空');
+  var m = txt.match(/^\s*---+\s*\r?\n([\s\S]*?)\r?\n---+\s*(?:\r?\n)?([\s\S]*)$/);
+  var meta = {}, content;
+  if(m){
+    content = (m[2]||'').trim();
+    m[1].split(/\r?\n/).forEach(function(line){
+      var idx=line.indexOf(':');
+      if(idx===-1)return;
+      var k=line.slice(0,idx).trim(), v=line.slice(idx+1).trim();
+      if(k)meta[k]=v;
+    });
+  }else{
+    var lines = txt.trim().split(/\r?\n/);
+    var first = (lines.shift()||'').replace(/^#+\s*/,'').trim();
+    if(!first) throw new Error('内容为空');
+    meta.title = first;
+    content = lines.join('\n').trim();
+  }
+  if(!meta.title) throw new Error('缺少 title（头部填写或首行写标题）');
+  if(!content) throw new Error('正文为空');
+  var post = {
+    title: meta.title,
+    date: /^\d{4}-\d{2}-\d{2}$/.test(meta.date||'') ? meta.date : new Date().toISOString().slice(0,10),
+    content: content
+  };
+  var tags = (meta.tags||'').split(/[,，]/).map(function(t){return t.trim()}).filter(Boolean);
+  if(tags.length) post.tags = tags;
+  if(meta.images||meta.image) post.images = meta.images||meta.image;
+  return post;
+}
+
+function pubMsg(text, cls){
+  var el=document.getElementById('pubMsg');
+  el.textContent=text;el.className='msg '+(cls||'');
+}
+
+function doPreview(){
+  try{
+    var post = parseTxtLocal(document.getElementById('txtArea').value);
+    var box = document.getElementById('previewBox');
+    box.style.display='';
+    box.innerHTML = '<div class="pv-title">'+esc(post.title)+'</div>'
+      + '<div class="pv-meta">📅 '+esc(post.date)
+      + (post.tags&&post.tags.length?' · 🏷 '+post.tags.map(function(t){return esc(t)}).join('、'):'')
+      + (post.images?' · 🖼 '+esc(post.images):'')
+      + '</div>'
+      + '<div class="pv-content">'+esc(post.content).replace(/\n/g,'<br>')+'</div>';
+    pubMsg('✅ 解析成功，确认无误后点击「提交到 GitHub + 网站」。','ok');
+  }catch(e){
+    document.getElementById('previewBox').style.display='none';
+    pubMsg('❌ '+e.message,'err');
+  }
+}
+
+function submitPost(){
+  var txt = document.getElementById('txtArea').value;
+  var post;
+  try{ post = parseTxtLocal(txt); }catch(e){ pubMsg('❌ '+e.message,'err'); return; }
+
+  if(!confirm('确认发布《'+post.title+'》？\n\n1️⃣ 网站将即时更新（全站访客可见）\n2️⃣ 自动推送到 GitHub 仓库并触发部署')) return;
+
+  var btn = document.getElementById('btnSubmit');
+  btn.disabled=true; btn.textContent='⏳ 提交中…'; pubMsg('⏳ 正在提交…','');
+
+  var headers = {
+    'Content-Type':'text/plain; charset=utf-8',
+    'X-Admin-Auth': ADMIN_AUTH
+  };
+  var token = '';
+  try{ token = localStorage.getItem(GH_TOKEN_KEY)||''; }catch(e){}
+  if(token) headers['X-GitHub-Token'] = token;
+
+  fetch('/api/posts', { method:'POST', headers:headers, body:txt })
+    .then(function(r){ return r.json().then(function(d){ return {status:r.status, data:d}; }); })
+    .then(function(res){
+      if(!res.data.ok) throw new Error(res.data.error || ('HTTP '+res.status));
+      // 更新本地列表与缓存
+      if(res.data.data && Array.isArray(res.data.data.posts)){
+        g_posts = res.data.data.posts;
+        try{ localStorage.setItem(BOX_KEY, JSON.stringify(g_posts)); }catch(e){}
+        localStorage.setItem('omiblog_admin_sync','1');
+        render();
+      }
+      var msg = '✅ 发布成功！新文章 ID='+res.data.post.id+'，共 '+res.data.count+' 篇';
+      if(res.data.github && res.data.github.pushed){
+        msg += '。📦 已推送 GitHub（'+res.data.github.repo+'），Cloudflare 正在自动部署。';
+      }
+      if(res.data.warning) msg += '\n⚠️ '+res.data.warning;
+      pubMsg(msg, (res.data.github&&res.data.github.pushed)?'ok':'err');
+      document.getElementById('txtArea').value='';
+      document.getElementById('previewBox').style.display='none';
+      updatePubBadge();
+    })
+    .catch(function(err){
+      pubMsg('❌ 提交失败：'+err.message,'err');
+    })
+    .then(function(){
+      btn.disabled=false; btn.textContent='🚀 提交到 GitHub + 网站';
+    });
+}
+
 // ===== 事件 =====
 function wire(){
   document.getElementById('gBtn').addEventListener('click',login);
@@ -510,6 +690,34 @@ function wire(){
   document.getElementById('postTable').addEventListener('click',function(e){
     var btn = e.target.closest('[data-del]');
     if(btn) deletePost(parseInt(btn.dataset.del));
+  });
+
+  // 选项卡
+  document.getElementById('tabPublish').addEventListener('click',function(){switchTab('publish')});
+  document.getElementById('tabManage').addEventListener('click',function(){switchTab('manage')});
+
+  // TXT 发布
+  document.getElementById('btnTxtFile').addEventListener('click',function(){document.getElementById('txtFile').click()});
+  document.getElementById('txtFile').addEventListener('change',function(){
+    var f=this.files[0];
+    if(!f)return;
+    var r=new FileReader();
+    r.onload=function(e){document.getElementById('txtArea').value=e.target.result;pubMsg('📂 已载入 '+f.name+'，可点击「解析预览」查看。','');};
+    r.onerror=function(){pubMsg('❌ 文件读取失败','err')};
+    r.readAsText(f);
+    this.value='';
+  });
+  document.getElementById('btnPreview').addEventListener('click',doPreview);
+  document.getElementById('btnSubmit').addEventListener('click',submitPost);
+
+  // GitHub Token 保存
+  var gh=document.getElementById('ghToken');
+  try{ gh.value = localStorage.getItem(GH_TOKEN_KEY)||''; }catch(e){}
+  gh.addEventListener('change',function(){
+    try{
+      if(gh.value.trim()) localStorage.setItem(GH_TOKEN_KEY,gh.value.trim());
+      else localStorage.removeItem(GH_TOKEN_KEY);
+    }catch(e){}
   });
 }
 
