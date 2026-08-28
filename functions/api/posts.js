@@ -1,22 +1,28 @@
 /**
  * POST /api/posts
  * ===============
- * 纯 TXT 提交博客入口（管理面板专用）。
+ * TXT / Markdown 提交博客入口（管理面板专用）。
  *
- * TXT 格式（推荐带头部）：
+ * 支持格式：
+ *   1. TXT 纯文本（带 --- 头部 或 首行标题）
+ *   2. Markdown（带 YAML frontmatter 或纯 Markdown）
+ *   3. JSON 对象（{ txt: "..." } 或完整 post 对象）
+ *
+ * Markdown 格式（推荐带头部）：
  *   ---
  *   title: 文章标题
  *   date: 2026-08-15
  *   tags: 标签1, 标签2
  *   images: images/xx.jpg（可选）
  *   ---
- *   正文……
+ *   # 正文内容
+ *   支持完整 Markdown 语法……
  *
- * 也可以不带头部：第一行作为标题，其余为正文。
+ * 也可以不带头部：第一行作为标题（支持 # 前缀），其余为正文。
  *
  * 流程：
  *   1. 校验 X-Admin-Auth
- *   2. 解析 TXT → post 对象
+ *   2. 解析 TXT/Markdown → post 对象
  *   3. 写入 KV（blog:posts / blog:main）→ 网站即时生效
  *   4. 通过 GitHub Contents API 更新仓库 data/posts.json 与 main.json
  *      → 触发 Cloudflare Pages 自动部署，仓库与线上保持一致
@@ -133,9 +139,10 @@ function validatePost(p) {
 }
 
 /**
- * 解析 TXT：
- *  - 带 --- 头部：解析 title/date/tags/images
- *  - 无头部：首行作为标题，其余为正文
+ * 解析 TXT / Markdown：
+ *  - 带 --- 头部（YAML frontmatter）：解析 title/date/tags/images
+ *  - 无头部：首行作为标题（支持 # Markdown 标题前缀），其余为正文
+ *  - 正文保留完整 Markdown 格式（标题、列表、代码块、链接等）
  */
 export function parseTxt(txt) {
   if (typeof txt !== 'string' || !txt.replace(/^\uFEFF/, '').trim()) {

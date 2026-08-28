@@ -18,7 +18,6 @@
 }
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 body{font-family:var(--font);background:var(--bg);color:var(--text2);min-height:100vh}
-/* 门禁 */
 .gate{
   position:fixed;inset:0;display:flex;align-items:center;justify-content:center;
   background:rgba(10,14,23,.97);z-index:999;
@@ -42,7 +41,6 @@ body{font-family:var(--font);background:var(--bg);color:var(--text2);min-height:
   border-radius:8px;font-size:15px;font-weight:600;cursor:pointer;margin-top:6px;
 }
 .gate-box button:hover{background:#2563eb}
-/* 布局 */
 .shell{display:flex;flex-direction:column;min-height:100vh}
 .topbar{
   display:flex;align-items:center;justify-content:space-between;
@@ -50,10 +48,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text2);min-height:
   border-bottom:1px solid var(--border);position:sticky;top:0;z-index:100;
 }
 .topbar span{color:var(--gold);font-weight:700;font-size:15px}
-.main{
-  flex:1;max-width:760px;margin:0 auto;width:100%;padding:24px 20px;
-}
-/* 卡片 */
+.main{flex:1;max-width:760px;margin:0 auto;width:100%;padding:24px 20px}
 .card{
   background:var(--card);border:1px solid var(--border);border-radius:12px;
   padding:24px 28px;margin-bottom:20px;
@@ -61,7 +56,6 @@ body{font-family:var(--font);background:var(--bg);color:var(--text2);min-height:
 .card h3{color:var(--accent);font-size:15px;margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--border)}
 .card p,.card li{font-size:14px;line-height:2}
 .card code{background:rgba(15,23,42,.8);padding:2px 8px;border-radius:4px;font-family:var(--mono);font-size:13px;color:var(--gold)}
-/* 按钮 */
 .btn{
   display:inline-flex;align-items:center;gap:6px;padding:9px 18px;
   border:none;border-radius:8px;font-size:13px;font-weight:500;font-family:var(--font);
@@ -74,7 +68,8 @@ body{font-family:var(--font);background:var(--bg);color:var(--text2);min-height:
 .btn-o:hover{border-color:var(--accent);background:rgba(59,130,246,.06)}
 .btn-d{background:rgba(239,68,68,.12);color:var(--red)}
 .btn-d:hover{background:rgba(239,68,68,.25);color:#fff}
-/* 导出区 */
+.btn-w{background:rgba(245,158,11,.12);color:var(--gold)}
+.btn-w:hover{background:rgba(245,158,11,.25);color:#fff}
 .export-area{
   width:100%;min-height:200px;max-height:400px;background:rgba(15,23,42,.8);
   border:1px solid var(--border);border-radius:8px;padding:16px 20px;
@@ -83,7 +78,6 @@ body{font-family:var(--font);background:var(--bg);color:var(--text2);min-height:
 }
 .export-area:focus{border-color:var(--accent)}
 .btn-row{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
-/* 状态徽章 */
 .badge{
   display:inline-flex;align-items:center;gap:6px;padding:4px 14px;
   border-radius:14px;font-size:12px;font-weight:600;
@@ -98,14 +92,12 @@ body{font-family:var(--font);background:var(--bg);color:var(--text2);min-height:
 .msg{font-size:13px;min-height:20px;margin-top:6px}
 .msg.ok{color:var(--green)}.msg.err{color:var(--red)}
 .hint{color:var(--text4);font-size:12px;margin-top:8px;line-height:1.8}
-/* 表格 */
 .tbl{width:100%;border-collapse:collapse;margin-top:8px}
 .tbl th{background:rgba(30,41,59,.5);color:var(--text3);font-size:11px;text-transform:uppercase;padding:10px 12px;text-align:left;border-bottom:1px solid var(--border)}
 .tbl td{padding:8px 12px;font-size:13px;border-bottom:1px solid rgba(30,41,59,.4)}
 .tbl tbody tr:hover{background:rgba(59,130,246,.04)}
 .tag{display:inline-block;padding:2px 8px;background:rgba(59,130,246,.1);color:var(--accent);border-radius:10px;font-size:11px;font-family:var(--mono);margin:1px 3px}
 .empty{text-align:center;padding:40px;color:var(--text4)}
-/* 访客监控 */
 .visitor-header{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:14px}
 .visitor-count{font-size:36px;font-weight:700;font-family:var(--mono);color:var(--green)}
 .visitor-count.zero{color:var(--text4)}
@@ -120,12 +112,9 @@ body{font-family:var(--font);background:var(--bg);color:var(--text2);min-height:
 .visitor-tbl tbody tr.new-row{animation:rowIn .4s ease}
 @keyframes rowIn{from{background:rgba(16,185,129,.15)}to{background:transparent}}
 .visitor-live{display:inline-block;width:5px;height:5px;border-radius:50%;background:var(--green);margin-right:3px;animation:pulse-dot 1.2s ease-in-out infinite}
-.visitor-online-badge{display:inline-flex;align-items:center;gap:4px;font-size:12px;color:var(--green);font-weight:500}
-/* 选项卡 */
-.tabs{display:flex;gap:8px;margin-bottom:20px}
+.tabs{display:flex;gap:8px;margin-bottom:20px;flex-wrap:wrap}
 .tab{padding:9px 22px;border-radius:8px;border:1px solid var(--border);background:var(--card);color:var(--text3);font-size:14px;cursor:pointer;font-family:var(--font);transition:all .2s}
 .tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
-/* TXT 发布 */
 .txt-area{
   width:100%;min-height:280px;resize:vertical;background:rgba(15,23,42,.8);
   border:1px solid var(--border);border-radius:8px;padding:14px 16px;
@@ -142,15 +131,46 @@ body{font-family:var(--font);background:var(--bg);color:var(--text2);min-height:
   font-family:var(--mono);font-size:13px;outline:none;margin-top:10px;
 }
 .token-input:focus{border-color:var(--accent)}
-/* 响应式 */
+/* 日志样式 */
+.log-entry{
+  display:flex;gap:12px;padding:8px 12px;border-bottom:1px solid rgba(30,41,59,.3);
+  font-size:12px;line-height:1.6;align-items:flex-start;
+}
+.log-entry:last-child{border-bottom:none}
+.log-time{color:var(--text4);font-family:var(--mono);white-space:nowrap;min-width:140px;flex-shrink:0}
+.log-action{font-weight:600;min-width:80px;flex-shrink:0}
+.log-action.login{color:var(--accent)}
+.log-action.publish{color:var(--green)}
+.log-action.delete{color:var(--red)}
+.log-action.import{color:var(--gold)}
+.log-action.export{color:#a78bfa}
+.log-action.sync{color:#06b6d4}
+.log-detail{color:var(--text3);word-break:break-all}
+.log-empty{text-align:center;padding:30px;color:var(--text4);font-size:13px}
+.log-toolbar{display:flex;gap:8px;align-items:center;margin-bottom:12px;flex-wrap:wrap}
+.log-count{color:var(--text4);font-size:12px;margin-left:auto}
+/* 导入选项卡 */
+.import-tabs{display:flex;gap:6px;margin-bottom:12px}
+.import-tab{padding:6px 14px;border-radius:6px;border:1px solid var(--border);background:transparent;color:var(--text3);font-size:12px;cursor:pointer;font-family:var(--font);transition:all .2s}
+.import-tab.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.import-zone{
+  border:2px dashed var(--border2);border-radius:10px;padding:28px 20px;text-align:center;
+  transition:all .2s;cursor:pointer;margin:10px 0;
+}
+.import-zone:hover,.import-zone.dragover{border-color:var(--accent);background:rgba(59,130,246,.04)}
+.import-zone p{color:var(--text4);font-size:13px;margin-top:6px}
+.import-zone .icon{font-size:32px;margin-bottom:4px}
 @media(max-width:640px){
   .main{padding:16px 12px}.card{padding:18px 16px}
+  .tabs{gap:4px}.tab{padding:7px 14px;font-size:12px}
+  .log-entry{flex-direction:column;gap:4px}
+  .log-time{min-width:auto}
 }
 </style>
 </head>
 <body>
 
-<!-- ==================== 门禁 ==================== -->
+<!-- 门禁 -->
 <div id="gate" class="gate">
   <div class="gate-box">
     <h2>管理认证</h2>
@@ -161,7 +181,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text2);min-height:
   </div>
 </div>
 
-<!-- ==================== 主面板 ==================== -->
+<!-- 主面板 -->
 <div id="shell" class="shell" style="display:none">
   <header class="topbar">
     <span>📦 Terminal </span>
@@ -177,23 +197,26 @@ body{font-family:var(--font);background:var(--bg);color:var(--text2);min-height:
     <div class="tabs">
       <button class="tab active" id="tabPublish">✍️ 发布博客</button>
       <button class="tab" id="tabManage">⚙️ 内容管理</button>
+      <button class="tab" id="tabImport">📥 导入导出</button>
+      <button class="tab" id="tabLog">📋 操作日志</button>
     </div>
 
-    <!-- ==================== 发布博客（纯 TXT 提交页） ==================== -->
+    <!-- ==================== 发布博客 ==================== -->
     <div id="panePublish">
       <div class="card">
-        <h3>✍️ 发布新博文（TXT 提交）</h3>
-        <textarea class="txt-area" id="txtArea" spellcheck="false" placeholder="---&#10;title: 文章标题&#10;date: 2026-08-15&#10;tags: 标签1, 标签2&#10;images: images/xx.jpg（可选）&#10;---&#10;&#10;正文内容……&#10;可以多段。&#10;&#10;不带头部时：第一行将作为标题，其余为正文。"></textarea>
+        <h3>✍️ 发布新博文（TXT / Markdown 提交）</h3>
+        <textarea class="txt-area" id="txtArea" spellcheck="false" placeholder="---&#10;title: 文章标题&#10;date: 2026-08-15&#10;tags: 标签1, 标签2&#10;images: images/xx.jpg（可选）&#10;---&#10;&#10;正文内容……&#10;可以多段。&#10;&#10;支持 Markdown 格式：&#10;# 标题&#10;**加粗** *斜体*&#10;- 列表项&#10;```代码块```"></textarea>
         <div class="btn-row" style="margin-top:12px">
-          <input type="file" id="txtFile" accept=".txt,text/plain" style="display:none">
-          <button class="btn btn-o" id="btnTxtFile">📂 上传 .txt</button>
+          <input type="file" id="txtFile" accept=".txt,.md,.markdown,text/plain,text/markdown" style="display:none">
+          <button class="btn btn-o" id="btnTxtFile">📂 上传 .txt / .md</button>
           <button class="btn btn-o" id="btnPreview">👁 解析预览</button>
           <button class="btn btn-s" id="btnSubmit">🚀 提交到 GitHub + 网站</button>
         </div>
         <div id="previewBox" class="preview-box" style="display:none"></div>
         <p class="msg" id="pubMsg"></p>
         <p class="hint">
-          提交后：① 立即更新到网站（KV，全站访客可见）② 自动推送到 GitHub 仓库 <code>data/posts.json</code> + <code>main.json</code>（触发 Cloudflare 自动部署）。
+          提交后：① 立即更新到网站（KV，全站访客可见）② 自动推送到 GitHub 仓库 <code>data/posts.json</code> + <code>main.json</code>（触发 Cloudflare 自动部署）。<br>
+          支持格式：TXT 纯文本、Markdown（.md），带头部或不带头部均可。
         </p>
       </div>
 
@@ -244,31 +267,6 @@ body{font-family:var(--font);background:var(--bg);color:var(--text2);min-height:
       </div>
     </div>
 
-    <!-- 导出 -->
-    <div class="card">
-      <h3>📤 导出 JSON 文件（删除文章后请下载并替换仓库文件）</h3>
-      <textarea class="export-area" id="exportArea" readonly placeholder="加载中..."></textarea>
-      <div class="btn-row">
-        <button class="btn btn-s" id="btnDLData">📥 下载 data/posts.json（完整版）</button>
-        <button class="btn btn-s" id="btnDLMain">📥 下载 main.json（摘要版）</button>
-        <button class="btn btn-o" id="btnCP">📋 复制</button>
-      </div>
-      <p class="hint" style="margin-top:10px">
-        ⚠️ <b>重要</b>：在管理面板删除文章后，请下载上述两个 JSON 文件，<br>
-        替换仓库中的 <code>data/posts.json</code> 和 <code>main.json</code>，<br>
-        然后 <code>git commit</code> + <code>git push</code> 以同步到 GitHub 和 Cloudflare。
-      </p>
-    </div>
-
-    <!-- 导入 -->
-    <div class="card">
-      <h3>📥 导入 JSON 文件</h3>
-      <input type="file" id="fileInp" accept=".json" style="display:none">
-      <button class="btn btn-p" id="btnImp"> 选择 JSON 文件导入</button>
-      <p class="msg" id="impMsg"></p>
-      <p class="hint">导入后点击 <b>同步到主站</b> 使内容在主站生效，再 git push 永久部署。</p>
-    </div>
-
     <!-- 文章列表 -->
     <div class="card">
       <h3>📋 当前文章</h3>
@@ -276,6 +274,75 @@ body{font-family:var(--font);background:var(--bg);color:var(--text2);min-height:
     </div>
 
     </div><!-- /paneManage -->
+
+    <!-- ==================== 导入导出 ==================== -->
+    <div id="paneImport" style="display:none">
+
+    <!-- 导出 -->
+    <div class="card">
+      <h3>📤 导出数据</h3>
+      <textarea class="export-area" id="exportArea" readonly placeholder="加载中..."></textarea>
+      <div class="btn-row">
+        <button class="btn btn-s" id="btnDLData">📥 下载 data/posts.json</button>
+        <button class="btn btn-s" id="btnDLMain">📥 下载 main.json</button>
+        <button class="btn btn-w" id="btnDLAllMd">📝 导出全部 Markdown</button>
+        <button class="btn btn-o" id="btnCP">📋 复制</button>
+      </div>
+      <p class="hint" style="margin-top:10px">
+        ⚠️ <b>重要</b>：在管理面板删除文章后，请下载上述 JSON 文件，<br>
+        替换仓库中的 <code>data/posts.json</code> 和 <code>main.json</code>，<br>
+        然后 <code>git commit</code> + <code>git push</code> 以同步到 GitHub 和 Cloudflare。
+      </p>
+    </div>
+
+    <!-- 导入 -->
+    <div class="card">
+      <h3>📥 导入数据</h3>
+      <div class="import-tabs">
+        <button class="import-tab active" id="impTabJson">JSON 导入</button>
+        <button class="import-tab" id="impTabMd">Markdown 导入</button>
+      </div>
+
+      <!-- JSON 导入 -->
+      <div id="impPaneJson">
+        <div class="import-zone" id="jsonDropZone">
+          <div class="icon">📄</div>
+          <p>点击或拖拽 JSON 文件到此处</p>
+          <p style="font-size:11px;color:var(--text4);margin-top:4px">支持 data/posts.json、main.json、完整备份文件</p>
+        </div>
+        <input type="file" id="jsonFileInp" accept=".json" style="display:none">
+      </div>
+
+      <!-- Markdown 导入 -->
+      <div id="impPaneMd" style="display:none">
+        <div class="import-zone" id="mdDropZone">
+          <div class="icon">📝</div>
+          <p>点击或拖拽 Markdown 文件到此处</p>
+          <p style="font-size:11px;color:var(--text4);margin-top:4px">支持 .md / .markdown 文件，可批量导入多个文件</p>
+          <p style="font-size:11px;color:var(--text4)">格式：带 YAML frontmatter 头部（title/date/tags）或纯 Markdown（首行标题）</p>
+        </div>
+        <input type="file" id="mdFileInp" accept=".md,.markdown" multiple style="display:none">
+      </div>
+
+      <p class="msg" id="impMsg"></p>
+      <p class="hint">导入后点击 <b>同步到主站</b> 使内容在主站生效，再 git push 永久部署。</p>
+    </div>
+
+    </div><!-- /paneImport -->
+
+    <!-- ==================== 操作日志 ==================== -->
+    <div id="paneLog" style="display:none">
+    <div class="card">
+      <h3>📋 管理操作日志</h3>
+      <div class="log-toolbar">
+        <button class="btn btn-o" id="btnLogRefresh" style="font-size:12px;padding:5px 12px">🔄 刷新</button>
+        <button class="btn btn-o" id="btnLogExport" style="font-size:12px;padding:5px 12px">📤 导出日志</button>
+        <button class="btn btn-d" id="btnLogClear" style="font-size:12px;padding:5px 12px">🗑 清空日志</button>
+        <span class="log-count" id="logCount"></span>
+      </div>
+      <div id="logList"></div>
+    </div>
+    </div><!-- /paneLog -->
 
   </main>
 </div>
@@ -286,11 +353,76 @@ body{font-family:var(--font);background:var(--bg);color:var(--text2);min-height:
 var DATA_URL = '../data/posts.json';
 var BOX_KEY = 'omiblog_z';
 var BOSS_KEY = 'adm_sesFlag';
-var PASS_KEY = 'adm_pass';  // 简单密码存储
+var LOG_KEY = 'omia_admin_log';
 var DEF_USER = 'admin';
 var DEF_PASS = '123456';
 
 var g_posts = [];
+
+// ===== 操作日志系统 =====
+function addLog(action, detail){
+  var logs = [];
+  try{ logs = JSON.parse(localStorage.getItem(LOG_KEY)||'[]'); }catch(e){ logs = []; }
+  logs.unshift({
+    time: new Date().toISOString(),
+    action: action,
+    detail: detail || ''
+  });
+  if(logs.length > 500) logs = logs.slice(0, 500);
+  try{ localStorage.setItem(LOG_KEY, JSON.stringify(logs)); }catch(e){}
+}
+
+function getLogs(){
+  try{ return JSON.parse(localStorage.getItem(LOG_KEY)||'[]'); }catch(e){ return []; }
+}
+
+function clearLogs(){
+  localStorage.removeItem(LOG_KEY);
+}
+
+function renderLogs(){
+  var logs = getLogs();
+  var el = document.getElementById('logList');
+  var countEl = document.getElementById('logCount');
+  countEl.textContent = '共 ' + logs.length + ' 条记录';
+  if(!logs.length){ el.innerHTML='<div class="log-empty">暂无操作记录</div>'; return; }
+  var h = '';
+  logs.forEach(function(l){
+    var t = new Date(l.time);
+    var timeStr = t.toLocaleDateString('zh-CN',{month:'2-digit',day:'2-digit'}) + ' ' + t.toLocaleTimeString('zh-CN',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+    var actionCls = l.action || '';
+    h += '<div class="log-entry">'
+      + '<span class="log-time">' + timeStr + '</span>'
+      + '<span class="log-action ' + actionCls + '">' + esc(getActionLabel(l.action)) + '</span>'
+      + '<span class="log-detail">' + esc(l.detail) + '</span>'
+      + '</div>';
+  });
+  el.innerHTML = h;
+}
+
+function getActionLabel(action){
+  var map = {
+    'login':'登录','publish':'发布','delete':'删除','import':'导入',
+    'export':'导出','sync':'同步','logout':'退出','markdown_import':'MD导入'
+  };
+  return map[action]||action||'未知';
+}
+
+function exportLogs(){
+  var logs = getLogs();
+  var lines = ['时间,操作,详情'];
+  logs.forEach(function(l){
+    var t = new Date(l.time).toLocaleString('zh-CN');
+    lines.push('"' + t + '","' + (l.action||'') + '","' + (l.detail||'').replace(/"/g,'""') + '"');
+  });
+  var b = new Blob(['\uFEFF' + lines.join('\n')], {type:'text/csv;charset=utf-8'});
+  var a = document.createElement('a');
+  a.href = URL.createObjectURL(b);
+  a.download = 'admin_log_' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+  URL.revokeObjectURL(a.href);
+  addLog('export', '导出操作日志');
+}
 
 // ===== 门禁 =====
 function initGate(){
@@ -302,19 +434,21 @@ function initGate(){
 function login(){
   var u = document.getElementById('gUser').value.trim();
   var p = document.getElementById('gPass').value;
-  // 直接硬编码，最简单可靠
-  if(u==='admin' && p==='123456'){
+  if(u===DEF_USER && p===DEF_PASS){
     localStorage.setItem(BOSS_KEY,'1');
     document.getElementById('gate').style.display='none';
     document.getElementById('gUser').value='';document.getElementById('gPass').value='';
     document.getElementById('gErr').textContent='';
+    addLog('login', '管理员登录成功');
     showShell();
   } else {
     document.getElementById('gErr').textContent='凭证错误';
+    addLog('login', '登录失败（凭证错误）');
   }
 }
 
 function logout(){
+  addLog('logout', '管理员退出');
   localStorage.removeItem(BOSS_KEY);
   stopVisitorPoll();
   document.getElementById('gate').style.display='';
@@ -323,10 +457,10 @@ function logout(){
 
 // ===== 实时访客监控 =====
 var VISITOR_API_ONLINE = '/api/visitors/online';
-var VISITOR_POLL_MS = 3000; // 3秒轮询
+var VISITOR_POLL_MS = 3000;
 var ADMIN_AUTH = 'omia_admin_2024';
 var _visitorTimer = null;
-var _prevSids = {}; // 用于检测新访客
+var _prevSids = {};
 
 function startVisitorPoll(){
   _fetchVisitors();
@@ -349,7 +483,6 @@ function _fetchVisitors(){
   })
   .catch(function(err){
     document.getElementById('pollStatus').textContent = '⚠ 连接异常';
-    console.warn('Visitor poll error:', err.message);
   });
 }
 
@@ -422,7 +555,6 @@ function render(){
   updatePubBadge();
   updateExportArea();
 
-  // 文章表
   var t=document.getElementById('postTable');
   if(!g_posts.length){t.innerHTML='<div class="empty">暂无文章</div>';return}
   var h='<table class="tbl"><thead><tr><th>ID</th><th>标题</th><th>日期</th><th>标签</th><th>操作</th></tr></thead><tbody>';
@@ -434,64 +566,81 @@ function render(){
 
 function esc(s){var d=document.createElement('div');d.textContent=s;return d.innerHTML}
 
-// 截取内容为摘要（取前150字或第一段）
 function excerpt(content, maxLen){
   if(!content) return '';
   maxLen = maxLen || 150;
-  // 按换行取第一段
   var firstPara = content.split('\n').filter(function(p){return p.trim();})[0] || content;
   if(firstPara.length <= maxLen) return firstPara;
   return firstPara.slice(0, maxLen).replace(/\s+\S*$/, '') + '...';
 }
 
-// 生成 main.json 格式（内容为摘要版）
 function generateMainJson(){
   var mainPosts = g_posts.map(function(p){
-    return {
-      id: p.id,
-      title: p.title,
-      date: p.date,
-      content: excerpt(p.content, 150),
-      tags: p.tags
-    };
+    return { id: p.id, title: p.title, date: p.date, content: excerpt(p.content, 150), tags: p.tags };
   });
   return { version: '5.1', updatedAt: new Date().toISOString(), posts: mainPosts };
 }
 
-// 生成 data/posts.json 格式（内容为完整版）
 function generateDataJson(){
   return { version: '5.1', updatedAt: new Date().toISOString(), posts: g_posts };
 }
 
-// 更新导出文本区
 function updateExportArea(){
   document.getElementById('exportArea').value = JSON.stringify(generateDataJson(), null, 2);
 }
 
-// 下载 main.json
 function downloadMainJson(){
   var jsonStr = JSON.stringify(generateMainJson(), null, 2);
-  var b = new Blob([jsonStr], {type: 'application/json'});
+  var b = new Blob([jsonStr],{type:'application/json'});
   var a = document.createElement('a');
   a.href = URL.createObjectURL(b);
   a.download = 'main.json';
   a.click();
   URL.revokeObjectURL(a.href);
+  addLog('export', '导出 main.json（摘要版）');
 }
 
-// 下载 data/posts.json
 function downloadDataJson(){
   var jsonStr = JSON.stringify(generateDataJson(), null, 2);
-  var b = new Blob([jsonStr], {type: 'application/json'});
+  var b = new Blob([jsonStr],{type:'application/json'});
   var a = document.createElement('a');
   a.href = URL.createObjectURL(b);
   a.download = 'data_posts.json';
   a.click();
   URL.revokeObjectURL(a.href);
+  addLog('export', '导出 data/posts.json（完整版）');
+}
+
+// ===== Markdown 导出 =====
+function downloadAllMarkdown(){
+  if(!g_posts.length){ alert('暂无文章可导出'); return; }
+  g_posts.forEach(function(p){
+    var md = postToMarkdown(p);
+    var b = new Blob([md], {type:'text/markdown;charset=utf-8'});
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(b);
+    var safeName = (p.title||'untitled').replace(/[<>:"/\\|?*]/g,'_').slice(0,60);
+    a.download = safeName + '.md';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  });
+  addLog('export', '导出全部 Markdown（' + g_posts.length + ' 篇）');
+  alert('✅ 已导出 ' + g_posts.length + ' 个 Markdown 文件');
+}
+
+function postToMarkdown(p){
+  var lines = ['---'];
+  lines.push('title: ' + (p.title||''));
+  lines.push('date: ' + (p.date||''));
+  if(p.tags && p.tags.length) lines.push('tags: ' + p.tags.join(', '));
+  if(p.images) lines.push('images: ' + p.images);
+  lines.push('---');
+  lines.push('');
+  lines.push(p.content||'');
+  return lines.join('\n');
 }
 
 function updatePubBadge(){
-  // 本地有数据即视为可显示
   var has=!!(localStorage.getItem(BOX_KEY));
   var b=document.getElementById('pubBadge');var t=document.getElementById('pubText');
   var bp=document.getElementById('btnPub');var bu=document.getElementById('btnUnpub');
@@ -500,36 +649,97 @@ function updatePubBadge(){
 }
 
 // ===== 导出 =====
-function download(){
-  var c=document.getElementById('exportArea').value;
-  if(!c){alert('无数据');return}
-  var b=new Blob([c],{type:'application/json'});
-  var a=document.createElement('a');a.href=URL.createObjectURL(b);
-  a.download='posts_'+new Date().toISOString().slice(0,10)+'.json';a.click();
-  URL.revokeObjectURL(a.href);
-}
-
 function copyExport(){
   var c=document.getElementById('exportArea').value;
   navigator.clipboard.writeText(c).then(function(){alert('已复制')})
     .catch(function(){var ta=document.getElementById('exportArea');ta.select();document.execCommand('copy');alert('已复制')});
 }
 
-// ===== 导入 =====
-function importFile(f){
+// ===== JSON 导入 =====
+function importJsonFile(f){
   var m=document.getElementById('impMsg');m.textContent='';m.className='msg';
   var r=new FileReader();
   r.onload=function(e){
     try{var d=JSON.parse(e.target.result)}catch(err){m.textContent='❌ JSON格式错误';m.className='msg err';return}
-    if(!d.posts||!Array.isArray(d.posts)){m.textContent='❌ 缺少 posts 数组';m.className='msg err';return}
-    for(var i=0;i<d.posts.length;i++){var p=d.posts[i];if(!p.id||!p.title||!p.date||!p.content){m.textContent='❌ 第'+(i+1)+'篇文章缺少必要字段';m.className='msg err';return}}
-    g_posts=d.posts;
-    try{localStorage.setItem(BOX_KEY,JSON.stringify(d.posts))}catch(e){m.textContent='❌ 存储不足';m.className='msg err';return}
-    render();m.textContent='✅ 导入成功！共 '+d.posts.length+' 篇';m.className='msg ok';
+    var posts = d.posts || d;
+    if(!Array.isArray(posts)){m.textContent='❌ 缺少 posts 数组';m.className='msg err';return}
+    for(var i=0;i<posts.length;i++){var p=posts[i];if(!p.id||!p.title||!p.date||!p.content){m.textContent='❌ 第'+(i+1)+'篇文章缺少必要字段';m.className='msg err';return}}
+    g_posts=posts;
+    try{localStorage.setItem(BOX_KEY,JSON.stringify(posts))}catch(e){m.textContent='❌ 存储不足';m.className='msg err';return}
+    render();m.textContent='✅ JSON 导入成功！共 '+posts.length+' 篇';m.className='msg ok';
     updatePubBadge();
+    addLog('import', 'JSON 导入：' + f.name + '（' + posts.length + ' 篇）');
   };
   r.onerror=function(){m.textContent='❌ 读取失败';m.className='msg err'};
   r.readAsText(f);
+}
+
+// ===== Markdown 导入 =====
+function parseMarkdownFile(txt){
+  txt = (txt||'').replace(/^\uFEFF/,'');
+  if(!txt.trim()) return null;
+  var m = txt.match(/^\s*---+\s*\r?\n([\s\S]*?)\r?\n---+\s*(?:\r?\n)?([\s\S]*)$/);
+  var meta = {}, content;
+  if(m){
+    content = (m[2]||'').trim();
+    m[1].split(/\r?\n/).forEach(function(line){
+      var idx=line.indexOf(':');
+      if(idx===-1)return;
+      var k=line.slice(0,idx).trim(), v=line.slice(idx+1).trim();
+      if(k)meta[k]=v;
+    });
+  }else{
+    var lines = txt.trim().split(/\r?\n/);
+    var first = (lines.shift()||'').replace(/^#+\s*/,'').trim();
+    if(!first) return null;
+    meta.title = first;
+    content = lines.join('\n').trim();
+  }
+  if(!meta.title || !content) return null;
+  var post = {
+    title: meta.title,
+    date: /^\d{4}-\d{2}-\d{2}$/.test(meta.date||'') ? meta.date : new Date().toISOString().slice(0,10),
+    content: content
+  };
+  var tags = (meta.tags||'').split(/[,，]/).map(function(t){return t.trim()}).filter(Boolean);
+  if(tags.length) post.tags = tags;
+  if(meta.images||meta.image) post.images = meta.images||meta.image;
+  return post;
+}
+
+function importMarkdownFiles(files){
+  var m=document.getElementById('impMsg');m.textContent='';m.className='msg';
+  if(!files.length) return;
+  var imported = 0;
+  var errors = [];
+  var maxId = g_posts.reduce(function(mx,p){ return Math.max(mx, Number(p.id)||0); }, 0);
+
+  Array.from(files).forEach(function(f,idx){
+    var r = new FileReader();
+    r.onload = function(e){
+      var post = parseMarkdownFile(e.target.result);
+      if(post){
+        maxId++;
+        post.id = maxId;
+        g_posts.push(post);
+        imported++;
+      } else {
+        errors.push(f.name);
+      }
+      if(idx === files.length - 1){
+        try{localStorage.setItem(BOX_KEY,JSON.stringify(g_posts))}catch(e){}
+        render();
+        updatePubBadge();
+        var msg = '✅ Markdown 导入完成！成功 ' + imported + ' 篇';
+        if(errors.length) msg += '，失败 ' + errors.length + ' 个（' + errors.join('、') + '）';
+        m.textContent = msg;
+        m.className = errors.length ? 'msg err' : 'msg ok';
+        addLog('markdown_import', 'Markdown 导入：' + imported + ' 篇成功' + (errors.length ? '，' + errors.length + ' 篇失败' : ''));
+      }
+    };
+    r.onerror = function(){ errors.push(f.name); };
+    r.readAsText(f);
+  });
 }
 
 // ===== 发布 =====
@@ -538,41 +748,44 @@ function publish(){
   localStorage.setItem('omiblog_admin_sync','1');
   updatePubBadge();
   updateExportArea();
+  addLog('sync', '同步 ' + g_posts.length + ' 篇文章到主站');
   alert('✅ 已同步到本地存储！当前浏览器访问主站将显示更新后的内容。\n\n📌 如需同步到所有用户，请下载下方 JSON 文件并替换仓库中的 data/posts.json 和 main.json，然后 git commit & push。');
 }
 
 function unpublish(){
-  localStorage.removeItem(BOX_KEY);localStorage.removeItem('omiblog_admin_sync');updatePubBadge();alert('↩ 已清除本地数据，主站将显示服务器版本。');
+  localStorage.removeItem(BOX_KEY);localStorage.removeItem('omiblog_admin_sync');updatePubBadge();
+  addLog('sync', '取消同步');
+  alert('↩ 已清除本地数据，主站将显示服务器版本。');
 }
 
 function deletePost(id){
-  if(!confirm('确定删除 ID='+id+' 的博文吗？此操作不可恢复。')) return;
+  var post = g_posts.find(function(p){return p.id===id;});
+  if(!confirm('确定删除 ID='+id+' 的博文《'+(post?post.title:'')+'》吗？此操作不可恢复。')) return;
   g_posts = g_posts.filter(function(p){ return p.id !== id; });
   try{localStorage.setItem(BOX_KEY,JSON.stringify(g_posts))}catch(e){}
   localStorage.setItem('omiblog_admin_sync','1');
   render();
-  // 自动更新导出区并提示
   updateExportArea();
+  addLog('delete', '删除文章 ID=' + id + '《' + (post?post.title:'') + '》');
   alert('✅ 博文已删除！\n\n📌 请点击下方「下载 data/posts.json」和「下载 main.json」按钮，\n然后将下载的文件替换到项目根目录的对应文件，\n最后 git commit & push 以同步到所有端。');
 }
 
 // ===== 选项卡 =====
 function switchTab(which){
-  var p=document.getElementById('tabPublish'), m=document.getElementById('tabManage');
-  var pp=document.getElementById('panePublish'), pm=document.getElementById('paneManage');
-  if(which==='publish'){
-    p.className='tab active';m.className='tab';
-    pp.style.display='';pm.style.display='none';
-  }else{
-    m.className='tab active';p.className='tab';
-    pm.style.display='';pp.style.display='none';
-  }
+  var tabs = {publish:'tabPublish',manage:'tabManage',import:'tabImport',log:'tabLog'};
+  var panes = {publish:'panePublish',manage:'paneManage',import:'paneImport',log:'paneLog'};
+  Object.keys(tabs).forEach(function(k){
+    var t=document.getElementById(tabs[k]);
+    var p=document.getElementById(panes[k]);
+    if(k===which){t.className='tab active';p.style.display='';}
+    else{t.className='tab';p.style.display='none';}
+  });
+  if(which==='log') renderLogs();
 }
 
-// ===== TXT 发布 =====
+// ===== TXT/Markdown 发布 =====
 var GH_TOKEN_KEY = 'omia_gh_token';
 
-// 解析 TXT（与服务端一致）：带 --- 头部 或 首行标题
 function parseTxtLocal(txt){
   txt = (txt||'').replace(/^\uFEFF/,'');
   if(!txt.trim()) throw new Error('内容为空');
@@ -651,7 +864,6 @@ function submitPost(){
     .then(function(r){ return r.json().then(function(d){ return {status:r.status, data:d}; }); })
     .then(function(res){
       if(!res.data.ok) throw new Error(res.data.error || ('HTTP '+res.status));
-      // 更新本地列表与缓存
       if(res.data.data && Array.isArray(res.data.data.posts)){
         g_posts = res.data.data.posts;
         try{ localStorage.setItem(BOX_KEY, JSON.stringify(g_posts)); }catch(e){}
@@ -664,6 +876,7 @@ function submitPost(){
       }
       if(res.data.warning) msg += '\n⚠️ '+res.data.warning;
       pubMsg(msg, (res.data.github&&res.data.github.pushed)?'ok':'err');
+      addLog('publish', '发布文章《' + post.title + '》ID=' + res.data.post.id);
       document.getElementById('txtArea').value='';
       document.getElementById('previewBox').style.display='none';
       updatePubBadge();
@@ -676,15 +889,31 @@ function submitPost(){
     });
 }
 
+// ===== 拖拽支持 =====
+function setupDropZone(zoneId, inputId, handler){
+  var zone = document.getElementById(zoneId);
+  var input = document.getElementById(inputId);
+  if(!zone || !input) return;
+  zone.addEventListener('click', function(){ input.click(); });
+  zone.addEventListener('dragover', function(e){ e.preventDefault(); zone.classList.add('dragover'); });
+  zone.addEventListener('dragleave', function(){ zone.classList.remove('dragover'); });
+  zone.addEventListener('drop', function(e){
+    e.preventDefault(); zone.classList.remove('dragover');
+    if(e.dataTransfer.files.length) handler(e.dataTransfer.files);
+  });
+  input.addEventListener('change', function(){
+    if(this.files.length){ handler(this.files); this.value=''; }
+  });
+}
+
 // ===== 事件 =====
 function wire(){
   document.getElementById('gBtn').addEventListener('click',login);
   document.getElementById('gPass').addEventListener('keydown',function(e){if(e.key==='Enter')login()});
   document.getElementById('btnDLData').addEventListener('click',downloadDataJson);
   document.getElementById('btnDLMain').addEventListener('click',downloadMainJson);
+  document.getElementById('btnDLAllMd').addEventListener('click',downloadAllMarkdown);
   document.getElementById('btnCP').addEventListener('click',copyExport);
-  document.getElementById('btnImp').addEventListener('click',function(){document.getElementById('fileInp').click()});
-  document.getElementById('fileInp').addEventListener('change',function(){if(this.files[0]){importFile(this.files[0]);this.value=''}});
   document.getElementById('btnPub').addEventListener('click',publish);
   document.getElementById('btnUnpub').addEventListener('click',unpublish);
   document.getElementById('postTable').addEventListener('click',function(e){
@@ -695,6 +924,8 @@ function wire(){
   // 选项卡
   document.getElementById('tabPublish').addEventListener('click',function(){switchTab('publish')});
   document.getElementById('tabManage').addEventListener('click',function(){switchTab('manage')});
+  document.getElementById('tabImport').addEventListener('click',function(){switchTab('import')});
+  document.getElementById('tabLog').addEventListener('click',function(){switchTab('log')});
 
   // TXT 发布
   document.getElementById('btnTxtFile').addEventListener('click',function(){document.getElementById('txtFile').click()});
@@ -710,7 +941,7 @@ function wire(){
   document.getElementById('btnPreview').addEventListener('click',doPreview);
   document.getElementById('btnSubmit').addEventListener('click',submitPost);
 
-  // GitHub Token 保存
+  // GitHub Token
   var gh=document.getElementById('ghToken');
   try{ gh.value = localStorage.getItem(GH_TOKEN_KEY)||''; }catch(e){}
   gh.addEventListener('change',function(){
@@ -718,6 +949,35 @@ function wire(){
       if(gh.value.trim()) localStorage.setItem(GH_TOKEN_KEY,gh.value.trim());
       else localStorage.removeItem(GH_TOKEN_KEY);
     }catch(e){}
+  });
+
+  // 导入选项卡
+  document.getElementById('impTabJson').addEventListener('click',function(){
+    this.className='import-tab active';document.getElementById('impTabMd').className='import-tab';
+    document.getElementById('impPaneJson').style.display='';document.getElementById('impPaneMd').style.display='none';
+  });
+  document.getElementById('impTabMd').addEventListener('click',function(){
+    this.className='import-tab active';document.getElementById('impTabJson').className='import-tab';
+    document.getElementById('impPaneMd').style.display='';document.getElementById('impPaneJson').style.display='none';
+  });
+
+  // JSON 拖拽导入
+  setupDropZone('jsonDropZone', 'jsonFileInp', function(files){
+    if(files[0]) importJsonFile(files[0]);
+  });
+
+  // Markdown 拖拽导入
+  setupDropZone('mdDropZone', 'mdFileInp', function(files){
+    importMarkdownFiles(files);
+  });
+
+  // 日志操作
+  document.getElementById('btnLogRefresh').addEventListener('click', renderLogs);
+  document.getElementById('btnLogExport').addEventListener('click', exportLogs);
+  document.getElementById('btnLogClear').addEventListener('click', function(){
+    if(confirm('确定清空所有操作日志吗？')){
+      clearLogs(); renderLogs();
+    }
   });
 }
 
