@@ -160,6 +160,56 @@ body{font-family:var(--font);background:var(--bg);color:var(--text2);min-height:
 .import-zone:hover,.import-zone.dragover{border-color:var(--accent);background:rgba(59,130,246,.04)}
 .import-zone p{color:var(--text4);font-size:13px;margin-top:6px}
 .import-zone .icon{font-size:32px;margin-bottom:4px}
+/* 标签输入 */
+.tag-input-wrap{
+  display:flex;flex-wrap:wrap;gap:6px;padding:8px 12px;
+  background:rgba(15,23,42,.8);border:1px solid var(--border);border-radius:8px;
+  min-height:42px;align-items:center;cursor:text;transition:border-color .2s;
+}
+.tag-input-wrap:focus-within{border-color:var(--accent);box-shadow:0 0 0 3px rgba(59,130,246,.15)}
+.tag-input-wrap .tag-item{
+  display:inline-flex;align-items:center;gap:4px;padding:3px 10px;
+  background:rgba(59,130,246,.15);color:var(--accent);border-radius:12px;
+  font-size:12px;font-family:var(--mono);white-space:nowrap;
+}
+.tag-input-wrap .tag-item .tag-remove{
+  cursor:pointer;opacity:.6;font-size:14px;line-height:1;
+}
+.tag-input-wrap .tag-item .tag-remove:hover{opacity:1;color:var(--red)}
+.tag-input-wrap input{
+  flex:1;min-width:80px;border:none;background:transparent;color:var(--text);
+  font-size:13px;font-family:var(--font);outline:none;padding:2px 0;
+}
+.tag-suggest{
+  position:absolute;z-index:50;background:var(--card);border:1px solid var(--border);
+  border-radius:8px;max-height:160px;overflow-y:auto;width:calc(100% - 56px);
+  box-shadow:0 8px 24px rgba(0,0,0,.4);display:none;margin-top:2px;
+}
+.tag-suggest.show{display:block}
+.tag-suggest-item{
+  padding:7px 14px;font-size:12px;color:var(--text2);cursor:pointer;
+  display:flex;align-items:center;gap:8px;
+}
+.tag-suggest-item:hover,.tag-suggest-item.active{background:rgba(59,130,246,.1);color:var(--accent)}
+.tag-suggest-item .tag-count{margin-left:auto;color:var(--text4);font-size:11px;font-family:var(--mono)}
+/* 标签筛选 */
+.tag-filter{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}
+.tag-filter-btn{
+  padding:4px 12px;border-radius:12px;border:1px solid var(--border);
+  background:transparent;color:var(--text3);font-size:11px;cursor:pointer;
+  font-family:var(--font);transition:all .2s;
+}
+.tag-filter-btn:hover{border-color:var(--accent);color:var(--accent)}
+.tag-filter-btn.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+.tag-filter-btn .tag-fcount{margin-left:4px;opacity:.7}
+/* 标签统计 */
+.tag-stats{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.tag-stat-item{
+  display:flex;align-items:center;gap:6px;padding:6px 14px;
+  background:rgba(30,41,59,.4);border-radius:10px;font-size:12px;
+}
+.tag-stat-name{color:var(--accent);font-weight:500}
+.tag-stat-count{color:var(--text4);font-family:var(--mono);font-size:11px}
 @media(max-width:640px){
   .main{padding:16px 12px}.card{padding:18px 16px}
   .tabs{gap:4px}.tab{padding:7px 14px;font-size:12px}
@@ -205,6 +255,13 @@ body{font-family:var(--font);background:var(--bg);color:var(--text2);min-height:
     <div id="panePublish">
       <div class="card">
         <h3>✍️ 发布新博文（TXT / Markdown 提交）</h3>
+        <div style="margin-bottom:12px">
+          <label style="color:var(--text3);font-size:12px;display:block;margin-bottom:6px">🏷️ 标签（回车添加，点击建议标签选择）</label>
+          <div class="tag-input-wrap" id="tagInputWrap">
+            <input type="text" id="tagInput" placeholder="输入标签后按回车…" autocomplete="off">
+          </div>
+          <div class="tag-suggest" id="tagSuggest"></div>
+        </div>
         <textarea class="txt-area" id="txtArea" spellcheck="false" placeholder="---&#10;title: 文章标题&#10;date: 2026-08-15&#10;tags: 标签1, 标签2&#10;images: images/xx.jpg（可选）&#10;---&#10;&#10;正文内容……&#10;可以多段。&#10;&#10;支持 Markdown 格式：&#10;# 标题&#10;**加粗** *斜体*&#10;- 列表项&#10;```代码块```"></textarea>
         <div class="btn-row" style="margin-top:12px">
           <input type="file" id="txtFile" accept=".txt,.md,.markdown,text/plain,text/markdown" style="display:none">
@@ -216,7 +273,7 @@ body{font-family:var(--font);background:var(--bg);color:var(--text2);min-height:
         <p class="msg" id="pubMsg"></p>
         <p class="hint">
           提交后：① 立即更新到网站（KV，全站访客可见）② 自动推送到 GitHub 仓库 <code>data/posts.json</code> + <code>main.json</code>（触发 Cloudflare 自动部署）。<br>
-          支持格式：TXT 纯文本、Markdown（.md），带头部或不带头部均可。
+          支持格式：TXT 纯文本、Markdown（.md），带头部或不带头部均可。标签会自动合并到 frontmatter 中。
         </p>
       </div>
 
@@ -270,7 +327,17 @@ body{font-family:var(--font);background:var(--bg);color:var(--text2);min-height:
     <!-- 文章列表 -->
     <div class="card">
       <h3>📋 当前文章</h3>
+      <div style="margin-bottom:10px">
+        <label style="color:var(--text3);font-size:12px;display:block;margin-bottom:6px">🏷️ 按标签筛选</label>
+        <div class="tag-filter" id="tagFilter"></div>
+      </div>
       <div id="postTable"></div>
+    </div>
+
+    <!-- 标签统计 -->
+    <div class="card">
+      <h3>📊 标签统计</h3>
+      <div class="tag-stats" id="tagStats"></div>
     </div>
 
     </div><!-- /paneManage -->
@@ -549,16 +616,196 @@ function fetchData(cb){
     });
 }
 
+// ===== 标签系统 =====
+var g_selectedTags = []; // 当前选中的筛选标签
+var g_inputTags = [];    // 发布区输入的标签
+
+// 获取所有标签及其使用次数
+function getAllTags(){
+  var tagMap = {};
+  g_posts.forEach(function(p){
+    (p.tags||[]).forEach(function(t){
+      tagMap[t] = (tagMap[t]||0) + 1;
+    });
+  });
+  return tagMap;
+}
+
+// 渲染标签筛选器
+function renderTagFilter(){
+  var tagMap = getAllTags();
+  var el = document.getElementById('tagFilter');
+  if(!el) return;
+  var tags = Object.keys(tagMap).sort(function(a,b){ return tagMap[b]-tagMap[a]; });
+  if(!tags.length){ el.innerHTML='<span style="color:var(--text4);font-size:12px">暂无标签</span>'; return; }
+  var h = '<button class="tag-filter-btn' + (g_selectedTags.length===0?' active':'') + '" data-tag="">全部</button>';
+  tags.forEach(function(t){
+    var isActive = g_selectedTags.indexOf(t)!==-1;
+    h += '<button class="tag-filter-btn' + (isActive?' active':'') + '" data-tag="' + escAttr(t) + '">' + esc(t) + '<span class="tag-fcount">(' + tagMap[t] + ')</span></button>';
+  });
+  el.innerHTML = h;
+}
+
+// 渲染标签统计
+function renderTagStats(){
+  var tagMap = getAllTags();
+  var el = document.getElementById('tagStats');
+  if(!el) return;
+  var tags = Object.keys(tagMap).sort(function(a,b){ return tagMap[b]-tagMap[a]; });
+  if(!tags.length){ el.innerHTML='<span style="color:var(--text4);font-size:12px">暂无标签数据</span>'; return; }
+  var h = '';
+  tags.forEach(function(t){
+    h += '<div class="tag-stat-item"><span class="tag-stat-name">' + esc(t) + '</span><span class="tag-stat-count">' + tagMap[t] + ' 篇</span></div>';
+  });
+  el.innerHTML = h;
+}
+
+// 标签输入系统
+function initTagInput(){
+  var wrap = document.getElementById('tagInputWrap');
+  var input = document.getElementById('tagInput');
+  var suggest = document.getElementById('tagSuggest');
+  if(!wrap||!input||!suggest) return;
+
+  // 点击整个区域聚焦输入框
+  wrap.addEventListener('click', function(){ input.focus(); });
+
+  // 输入事件 - 显示建议
+  input.addEventListener('input', function(){
+    var val = input.value.trim().toLowerCase();
+    if(!val){ suggest.classList.remove('show'); return; }
+    var tagMap = getAllTags();
+    var matches = Object.keys(tagMap).filter(function(t){
+      return t.toLowerCase().indexOf(val)!==-1 && g_inputTags.indexOf(t)===-1;
+    });
+    if(!matches.length){ suggest.classList.remove('show'); return; }
+    var h = '';
+    matches.slice(0,8).forEach(function(t){
+      h += '<div class="tag-suggest-item" data-tag="' + escAttr(t) + '">' + esc(t) + '<span class="tag-count">' + tagMap[t] + ' 篇</span></div>';
+    });
+    suggest.innerHTML = h;
+    suggest.classList.add('show');
+  });
+
+  // 回车添加标签
+  input.addEventListener('keydown', function(e){
+    if(e.key==='Enter'){
+      e.preventDefault();
+      var val = input.value.trim();
+      if(val && g_inputTags.indexOf(val)===-1){
+        g_inputTags.push(val);
+        renderInputTags();
+      }
+      input.value='';
+      suggest.classList.remove('show');
+    }
+    if(e.key==='Backspace' && !input.value && g_inputTags.length){
+      g_inputTags.pop();
+      renderInputTags();
+    }
+  });
+
+  // 点击建议标签
+  suggest.addEventListener('click', function(e){
+    var item = e.target.closest('.tag-suggest-item');
+    if(!item) return;
+    var tag = item.dataset.tag;
+    if(tag && g_inputTags.indexOf(tag)===-1){
+      g_inputTags.push(tag);
+      renderInputTags();
+    }
+    input.value='';
+    suggest.classList.remove('show');
+    input.focus();
+  });
+
+  // 点击其他地方关闭建议
+  document.addEventListener('click', function(e){
+    if(!wrap.contains(e.target) && !suggest.contains(e.target)){
+      suggest.classList.remove('show');
+    }
+  });
+}
+
+// 渲染输入区的标签
+function renderInputTags(){
+  var wrap = document.getElementById('tagInputWrap');
+  var input = document.getElementById('tagInput');
+  if(!wrap) return;
+  // 清除旧的标签元素
+  var oldTags = wrap.querySelectorAll('.tag-item');
+  oldTags.forEach(function(el){ el.remove(); });
+  // 在输入框前插入标签
+  g_inputTags.forEach(function(t, i){
+    var el = document.createElement('span');
+    el.className='tag-item';
+    el.innerHTML = esc(t) + '<span class="tag-remove" data-idx="' + i + '">×</span>';
+    wrap.insertBefore(el, input);
+  });
+}
+
+// 删除输入区标签
+function removeInputTag(idx){
+  g_inputTags.splice(idx,1);
+  renderInputTags();
+}
+
+// 将输入区标签合并到TXT内容中
+function mergeTagsToContent(txt){
+  if(!g_inputTags.length) return txt;
+  // 检查是否有 frontmatter
+  var m = txt.match(/^\s*---+\s*\r?\n([\s\S]*?)\r?\n---+\s*(?:\r?\n)?([\s\S]*)$/);
+  if(m){
+    // 有 frontmatter - 检查是否已有 tags
+    var header = m[1];
+    var body = m[2]||'';
+    var existingTags = [];
+    var tagMatch = header.match(/^tags:\s*(.+)$/m);
+    if(tagMatch){
+      existingTags = tagMatch[1].split(/[,，]/).map(function(t){return t.trim()}).filter(Boolean);
+    }
+    // 合并标签
+    var allTags = existingTags.slice();
+    g_inputTags.forEach(function(t){
+      if(allTags.indexOf(t)===-1) allTags.push(t);
+    });
+    // 替换或添加 tags 行
+    if(tagMatch){
+      header = header.replace(/^tags:\s*(.+)$/m, 'tags: ' + allTags.join(', '));
+    } else {
+      header = header.trim() + '\ntags: ' + allTags.join(', ');
+    }
+    return '---\n' + header + '\n---\n' + body;
+  } else {
+    // 无 frontmatter - 添加
+    var title = txt.split('\n')[0].replace(/^#+\s*/,'').trim() || '未命名';
+    var date = new Date().toISOString().slice(0,10);
+    return '---\ntitle: ' + title + '\ndate: ' + date + '\ntags: ' + g_inputTags.join(', ') + '\n---\n\n' + txt;
+  }
+}
+
 // ===== 渲染 =====
 function render(){
   document.getElementById('cnt').textContent=g_posts.length;
   updatePubBadge();
   updateExportArea();
+  renderTagFilter();
+  renderTagStats();
+
+  // 按标签筛选
+  var filtered = g_posts;
+  if(g_selectedTags.length){
+    filtered = g_posts.filter(function(p){
+      return g_selectedTags.some(function(st){
+        return (p.tags||[]).indexOf(st)!==-1;
+      });
+    });
+  }
 
   var t=document.getElementById('postTable');
-  if(!g_posts.length){t.innerHTML='<div class="empty">暂无文章</div>';return}
+  if(!filtered.length){t.innerHTML='<div class="empty">' + (g_selectedTags.length?'没有匹配的文章':'暂无文章') + '</div>';return}
   var h='<table class="tbl"><thead><tr><th>ID</th><th>标题</th><th>日期</th><th>标签</th><th>操作</th></tr></thead><tbody>';
-  g_posts.forEach(function(p){
+  filtered.forEach(function(p){
     h+='<tr><td>'+p.id+'</td><td><strong style="color:var(--text)">'+esc(p.title)+'</strong></td><td>'+esc(p.date)+'</td><td>'+(p.tags||[]).map(function(t){return'<span class="tag">'+esc(t)+'</span>'}).join(' ')+'</td><td><button class="btn btn-d" data-del="'+p.id+'" style="font-size:12px;padding:4px 10px">删除</button></td></tr>';
   });
   h+='</tbody></table>';t.innerHTML=h;
@@ -632,7 +879,11 @@ function postToMarkdown(p){
   var lines = ['---'];
   lines.push('title: ' + (p.title||''));
   lines.push('date: ' + (p.date||''));
-  if(p.tags && p.tags.length) lines.push('tags: ' + p.tags.join(', '));
+  if(p.tags && p.tags.length){
+    // 使用 YAML 列表格式
+    lines.push('tags:');
+    p.tags.forEach(function(t){ lines.push('  - ' + t); });
+  }
   if(p.images) lines.push('images: ' + p.images);
   lines.push('---');
   lines.push('');
@@ -682,11 +933,35 @@ function parseMarkdownFile(txt){
   var meta = {}, content;
   if(m){
     content = (m[2]||'').trim();
-    m[1].split(/\r?\n/).forEach(function(line){
+    var lines = m[1].split(/\r?\n/);
+    var currentKey = null;
+    var listItems = [];
+    lines.forEach(function(line){
+      // 检查是否是列表项（以 - 开头）
+      var listMatch = line.match(/^\s+-\s+(.+)$/);
+      if(listMatch && currentKey){
+        listItems.push(listMatch[1].trim());
+        meta[currentKey] = listItems;
+        return;
+      }
+      // 普通 key: value 行
       var idx=line.indexOf(':');
-      if(idx===-1)return;
+      if(idx===-1) return;
       var k=line.slice(0,idx).trim(), v=line.slice(idx+1).trim();
-      if(k)meta[k]=v;
+      if(k){
+        currentKey = k;
+        listItems = [];
+        // 如果值为空，可能是列表的开始
+        if(!v){
+          meta[k] = '';
+        } else {
+          meta[k] = v;
+          // 检查是否是逗号分隔的标签列表
+          if(k==='tags' && v.indexOf(',')!==-1){
+            meta[k] = v; // 保持字符串形式，后面统一处理
+          }
+        }
+      }
     });
   }else{
     var lines = txt.trim().split(/\r?\n/);
@@ -701,7 +976,15 @@ function parseMarkdownFile(txt){
     date: /^\d{4}-\d{2}-\d{2}$/.test(meta.date||'') ? meta.date : new Date().toISOString().slice(0,10),
     content: content
   };
-  var tags = (meta.tags||'').split(/[,，]/).map(function(t){return t.trim()}).filter(Boolean);
+  // 处理标签 - 支持多种格式
+  var tags = [];
+  if(Array.isArray(meta.tags)){
+    // YAML 列表格式：tags:\n- tag1\n- tag2
+    tags = meta.tags.map(function(t){return t.trim()}).filter(Boolean);
+  } else if(typeof meta.tags === 'string' && meta.tags){
+    // 逗号分隔格式：tags: tag1, tag2
+    tags = meta.tags.split(/[,，]/).map(function(t){return t.trim()}).filter(Boolean);
+  }
   if(tags.length) post.tags = tags;
   if(meta.images||meta.image) post.images = meta.images||meta.image;
   return post;
@@ -793,11 +1076,30 @@ function parseTxtLocal(txt){
   var meta = {}, content;
   if(m){
     content = (m[2]||'').trim();
-    m[1].split(/\r?\n/).forEach(function(line){
+    var lines = m[1].split(/\r?\n/);
+    var currentKey = null;
+    var listItems = [];
+    lines.forEach(function(line){
+      // 检查是否是列表项（以 - 开头）
+      var listMatch = line.match(/^\s+-\s+(.+)$/);
+      if(listMatch && currentKey){
+        listItems.push(listMatch[1].trim());
+        meta[currentKey] = listItems;
+        return;
+      }
+      // 普通 key: value 行
       var idx=line.indexOf(':');
       if(idx===-1)return;
       var k=line.slice(0,idx).trim(), v=line.slice(idx+1).trim();
-      if(k)meta[k]=v;
+      if(k){
+        currentKey = k;
+        listItems = [];
+        if(!v){
+          meta[k] = '';
+        } else {
+          meta[k] = v;
+        }
+      }
     });
   }else{
     var lines = txt.trim().split(/\r?\n/);
@@ -813,7 +1115,15 @@ function parseTxtLocal(txt){
     date: /^\d{4}-\d{2}-\d{2}$/.test(meta.date||'') ? meta.date : new Date().toISOString().slice(0,10),
     content: content
   };
-  var tags = (meta.tags||'').split(/[,，]/).map(function(t){return t.trim()}).filter(Boolean);
+  // 处理标签 - 支持多种格式
+  var tags = [];
+  if(Array.isArray(meta.tags)){
+    // YAML 列表格式：tags:\n- tag1\n- tag2
+    tags = meta.tags.map(function(t){return t.trim()}).filter(Boolean);
+  } else if(typeof meta.tags === 'string' && meta.tags){
+    // 逗号分隔格式：tags: tag1, tag2
+    tags = meta.tags.split(/[,，]/).map(function(t){return t.trim()}).filter(Boolean);
+  }
   if(tags.length) post.tags = tags;
   if(meta.images||meta.image) post.images = meta.images||meta.image;
   return post;
@@ -844,6 +1154,8 @@ function doPreview(){
 
 function submitPost(){
   var txt = document.getElementById('txtArea').value;
+  // 合并输入区标签
+  txt = mergeTagsToContent(txt);
   var post;
   try{ post = parseTxtLocal(txt); }catch(e){ pubMsg('❌ '+e.message,'err'); return; }
 
@@ -879,6 +1191,8 @@ function submitPost(){
       addLog('publish', '发布文章《' + post.title + '》ID=' + res.data.post.id);
       document.getElementById('txtArea').value='';
       document.getElementById('previewBox').style.display='none';
+      g_inputTags=[];
+      renderInputTags();
       updatePubBadge();
     })
     .catch(function(err){
@@ -979,6 +1293,34 @@ function wire(){
       clearLogs(); renderLogs();
     }
   });
+
+  // 标签筛选
+  document.getElementById('tagFilter').addEventListener('click', function(e){
+    var btn = e.target.closest('.tag-filter-btn');
+    if(!btn) return;
+    var tag = btn.dataset.tag;
+    if(!tag){
+      // 点击"全部"
+      g_selectedTags = [];
+    } else {
+      var idx = g_selectedTags.indexOf(tag);
+      if(idx===-1) g_selectedTags.push(tag);
+      else g_selectedTags.splice(idx,1);
+    }
+    render();
+  });
+
+  // 标签输入删除
+  document.getElementById('tagInputWrap').addEventListener('click', function(e){
+    var removeBtn = e.target.closest('.tag-remove');
+    if(removeBtn){
+      e.stopPropagation();
+      removeInputTag(parseInt(removeBtn.dataset.idx));
+    }
+  });
+
+  // 初始化标签输入系统
+  initTagInput();
 }
 
 function showShell(){

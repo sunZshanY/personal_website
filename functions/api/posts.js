@@ -143,6 +143,9 @@ function validatePost(p) {
  *  - 带 --- 头部（YAML frontmatter）：解析 title/date/tags/images
  *  - 无头部：首行作为标题（支持 # Markdown 标题前缀），其余为正文
  *  - 正文保留完整 Markdown 格式（标题、列表、代码块、链接等）
+ *  - 支持标签格式：
+ *    逗号分隔：tags: tag1, tag2
+ *    YAML 列表：tags:\n  - tag1\n  - tag2
  */
 export function parseTxt(txt) {
   if (typeof txt !== 'string' || !txt.replace(/^\uFEFF/, '').trim()) {
@@ -155,12 +158,31 @@ export function parseTxt(txt) {
 
   if (m) {
     content = (m[2] || '').trim();
-    for (const line of m[1].split(/\r?\n/)) {
+    const lines = m[1].split(/\r?\n/);
+    let currentKey = null;
+    let listItems = [];
+    for (const line of lines) {
+      // 检查是否是 YAML 列表项（以 - 开头）
+      const listMatch = line.match(/^\s+-\s+(.+)$/);
+      if (listMatch && currentKey) {
+        listItems.push(listMatch[1].trim());
+        meta[currentKey] = listItems;
+        continue;
+      }
+      // 普通 key: value 行
       const idx = line.indexOf(':');
       if (idx === -1) continue;
       const k = line.slice(0, idx).trim();
       const v = line.slice(idx + 1).trim();
-      if (k) meta[k] = v;
+      if (k) {
+        currentKey = k;
+        listItems = [];
+        if (!v) {
+          meta[k] = '';
+        } else {
+          meta[k] = v;
+        }
+      }
     }
   } else {
     const lines = txt.trim().split(/\r?\n/);
@@ -179,7 +201,15 @@ export function parseTxt(txt) {
     date: /^\d{4}-\d{2}-\d{2}$/.test(meta.date || '') ? meta.date : new Date().toISOString().slice(0, 10),
     content
   };
-  const tags = (meta.tags || '').split(/[,，]/).map(t => t.trim()).filter(Boolean);
+  // 处理标签 - 支持多种格式
+  let tags = [];
+  if (Array.isArray(meta.tags)) {
+    // YAML 列表格式：tags:\n- tag1\n- tag2
+    tags = meta.tags.map(t => t.trim()).filter(Boolean);
+  } else if (typeof meta.tags === 'string' && meta.tags) {
+    // 逗号分隔格式：tags: tag1, tag2
+    tags = meta.tags.split(/[,，]/).map(t => t.trim()).filter(Boolean);
+  }
   if (tags.length) post.tags = tags;
   if (meta.images || meta.image) post.images = meta.images || meta.image;
   return post;
