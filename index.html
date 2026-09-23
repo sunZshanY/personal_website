@@ -15,19 +15,19 @@
   <link rel="icon" href="images/images1.jpg" type="image/jpeg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,700;1,400&display=swap"
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
 </head>
 
-<body data-theme="dark">
+<body data-theme="light">
   <!-- 背景层 -->
   <div class="bg-layer" id="bgLayer" aria-hidden="true"></div>
   <div class="bg-overlay" aria-hidden="true"></div>
   <!-- Toast -->
   <div id="toastContainer" class="toast-container" aria-live="polite"></div>
 
-  <!-- ====== RinUI 布局框架 ====== -->
+  <!-- ====== 布局框架 ====== -->
   <!-- RinLit我们喜欢你口牙 -->
   <div class="rinui-layout" id="appRoot">
 
@@ -57,11 +57,10 @@
         <button type="button" class="sidebar-btn active" data-panel="blog" aria-current="page"> ブログ(博客)</button>
         <button type="button" class="sidebar-btn" data-panel="projects"> 我的项目喵</button>
         <button type="button" class="sidebar-btn" data-panel="stack"> 我的技术栈面版</button>
-        <button type="button" class="sidebar-btn disabled" data-panel="friends" disabled> 友链（暂未添加）</button>
         <button type="button" class="sidebar-btn" data-panel="friends-link">🔗 友链</button>
         <button type="button" class="sidebar-btn" data-panel="about"> About ME</button>
         <span class="sidebar-spacer"></span>
-        <span class="sidebar-version">v3.0</span>
+        <span class="sidebar-version">v4.0</span>
       </nav>
 
       <!-- 内容区 -->
@@ -87,6 +86,7 @@
         <!-- ====== 项目面板 ====== -->
         <section id="projects" class="content-panel" aria-labelledby="projectsHeading">
           <h2 class="panel-title" id="projectsHeading" style="text-align:center"> 个人プロジェクト</h2>
+
           <div class="project-card">
             <div class="project-card-header">
               <h3>nanox</h3>
@@ -94,244 +94,245 @@
                 rel="noopener noreferrer">Come Come</a>
             </div>
             <p class="project-desc">一款由C++开发的编译器，融合了nano+vim的功能，支持C++、C语言的编译、调试、运行等功能，对nano和vim用户十分友好</p>
+            <div class="project-tags">
+              <span class="rinui-tag">C++</span><span class="rinui-tag">编译器</span><span class="rinui-tag">编程工具</span>
+            </div>
           </div>
-          <div class="project-tags">
-            <span class="rinui-tag">C++</span><span class="rinui-tag">编译器</span><span class="rinui-tag">编程工具</span>
+
+          <div class="project-card">
+            <div class="project-card-header">
+              <h3>news-review</h3>
+              <a href="https://github.com/sunZshanY/news-review" class="rinui-btn success" target="_blank"
+                rel="noopener noreferrer">详情请进入此处查看</a>
+            </div>
+            <p class="project-desc">在桌面展示今日国内与国际新闻的 Class Widgets 2 新闻阅览插件，使用python+QML搭建</p>
+            <div class="project-tags">
+              <span class="rinui-tag">Python</span><span class="rinui-tag">QML</span><span class="rinui-tag">桌面插件</span>
+            </div>
           </div>
+
+          <div class="project-card">
+            <div class="project-card-header">
+              <h3>WEB_TODO</h3>
+              <a href="https://omia.pages.dev" class="rinui-btn success" target="_blank" rel="noopener noreferrer">欢迎光临</a>
+            </div>
+            <p class="project-desc">使用前端三剑客+TypeScript写出来的 TODO 工具，能加能删能分类，够用就行。后端还在缝缝补补，现版本已添加AI功能。</p>
+            <div class="project-tags">
+              <span class="rinui-tag">HTML</span><span class="rinui-tag">CSS</span><span
+                class="rinui-tag">JavaScript</span><span class="rinui-tag">Python</span>
+            </div>
+          </div>
+
+          <div class="project-card">
+            <div class="project-card-header">
+              <h3>知识库</h3>
+              <a href="knowflow/index.html" class="rinui-btn success" target="_blank" rel="noopener noreferrer">进去看看</a>
+            </div>
+            <p class="project-desc">学啥记啥，踩坑记录本。本地存储，随时查阅。</p>
+            <div class="project-tags">
+              <span class="rinui-tag">知识管理</span><span class="rinui-tag">笔记</span><span class="rinui-tag">学习</span>
+            </div>
+          </div>
+        </section>
+
+        <!-- ====== 技术栈面板 ====== -->
+        <section id="stack" class="content-panel" aria-labelledby="stackHeading">
+          <h2 class="panel-title" id="stackHeading" style="text-align:center"> 我的技术栈面版</h2>
+
+          <!-- 编程语言 & 工具 -->
+          <div class="stack-section">
+            <h3 class="stack-section-title">
+              <span class="stack-section-icon">💻</span> 语言 & 工具
+            </h3>
+            <div class="stack-icons-grid">
+              <img src="https://skillicons.dev/icons?i=python,c,cpp,java,html,css,js,ts,nodejs,lua" alt="编程语言与工具"
+                class="stack-skill-icons" loading="lazy">
+            </div>
+            <p
+              style="color:var(--rinui-text-muted);font-size:13px;text-align:center;margin-top:12px;font-family:var(--font-cn);">
+              Python 写得多、Java学的还行，现在正在学习lua和C语言(以及许多语言，数也数不过来了......)。
+            </p>
+          </div>
+
+          <!-- 最爱 IDE -->
+          <div class="stack-section">
+            <h3 class="stack-section-title">
+              <span class="stack-section-icon">🔧</span> 最爱的 IDE / 编辑器
+            </h3>
+            <div class="stack-icons-grid">
+              <img src="https://skillicons.dev/icons?i=pycharm,idea,clion,vim,neovim,vscode" alt="IDE 和编辑器"
+                class="stack-skill-icons" loading="lazy">
+            </div>
+            <p
+              style="color:var(--rinui-text-muted);font-size:13px;text-align:center;margin-top:12px;font-family:var(--font-cn);">
+              主力neovim ，前端用vscode，写大项目用Jetbrain的IDE。
+            </p>
+          </div>
+
+          <!-- 其他工具 -->
+          <div class="stack-section">
+            <h3 class="stack-section-title">
+              <span class="stack-section-icon">🛠️</span> 其他常用工具
+            </h3>
+            <div class="stack-icons-grid">
+              <img src="https://skillicons.dev/icons?i=,git,github,docker,md" alt="其他常用工具" class="stack-skill-icons"
+                loading="lazy">
+            </div>
+            <p
+              style="color:var(--rinui-text-muted);font-size:13px;text-align:center;margin-top:12px;font-family:var(--font-cn);">
+              git提交代码，GitHub 当学习网站，<del>Docker 还在学</del>
+            </p>
+          </div>
+        </section>
+
+        <!-- ====== 友链面板 ====== -->
+        <section id="friends-link" class="content-panel" aria-labelledby="friendsLinkHeading">
+          <h2 class="panel-title" id="friendsLinkHeading" style="text-align:center">🔗 友链</h2>
+          <a href="explanation/friend_line.html" class="friend-guide-card" target="_blank" rel="noopener noreferrer">
+            <span class="friend-guide-icon">📖</span>
+            <span class="friend-guide-text">
+              <span class="friend-guide-title">友链添加说明</span>
+              <span class="friend-guide-subtitle">了解如何申请添加友链 →</span>
+            </span>
+          </a>
+          <div class="friends-grid">
+            <!-- 次元裂缝 -->
+            <a href="." class="friend-card" target="_blank" rel="noopener noreferrer" title="次元裂缝 — 新番杂谈与追番笔记">
+              <img src="https://api.dicebear.com/9.x/thumbs/svg?seed=jigen" alt="次元裂缝" class="friend-avatar" width="56"
+                height="56" loading="lazy">
+              <div class="friend-info">
+                <span class="friend-name">次元裂缝</span>
+                <span class="friend-desc">新番杂谈与追番笔记，偶尔写写轻小说推荐</span>
+              </div>
+              <span class="friend-tag">动画</span>
+            </a>
+            <!-- 摸鱼开发日志 -->
+            <a href="." class="friend-card" target="_blank" rel="noopener noreferrer" title="摸鱼开发日志 — 一个码农的自我修养">
+              <img src="https://api.dicebear.com/9.x/thumbs/svg?seed=moyu" alt="摸鱼开发日志" class="friend-avatar" width="56"
+                height="56" loading="lazy">
+              <div class="friend-info">
+                <span class="friend-name">摸鱼开发日志</span>
+                <span class="friend-desc">一个码农的自我修养：写Bug → 修Bug → 摆烂</span>
+              </div>
+              <span class="friend-tag">编程</span>
+            </a>
+            <!-- 音游废人の日常 -->
+            <a href="." class="friend-card" target="_blank" rel="noopener noreferrer" title="音游废人の日常 — 舞萌DX出勤记录">
+              <img src="https://api.dicebear.com/9.x/thumbs/svg?seed=otoge" alt="音游废人の日常" class="friend-avatar" width="56"
+                height="56" loading="lazy">
+              <div class="friend-info">
+                <span class="friend-name">音游废人の日常</span>
+                <span class="friend-desc">舞萌DX出勤记录 & 手元视频，rating缓慢爬升中</span>
+              </div>
+              <span class="friend-tag">音游</span>
+            </a>
+            <!-- BA特命部 -->
+            <a href="." class="friend-card" target="_blank" rel="noopener noreferrer" title="BA特命部 — 蔚蓝档案攻略与二创">
+              <img src="https://api.dicebear.com/9.x/thumbs/svg?seed=bluearchive" alt="BA特命部" class="friend-avatar"
+                width="56" height="56" loading="lazy">
+              <div class="friend-info">
+                <span class="friend-name">BA特命部</span>
+                <span class="friend-desc">蔚蓝档案攻略 & 二创分享，沙勒老师集中营</span>
+              </div>
+              <span class="friend-tag">游戏</span>
+            </a>
+            <!-- 魔爪中毒者 -->
+            <a href="." class="friend-card" target="_blank" rel="noopener noreferrer" title="魔爪中毒者 — 能量饮料与深夜码字">
+              <img src="https://api.dicebear.com/9.x/thumbs/svg?seed=monster" alt="魔爪中毒者" class="friend-avatar" width="56"
+                height="56" loading="lazy">
+              <div class="friend-info">
+                <span class="friend-name">魔爪中毒者</span>
+                <span class="friend-desc">每天一罐魔爪，赛博提神，深夜码字停不下来</span>
+              </div>
+              <span class="friend-tag">生活</span>
+            </a>
+            <!-- Galaxy驿站 -->
+            <a href="." class="friend-card" target="_blank" rel="noopener noreferrer" title="Galaxy驿站 — 杂货铺式个人站">
+              <img src="https://api.dicebear.com/9.x/thumbs/svg?seed=galaxy" alt="Galaxy驿站" class="friend-avatar" width="56"
+                height="56" loading="lazy">
+              <div class="friend-info">
+                <span class="friend-name">Galaxy驿站</span>
+                <span class="friend-desc">杂货铺式个人站：资源分享、日常碎碎念、啥都有</span>
+              </div>
+              <span class="friend-tag">综合</span>
+            </a>
+            <p align="center" text-align="center">
+              <span align="center" ,text-align="center">
+                注意，此网页有些链接可能无法访问，这是由于链接过期或被删除导致的。
+              </span>
+            </p>
+          </div>
+        </section>
+
+        <!-- ====== 关于面板 ====== -->
+        <section id="about" class="content-panel" aria-labelledby="aboutHeading">
+          <h2 class="panel-title" id="aboutHeading" style="text-align:center"> About ME</h2>
+          <div class="about-content">
+            <img src="images/images1.jpg" alt="Yu Sun" class="profile-image" width="110" height="110" loading="lazy">
+
+            <!-- ========== 个人介绍 ========== -->
+            <p class="about-intro">嗨，我是<strong>Yu Sun</strong>，一个写代码的中职生，也是一名otaku。</p>
+            <div class="intro-tags">
+              <span class="intro-tag"><span class="intro-tag-icon">💻</span>写代码</span>
+              <span class="intro-tag"><span class="intro-tag-icon">🎮</span>舞萌DX</span>
+              <span class="intro-tag"><span class="intro-tag-icon">💕</span>纯爱番</span>
+              <span class="intro-tag"><span class="intro-tag-icon">🥤</span>魔爪</span> <!--要整就整黑魔爪-->
+              <span class="intro-tag"><span class="intro-tag-icon">📱</span>蔚蓝档案</span>
+            </div>
+            <button type="button" class="intro-more-btn" onclick="openModal('introModal')">
+              点击了解更多关于我
+            </button>
+
+            <!-- GitHub -->
+            <a href="https://github.com/sunZshanY" target="_blank" rel="noopener noreferrer" class="github-link">
+              <svg class="github-icon" viewBox="0 0 24 24" aria-hidden="true" width="22" height="22">
+                <path fill="currentColor"
+                  d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.385-1.335-1.755-1.335-1.755-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12z" />
+              </svg>
+              GitHub · sunZshanY
+            </a>
+
+            <!-- ========== 许可协议 ========== -->
+            <div class="license-block">
+              <p class="license-title">📜 许可协议(LICENSE)</p>
+              <p class="license-text">
+                本站所有原创内容采用
+                <a href="https://github.com/sunZshanY/sunZshanY.github.io/blob/main/LICENSE" target="_blank"
+                  rel="noopener noreferrer">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+                （CC BY-NC-SA 4.0）进行许可。
+              </p>
+              <p class="license-summary">
+                这意味着你可以自由地分享、改编本站内容，但必须：<br>
+                ① 给出适当的署名（标注原作者 Yu Sun）<br>
+                ② 不得用于商业目的<br>
+                ③ 改编后的作品必须以相同方式共享
+              </p>
+            </div>
+          </div>
+        </section>
+
+      </main>
     </div>
-    <div class="project-card">
-      <div class="project-card-header">
-        <h3>news-review</h3>
-        <a href="https://github.com/sunZshanY/news-review" class="rinui-btn success" target="_blank"
-          rel="noopener noreferrer">详情请进入此处查看</a>
-      </div>
-      <p class="project-desc">在桌面展示今日国内与国际新闻的 Class Widgets 2 新闻阅览插件，使用python+QML搭建</p>
-      <div class="project-tags">
-        <span class="rinui-tag">Python</span><span class="rinui-tag">QML</span><span class="rinui-tag">桌面插件</span>
-      </div>
-    </div>
-    <div class="project-card">
-      <div class="project-card-header">
-        <h3>WEB_TODO</h3>
-        <a href="https://omia.pages.dev" class="rinui-btn success" target="_blank" rel="noopener noreferrer">欢迎光临</a>
-      </div>
-      <p class="project-desc">使用前端三剑客+TypeScript写出来的 TODO 工具，能加能删能分类，够用就行。后端还在缝缝补补，现版本已添加AI功能。</p>
-      <div class="project-tags">
-        <span class="rinui-tag">HTML</span><span class="rinui-tag">CSS</span><span
-          class="rinui-tag">JavaScript</span><span class="rinui-tag">Python</span>
-      </div>
-    </div>
 
-    </section>
-
-    <!-- ====== 技术栈面板 ====== -->
-    <section id="stack" class="content-panel" aria-labelledby="stackHeading">
-      <h2 class="panel-title" id="stackHeading" style="text-align:center"> 我的技术栈面版</h2>
-
-      <!-- 编程语言 & 工具 -->
-      <div class="stack-section">
-        <h3 class="stack-section-title">
-          <span class="stack-section-icon">💻</span> 语言 & 工具
-        </h3>
-        <div class="stack-icons-grid">
-          <img src="https://skillicons.dev/icons?i=python,c,cpp,java,html,css,js,ts,nodejs,lua" alt="编程语言与工具"
-            class="stack-skill-icons" loading="lazy">
-        </div>
-        <p
-          style="color:var(--rinui-text-muted);font-size:13px;text-align:center;margin-top:12px;font-family:var(--font-cn);">
-          Python 写得多、Java学的还行，现在正在学习lua和C语言(以及许多语言，数也数不过来了......)。
-        </p>
-      </div>
-
-      <!-- 最爱 IDE -->
-      <div class="stack-section">
-        <h3 class="stack-section-title">
-          <span class="stack-section-icon">🔧</span> 最爱的 IDE / 编辑器
-        </h3>
-        <div class="stack-icons-grid">
-          <img src="https://skillicons.dev/icons?i=pycharm,idea,clion,vim,neovim,vscode" alt="IDE 和编辑器"
-            class="stack-skill-icons" loading="lazy">
-        </div>
-        <p
-          style="color:var(--rinui-text-muted);font-size:13px;text-align:center;margin-top:12px;font-family:var(--font-cn);">
-          主力neovim ，前端用vscode，写大项目用Jetbrain的IDE。
-        </p>
-      </div>
-
-      <!-- 其他工具 -->
-      <div class="stack-section">
-        <h3 class="stack-section-title">
-          <span class="stack-section-icon">🛠️</span> 其他常用工具
-        </h3>
-        <div class="stack-icons-grid">
-          <img src="https://skillicons.dev/icons?i=,git,github,docker,md" alt="其他常用工具" class="stack-skill-icons"
-            loading="lazy">
-        </div>
-        <p
-          style="color:var(--rinui-text-muted);font-size:13px;text-align:center;margin-top:12px;font-family:var(--font-cn);">
-          git提交代码，GitHub 当学习网站，<del>Docker 还在学</del>
-        </p>
-      </div>
-    </section>
-
-    <!-- ====== 友链面板 ====== -->
-    <section id="friends" class="content-panel" aria-labelledby="friendsHeading">
-      <h2 class="panel-title" id="friendsHeading" style="text-align:center"> 友链</h2>
-      <p>暂无友链，敬请期待,如想添加，可联系我<a href="mailto:woshishanyideshifu@qq.com">邮箱请点此处</a></p>
-      <div class="empty-state"><span class="empty-icon" aria-hidden="true">🔗</span>
-        <p class="empty-title">暂无友链</p>
-        <p class="empty-subtitle">敬请期待</p>
-      </div>
-    </section>
-
-    <!-- ====== 友链面板 ====== -->
-    <section id="friends-link" class="content-panel" aria-labelledby="friendsLinkHeading">
-      <h2 class="panel-title" id="friendsLinkHeading" style="text-align:center">🔗 友链</h2>
-      <a href="explanation/friend_line.html" class="friend-guide-card" target="_blank" rel="noopener noreferrer">
-        <span class="friend-guide-icon">📖</span>
-        <span class="friend-guide-text">
-          <span class="friend-guide-title">友链添加说明</span>
-          <span class="friend-guide-subtitle">了解如何申请添加友链 →</span>
-        </span>
-      </a>
-      <div class="friends-grid">
-        <!-- 次元裂缝 -->
-        <a href="." class="friend-card" target="_blank" rel="noopener noreferrer" title="次元裂缝 — 新番杂谈与追番笔记">
-          <img src="https://api.dicebear.com/9.x/thumbs/svg?seed=jigen" alt="次元裂缝" class="friend-avatar" width="56"
-            height="56" loading="lazy">
-          <div class="friend-info">
-            <span class="friend-name">次元裂缝</span>
-            <span class="friend-desc">新番杂谈与追番笔记，偶尔写写轻小说推荐</span>
-          </div>
-          <span class="friend-tag">动画</span>
-        </a>
-        <!-- 摸鱼开发日志 -->
-        <a href="." class="friend-card" target="_blank" rel="noopener noreferrer" title="摸鱼开发日志 — 一个码农的自我修养">
-          <img src="https://api.dicebear.com/9.x/thumbs/svg?seed=moyu" alt="摸鱼开发日志" class="friend-avatar" width="56"
-            height="56" loading="lazy">
-          <div class="friend-info">
-            <span class="friend-name">摸鱼开发日志</span>
-            <span class="friend-desc">一个码农的自我修养：写Bug → 修Bug → 摆烂</span>
-          </div>
-          <span class="friend-tag">编程</span>
-        </a>
-        <!-- 音游废人の日常 -->
-        <a href="." class="friend-card" target="_blank" rel="noopener noreferrer" title="音游废人の日常 — 舞萌DX出勤记录">
-          <img src="https://api.dicebear.com/9.x/thumbs/svg?seed=otoge" alt="音游废人の日常" class="friend-avatar" width="56"
-            height="56" loading="lazy">
-          <div class="friend-info">
-            <span class="friend-name">音游废人の日常</span>
-            <span class="friend-desc">舞萌DX出勤记录 & 手元视频，rating缓慢爬升中</span>
-          </div>
-          <span class="friend-tag">音游</span>
-        </a>
-        <!-- BA特命部 -->
-        <a href="." class="friend-card" target="_blank" rel="noopener noreferrer" title="BA特命部 — 蔚蓝档案攻略与二创">
-          <img src="https://api.dicebear.com/9.x/thumbs/svg?seed=bluearchive" alt="BA特命部" class="friend-avatar"
-            width="56" height="56" loading="lazy">
-          <div class="friend-info">
-            <span class="friend-name">BA特命部</span>
-            <span class="friend-desc">蔚蓝档案攻略 & 二创分享，沙勒老师集中营</span>
-          </div>
-          <span class="friend-tag">游戏</span>
-        </a>
-        <!-- 魔爪中毒者 -->
-        <a href="." class="friend-card" target="_blank" rel="noopener noreferrer" title="魔爪中毒者 — 能量饮料与深夜码字">
-          <img src="https://api.dicebear.com/9.x/thumbs/svg?seed=monster" alt="魔爪中毒者" class="friend-avatar" width="56"
-            height="56" loading="lazy">
-          <div class="friend-info">
-            <span class="friend-name">魔爪中毒者</span>
-            <span class="friend-desc">每天一罐魔爪，赛博提神，深夜码字停不下来</span>
-          </div>
-          <span class="friend-tag">生活</span>
-        </a>
-        <!-- Galaxy驿站 -->
-        <a href="." class="friend-card" target="_blank" rel="noopener noreferrer" title="Galaxy驿站 — 杂货铺式个人站">
-          <img src="https://api.dicebear.com/9.x/thumbs/svg?seed=galaxy" alt="Galaxy驿站" class="friend-avatar" width="56"
-            height="56" loading="lazy">
-          <div class="friend-info">
-            <span class="friend-name">Galaxy驿站</span>
-            <span class="friend-desc">杂货铺式个人站：资源分享、日常碎碎念、啥都有</span>
-          </div>
-          <span class="friend-tag">综合</span>
-        </a>
-        <p align="center" text-align="center">
-          <span align="center" ,text-align="center">
-            注意，此网页有些链接可能无法访问，这是由于链接过期或被删除导致的。
-          </span>
-        </p>
-      </div>
-    </section>
-
-    <!-- ====== 关于面板 ====== -->
-    <section id="about" class="content-panel" aria-labelledby="aboutHeading">
-      <h2 class="panel-title" id="aboutHeading" style="text-align:center"> About ME</h2>
-      <div class="about-content">
-        <img src="images/images1.jpg" alt="Yu Sun" class="profile-image" width="110" height="110" loading="lazy">
-
-        <!-- ========== 个人介绍 ========== -->
-        <p class="about-intro">嗨，我是<strong>Yu Sun</strong>，一个写代码的中职生，也是一名otaku。</p>
-        <div class="intro-tags">
-          <span class="intro-tag"><span class="intro-tag-icon">💻</span>写代码</span>
-          <span class="intro-tag"><span class="intro-tag-icon">🎮</span>舞萌DX</span>
-          <span class="intro-tag"><span class="intro-tag-icon">💕</span>纯爱番</span>
-          <span class="intro-tag"><span class="intro-tag-icon">🥤</span>魔爪</span> <!--要整就整黑魔爪-->
-          <span class="intro-tag"><span class="intro-tag-icon">📱</span>蔚蓝档案</span>
-        </div>
-        <button type="button" class="intro-more-btn" onclick="openModal('introModal')">
-          点击了解更多关于我
-        </button>
-
-        <!-- GitHub -->
-        <a href="https://github.com/sunZshanY" target="_blank" rel="noopener noreferrer" class="github-link">
-          <svg class="github-icon" viewBox="0 0 24 24" aria-hidden="true" width="22" height="22">
-            <path fill="currentColor"
-              d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61-.546-1.385-1.335-1.755-1.335-1.755-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 21.795 24 17.295 24 12c0-6.63-5.37-12-12-12z" />
-          </svg>
-          GitHub · sunZshanY
-        </a>
-
-        <!-- ========== 许可协议 ========== -->
-        <div class="license-block">
-          <p class="license-title">📜 许可协议(LICENSE)</p>
-          <p class="license-text">
-            本站所有原创内容采用
-            <a href="https://github.com/sunZshanY/sunZshanY.github.io/blob/main/LICENSE" target="_blank"
-              rel="noopener noreferrer">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
-            （CC BY-NC-SA 4.0）进行许可。
-          </p>
-          <p class="license-summary">
-            这意味着你可以自由地分享、改编本站内容，但必须：<br>
-            ① 给出适当的署名（标注原作者 Yu Sun）<br>
-            ② 不得用于商业目的<br>
-            ③ 改编后的作品必须以相同方式共享
-          </p>
-        </div>
-      </div>
-    </section>
-
-    </main>
-  </div>
-
-  <!-- ====== 底部状态栏 ====== -->
-  <footer class="rinui-statusbar" role="contentinfo">
-    <span class="statusbar-item" id="wallpaperInfo" title="点击查看原图" onclick="openCurrentWallpaper()"
-      style="cursor:pointer;transition:color 0.2s ease">等待加载...</span>
-    <span class="statusbar-item statusbar-center">
-      浏览人数：<span id="visitorCount">0</span>
-    </span>
-    <span class="statusbar-item">
-      <span>© sunZshanY.inc</span>
-      <span class="statusbar-separator" aria-hidden="true">|</span>
-      <a href="https://icp.gov.moe/?keyword=20266671" target="_blank" rel="noopener noreferrer"
-        style="text-decoration:none;color:inherit">萌ICP备20266671号</a>
-      <span class="statusbar-separator" aria-hidden="true">|</span>
-      <span style="opacity:0.35;font-size:12px"><a
-          href="https://www.bilibili.com/video/BV1CkN66eEtV/?spm_id_from=333.1391.0.0&vd_source=7c847222bc0c98bdec924409f34d4677"
-          target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:none">请输入文本</a></span>
-      <span class="statusbar-separator" aria-hidden="true">|</span>
-    </span>
-  </footer>
+    <!-- ====== 底部状态栏 ====== -->
+    <footer class="rinui-statusbar" role="contentinfo">
+      <span class="statusbar-item" id="wallpaperInfo" title="点击查看原图" onclick="openCurrentWallpaper()"
+        style="cursor:pointer;transition:color 0.2s ease">等待加载...</span>
+      <span class="statusbar-item statusbar-center">
+        浏览人数：<span id="visitorCount">0</span>
+      </span>
+      <span class="statusbar-item">
+        <span>© sunZshanY.inc</span>
+        <span class="statusbar-separator" aria-hidden="true">|</span>
+        <a href="https://icp.gov.moe/?keyword=20266671" target="_blank" rel="noopener noreferrer"
+          style="text-decoration:none;color:inherit">萌ICP备20266671号</a>
+        <span class="statusbar-separator" aria-hidden="true">|</span>
+        <span style="opacity:0.35;font-size:12px"><a
+            href="https://www.bilibili.com/video/BV1CkN66eEtV/?spm_id_from=333.1391.0.0&vd_source=7c847222bc0c98bdec924409f34d4677"
+            target="_blank" rel="noopener noreferrer" style="color:inherit;text-decoration:none">请输入文本</a></span>
+        <span class="statusbar-separator" aria-hidden="true">|</span>
+      </span>
+    </footer>
   </div>
 
   <!-- ====== 博客详情弹窗 ====== -->

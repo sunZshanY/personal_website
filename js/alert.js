@@ -545,7 +545,7 @@
     window.addEventListener('DOMContentLoaded', async function() {
         var savedTheme = null;
         try { savedTheme = localStorage.getItem(THEME_KEY); } catch (e) {}
-        _applyTheme(savedTheme || 'dark');
+        _applyTheme(savedTheme || 'light');
         document.body.classList.add('loaded');
         await _kickstart();
         _typeLoop();
