@@ -617,9 +617,9 @@ body.loaded { opacity: 1; }
 
 .stack-section-title { color: var(--rinui-text); font-size: 18px; font-weight: 700; font-family: var(--font-serif); margin-bottom: 16px; display: flex; align-items: center; gap: 10px; padding-bottom: 12px; border-bottom: 1px solid var(--rinui-border); }
 .stack-section-icon { font-size: 20px; width: 38px; height: 38px; display: inline-flex; align-items: center; justify-content: center; background: var(--rinui-accent-soft); border-radius: var(--rinui-radius-m); border: 1px solid var(--rinui-accent-line); flex-shrink: 0; }
-.stack-icons-grid { display: flex; justify-content: center; padding: 8px 0; }
-.stack-skill-icons { max-width: 100%; height: auto; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.12)); transition: transform 0.3s var(--ease-out-expo); }
-.stack-skill-icons:hover { transform: scale(1.03); }
+.stack-icons-grid { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 8px; padding: 8px 0; }
+.stack-icon { width: 40px; height: 40px; flex-shrink: 0; filter: drop-shadow(0 2px 8px rgba(0,0,0,0.12)); transition: transform 0.3s var(--ease-out-expo); }
+.stack-icon:hover { transform: translateY(-3px) scale(1.08); }
 
 .stack-ide-labels { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--rinui-border); }
 .stack-ide-tag { display: inline-flex; align-items: center; gap: 5px; padding: 6px 16px; background: var(--rinui-tag-bg); border: 1px solid var(--rinui-accent-line); border-radius: 999px; font-size: 13px; color: var(--rinui-tag-text); font-family: var(--font-cn); transition: background 0.15s var(--ease-out-quart), transform 0.2s var(--ease-spring); cursor: default; }
@@ -761,4 +761,6 @@ body.loaded { opacity: 1; }
     .stack-section-icon { width: 34px; height: 34px; font-size: 18px; border-radius: var(--rinui-radius-s); }
     .stack-ide-labels { gap: 6px; margin-top: 12px; padding-top: 12px; }
     .stack-ide-tag { padding: 6px 12px; font-size: 11px; }
+    .stack-icons-grid { gap: 7px; }
+    .stack-icon { width: 32px; height: 32px; }
 }
