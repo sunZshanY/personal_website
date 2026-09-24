@@ -421,6 +421,7 @@ body.loaded { opacity: 1; }
 .intro-card:nth-child(2) { animation-delay: 0.08s; }
 .intro-card:nth-child(3) { animation-delay: 0.12s; }
 .intro-card:nth-child(4) { animation-delay: 0.16s; }
+.intro-card:nth-child(5) { animation-delay: 0.2s; }
 .intro-card:last-child { margin-bottom: 0; }
 .intro-card:hover { border-color: var(--rinui-border-hov); transform: translateY(-2px); box-shadow: var(--rinui-shadow-md); }
 @keyframes introCardIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
@@ -442,6 +443,22 @@ body.loaded { opacity: 1; }
     transition: background 0.15s var(--ease-out-quart), transform 0.15s var(--ease-spring);
 }
 .intro-fun-tags span:hover { background: var(--rinui-accent-soft); transform: translateY(-1px); }
+
+/* ---- 联系我 ---- */
+.intro-contact-list { display: flex; flex-direction: column; gap: 8px; }
+.intro-contact-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 14px; background: var(--rinui-surface-3);
+    border: 1px solid var(--rinui-border); border-radius: var(--rinui-radius-m);
+    text-decoration: none; color: inherit;
+    transition: border-color 0.2s var(--ease-out-quart), background 0.2s var(--ease-out-quart), transform 0.15s var(--ease-spring);
+}
+.intro-contact-item:hover { border-color: var(--rinui-accent); background: var(--rinui-accent-soft); transform: translateX(3px); }
+.intro-contact-icon { font-size: 18px; width: 24px; text-align: center; flex-shrink: 0; }
+.intro-contact-text { display: flex; flex-direction: column; line-height: 1.4; min-width: 0; }
+.intro-contact-name { font-size: 12px; color: var(--rinui-text-muted); font-family: var(--font-cn); }
+.intro-contact-value { font-size: 14px; color: var(--rinui-text); font-family: var(--font-mono); word-break: break-all; }
+.intro-contact-item:hover .intro-contact-value { color: var(--rinui-accent); }
 
 .intro-footer { display: flex; align-items: center; justify-content: space-between; }
 .intro-footer-note { color: var(--rinui-text-muted); font-size: 13px; font-family: var(--font-cn); font-style: italic; }
@@ -730,6 +747,8 @@ body.loaded { opacity: 1; }
     .intro-tag { padding: 6px 12px; font-size: 12px; }
     .intro-fun-tags { gap: 6px; }
     .intro-fun-tags span { padding: 4px 10px; font-size: 12px; }
+    .intro-contact-item { padding: 8px 12px; gap: 10px; }
+    .intro-contact-value { font-size: 13px; }
     .intro-more-btn { padding: 10px 20px; font-size: 13px; }
     .intro-footer { flex-direction: column; gap: 8px; text-align: center; }
     .intro-footer-note { font-size: 12px; }
