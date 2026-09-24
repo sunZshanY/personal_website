@@ -11,8 +11,6 @@
 
     // ========== 常量 ==========
     var IMG_API_WIDE = '/api/bg';
-    var DATA_URL_API = '/api/posts-data';   // KV 实时数据（管理面板提交后即时生效）
-    var DATA_URL = 'data/posts.json';       // 静态兜底
     var BG_TICK = 60000;
     var API_TIMEOUT = 8000;
 
@@ -39,7 +37,6 @@
         typeWriter:     $('#typed-text'),
         apiDot:         $('#apiStatusDot'),
         apiLabel:       $('#apiStatusText'),
-        themeToggle:    $('#themeToggle'),
         // 博客
         blogList:       $('#blogList'),
         blogEmpty:      $('#blogEmpty'),
@@ -211,10 +208,9 @@
 
     // ========== 数据层 ==========
     // 博客数据：从 data/posts.json 加载（GitHub 托管）
-    var BOX_KEY = 'omiblog_z';       // 保留作为缓存
+    var BOX_KEY = window.OmiBlog.posts.cacheKey;
     var EYE_KEY = 'kaze_count';
     var EYE_FLAG = 'kaze_flag';
-    var THEME_KEY = 'omiblog_theme';
 
     var g_logo = null;
 
@@ -229,44 +225,10 @@
     }
 
     function _loadPosts() {
-        // 服务器优先：KV 接口最新数据 → 静态 JSON → 本地缓存
-        return _fetchPosts(DATA_URL_API + '?_t=' + Date.now())
-            .catch(function() {
-                return _fetchPosts(DATA_URL + '?_t=' + Date.now());
-            })
-            .catch(function(err) {
-                console.warn('Cannot load posts:', err.message);
-                try {
-                    var raw = localStorage.getItem(BOX_KEY);
-                    if (raw) {
-                        var cached = JSON.parse(raw);
-                        if (Array.isArray(cached) && cached.length > 0) {
-                            g_postHeap = cached;
-                            return;
-                        }
-                    }
-                } catch(e) {}
-                g_postHeap = [];
-            });
-    }
-
-    function _fetchPosts(url) {
-        return fetch(url)
-            .then(function(r) {
-                if (!r.ok) throw new Error('HTTP ' + r.status);
-                return r.json();
-            })
-            .then(function(data) {
-                if (data) {
-                    if (data.logo) _applyLogo(data.logo);
-                    if (Array.isArray(data.posts)) {
-                        g_postHeap = data.posts;
-                        try { localStorage.setItem(BOX_KEY, JSON.stringify(g_postHeap)); } catch(e) {}
-                        return;
-                    }
-                }
-                throw new Error('Invalid format');
-            });
+        return window.OmiBlog.posts.load().then(function (data) {
+            if (data.logo) _applyLogo(data.logo);
+            g_postHeap = data.posts;
+        });
     }
 
     // ========== 实时访客心跳 ==========
@@ -315,8 +277,12 @@
 
     // ========== 访客计数 ==========
     function _eyeBump() {
-        var c = parseInt(localStorage.getItem(EYE_KEY),10)||0;
-        if (!sessionStorage.getItem(EYE_FLAG)) { c++; localStorage.setItem(EYE_KEY,'' + c); sessionStorage.setItem(EYE_FLAG,'1'); }
+        var c = 0;
+        // Storage may be disabled; the rest of the page must still initialize.
+        try {
+            c = parseInt(localStorage.getItem(EYE_KEY),10)||0;
+            if (!sessionStorage.getItem(EYE_FLAG)) { c++; localStorage.setItem(EYE_KEY,'' + c); sessionStorage.setItem(EYE_FLAG,'1'); }
+        } catch (error) {}
         _eyeShow(c);
     }
     function _eyeShow(v) {
@@ -346,15 +312,17 @@
 
     // ========== 导航 ==========
     function _wireNav() {
-        var btns=$$('.sidebar-btn[data-panel]'), panes=$$('.content-panel');
+        var btns=$$('.sidebar-btn[data-panel]'), panes=$$('.content-panel'), content=$('#mainContent');
         btns.forEach(function(b){
             b.addEventListener('click',function(){
                 if(this.classList.contains('disabled')||this.disabled)return;
-                btns.forEach(function(x){x.classList.remove('active');}); this.classList.add('active');
+                btns.forEach(function(x){x.classList.remove('active');x.removeAttribute('aria-current');});
+                this.classList.add('active');this.setAttribute('aria-current','page');
                 var tid=this.dataset.panel;
                 panes.forEach(function(p){p.classList.remove('active');});
                 var t=document.getElementById(tid);
                 if(t){t.classList.add('active');t.style.animation='none';void t.offsetWidth;t.style.animation='';}
+                if(content)content.scrollTop=0;
             });
         });
     }
@@ -406,21 +374,6 @@
         if(id) location.href = 'read.html?post=' + id;
     }
 
-    // ========== 主题管理 ==========
-    function _currentTheme() {
-        return document.body.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
-    }
-
-    function _applyTheme(mode) {
-        if (mode !== 'light') mode = 'dark';
-        document.body.setAttribute('data-theme', mode);
-        try { localStorage.setItem(THEME_KEY, mode); } catch (e) {}
-        if (E.themeToggle) {
-            E.themeToggle.textContent = mode === 'light' ? '☀️' : '🌙';
-            E.themeToggle.title = mode === 'light' ? '切换到深色主题' : '切换到浅色主题';
-        }
-    }
-
     // ========== 灯箱 ==========
     window.openLightbox = function(src) { var ex=document.querySelector('.lightbox-overlay'); if(ex)ex.remove(); var o=document.createElement('div'); o.className='lightbox-overlay'; o.innerHTML='<img src="'+_safeAttr(src)+'" alt="放大查看">'; o.addEventListener('click',function(){o.remove();}); document.body.appendChild(o); };
 
@@ -444,12 +397,6 @@
     // ========== 事件绑线 ==========
     function _wireItUp() {
         _wireNav();
-
-        if (E.themeToggle) {
-            E.themeToggle.addEventListener('click', function() {
-                _applyTheme(_currentTheme() === 'dark' ? 'light' : 'dark');
-            });
-        }
 
         E.blogSearch.addEventListener('input', _debounce(_paintPosts, 300));
         E.blogList.addEventListener('click', _cardClick);
@@ -485,9 +432,6 @@
     }
 
     window.addEventListener('DOMContentLoaded', async function() {
-        var savedTheme = null;
-        try { savedTheme = localStorage.getItem(THEME_KEY); } catch (e) {}
-        _applyTheme(savedTheme || 'light');
         document.body.classList.add('loaded');
         await _kickstart();
         _typeLoop();

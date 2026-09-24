@@ -6,127 +6,12 @@
    强调色：#6366F1（蓝紫），悬停 #818CF8
    ============================================================ */
 
-/* ---------- 设计令牌：浅色（默认） ---------- */
-:root {
-    /* 材质 / 表面 */
-    --rinui-bg:          #FAFAFA;
-    --rinui-surface:     #FFFFFF;
-    --rinui-surface-2:   #F5F5F7;
-    --rinui-surface-3:   #EEEEF1;
-    --rinui-topbar:      rgba(255, 255, 255, 0.78);
-    --rinui-sidebar:     rgba(250, 250, 250, 0.82);
-    --rinui-statusbar:   rgba(255, 255, 255, 0.78);
-    --rinui-card:        rgba(255, 255, 255, 0.90);
-    --rinui-card-hov:    #FFFFFF;
-    --rinui-overlay:     rgba(250, 250, 250, 0.80);
-    --rinui-veil:        rgba(31, 35, 40, 0.40);
-
-    /* 边框 */
-    --rinui-border:       #EAEAEE;
-    --rinui-border-hov:   #D8D9E0;
-    --rinui-border-strong:#C4C6CE;
-
-    /* 强调色（两种模式通用） */
-    --rinui-accent:       #6366F1;
-    --rinui-accent-hover: #818CF8;
-    --rinui-accent-soft:  rgba(99, 102, 241, 0.10);
-    --rinui-accent-line:  rgba(99, 102, 241, 0.35);
-    --rinui-on-accent:    #FFFFFF;
-    --rinui-active:       rgba(99, 102, 241, 0.12);
-    --rinui-tag-text:     #4F46E5;
-    --rinui-tag-bg:       rgba(99, 102, 241, 0.09);
-
-    /* 文本 */
-    --rinui-text:         #1F2328;
-    --rinui-text-reg:     #2A2E35;
-    --rinui-text-sub:     #4A4F57;
-    --rinui-text-muted:   #7A8089;
-    --rinui-text-stat:    #8A9099;
-    --rinui-text-dis:     #A5ABB4;
-    --rinui-text-ver:     #B0B5BD;
-
-    /* 语义色 */
-    --rinui-green:        #16A34A;
-    --rinui-red:          #DC2626;
-    --rinui-gold:         #D97706;
-    --rinui-green-soft:   rgba(22, 163, 74, 0.10);
-    --rinui-red-soft:     rgba(220, 38, 38, 0.10);
-    --rinui-gold-soft:    rgba(217, 119, 6, 0.10);
-
-    /* 字体 */
-    --font-cn:    'Inter', system-ui, -apple-system, 'Segoe UI', 'Noto Sans SC', 'Source Han Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-    --font-serif: 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', 'SimSun', serif;
-    --font-mono:  'JetBrains Mono', 'SF Mono', Consolas, 'Cascadia Code', monospace;
-
-    /* 圆角 */
-    --rinui-radius-s: 8px;
-    --rinui-radius-m: 10px;
-    --rinui-radius-l: 12px;
-
-    /* 阴影（极浅） */
-    --rinui-shadow-sm: 0 1px 2px rgba(31, 35, 40, 0.05);
-    --rinui-shadow-md: 0 6px 16px rgba(31, 35, 40, 0.08);
-    --rinui-shadow-lg: 0 16px 40px rgba(31, 35, 40, 0.14);
-
-    /* 缓动曲线 */
-    --ease-out-expo:    cubic-bezier(0.16, 1, 0.3, 1);
-    --ease-out-quart:   cubic-bezier(0.25, 1, 0.5, 1);
-    --ease-spring:      cubic-bezier(0.175, 0.885, 0.32, 1.275);
-    --ease-in-out-circ: cubic-bezier(0.85, 0, 0.15, 1);
-    --ease-smooth:      cubic-bezier(0.4, 0, 0.2, 1);
-    --ease-elastic:     cubic-bezier(0.68, -0.55, 0.265, 1.55);
-
-    color-scheme: light;
-}
-
-/* ---------- 设计令牌：深色 ---------- */
-[data-theme="dark"] {
-    --rinui-bg:          #0F1117;
-    --rinui-surface:     #1A1D27;
-    --rinui-surface-2:   #161923;
-    --rinui-surface-3:   #12141D;
-    --rinui-topbar:      rgba(15, 17, 23, 0.72);
-    --rinui-sidebar:     rgba(15, 17, 23, 0.78);
-    --rinui-statusbar:   rgba(15, 17, 23, 0.72);
-    --rinui-card:        rgba(26, 29, 39, 0.88);
-    --rinui-card-hov:    #1E222E;
-    --rinui-overlay:     rgba(15, 17, 23, 0.68);
-    --rinui-veil:        rgba(0, 0, 0, 0.60);
-
-    --rinui-border:       #262B38;
-    --rinui-border-hov:   #353B4C;
-    --rinui-border-strong:#454C60;
-
-    --rinui-tag-text:     #A5B4FC;
-    --rinui-tag-bg:       rgba(99, 102, 241, 0.14);
-
-    --rinui-text:         #F3F4F6;
-    --rinui-text-reg:     #E5E7EB;
-    --rinui-text-sub:     #C9CDD6;
-    --rinui-text-muted:   #8B90A0;
-    --rinui-text-stat:    #8B90A0;
-    --rinui-text-dis:     #5C6270;
-    --rinui-text-ver:     #4A5060;
-
-    --rinui-green:        #4ADE80;
-    --rinui-red:          #F87171;
-    --rinui-gold:         #FBBF24;
-    --rinui-green-soft:   rgba(74, 222, 128, 0.12);
-    --rinui-red-soft:     rgba(248, 113, 113, 0.12);
-    --rinui-gold-soft:    rgba(251, 191, 36, 0.12);
-
-    --rinui-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.30);
-    --rinui-shadow-md: 0 6px 16px rgba(0, 0, 0, 0.38);
-    --rinui-shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.55);
-
-    color-scheme: dark;
-}
-
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 html { scroll-behavior: smooth; }
 
 body {
     min-height: 100vh;
+    min-height: 100dvh;
     font-family: var(--font-cn);
     font-size: 16px;
     line-height: 1.7;
@@ -158,7 +43,7 @@ body.loaded { opacity: 1; }
 }
 
 /* ---- 布局 ---- */
-.rinui-layout { display: flex; flex-direction: column; height: 100vh; position: relative; z-index: 1; }
+.rinui-layout { display: flex; flex-direction: column; height: 100vh; height: 100dvh; position: relative; z-index: 1; }
 
 /* ---- 顶栏 ---- */
 .rinui-topbar {
@@ -175,21 +60,8 @@ body.loaded { opacity: 1; }
 .typed-text { color: var(--rinui-text-sub); font-size: 14px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: var(--font-mono); }
 .cursor { display: inline-block; color: var(--rinui-accent); font-size: 14px; animation: cursorBlink 0.7s infinite; }
 @keyframes cursorBlink { 0%,50%{opacity:1;} 51%,100%{opacity:0;} }
-.topbar-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+.topbar-right { display: flex; align-items: center; gap: 8px; flex-shrink: 0; margin-left: auto; }
 .topbar-separator { color: var(--rinui-border-hov); font-size: 14px; }
-
-/* 主题切换按钮 */
-.theme-toggle {
-    display: inline-flex; align-items: center; justify-content: center;
-    width: 36px; height: 36px; padding: 0;
-    background: transparent; border: 1px solid transparent; border-radius: var(--rinui-radius-s);
-    color: var(--rinui-text-reg); font-size: 17px; line-height: 1;
-    cursor: pointer;
-    transition: background 0.2s var(--ease-out-quart), color 0.2s var(--ease-out-quart), border-color 0.2s var(--ease-out-quart), transform 0.2s var(--ease-spring);
-    outline: none;
-}
-.theme-toggle:hover { background: var(--rinui-accent-soft); color: var(--rinui-accent); border-color: var(--rinui-accent-line); }
-.theme-toggle:active { transform: scale(0.92); }
 
 .status-indicator { display: flex; align-items: center; gap: 6px; }
 .status-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--rinui-red); transition: background 0.3s ease; }
@@ -231,7 +103,7 @@ body.loaded { opacity: 1; }
 .sidebar-version { color: var(--rinui-text-ver); font-size: 10px; font-family: var(--font-mono); padding: 8px; text-align: center; }
 
 /* ---- 内容区（720px 居中） ---- */
-.rinui-content { flex: 1; overflow-y: auto; overflow-x: hidden; padding: 36px 28px; background: transparent; }
+.rinui-content { flex: 1; min-width: 0; min-height: 0; overflow-y: auto; overflow-x: hidden; padding: 36px 28px; background: transparent; }
 .content-panel { display: none; max-width: 720px; margin: 0 auto; animation: panelIn 0.3s var(--ease-out-expo) forwards; }
 .content-panel.active { display: block; }
 @keyframes panelIn { from{opacity:0;transform:translateY(8px);} to{opacity:1;transform:translateY(0);} }
@@ -602,6 +474,7 @@ body.loaded { opacity: 1; }
 .friend-guide-card:hover .friend-guide-subtitle { color: var(--rinui-accent); }
 
 .friends-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+.friends-note { margin-top: 20px; text-align: center; color: var(--rinui-text-muted); font-size: 13px; }
 
 .friend-card {
     display: flex; align-items: center; gap: 16px; padding: 18px 20px;
@@ -647,7 +520,7 @@ body.loaded { opacity: 1; }
 /* ---- 响应式 ---- */
 @media (max-width: 768px) {
     .rinui-main { flex-direction: column; }
-    .rinui-sidebar { width: 100%; min-width: 100%; height: auto; flex-direction: row; flex-wrap: wrap; padding: 6px; gap: 4px; overflow-y: visible; border-right: none; border-bottom: 1px solid var(--rinui-border); }
+    .rinui-sidebar { width: 100%; min-width: 100%; height: auto; flex-shrink: 0; flex-direction: row; flex-wrap: wrap; padding: 6px; gap: 4px; overflow-y: visible; border-right: none; border-bottom: 1px solid var(--rinui-border); }
     .sidebar-label { display: none; } .sidebar-spacer { display: none; } .sidebar-version { display: none; }
     .sidebar-btn { width: auto; flex: 0 0 auto; height: 32px; padding: 0 12px; font-size: 12px; }
     .sidebar-btn.active::before { display: none; }
@@ -675,7 +548,7 @@ body.loaded { opacity: 1; }
     .rinui-topbar { padding: 0 8px; gap: 6px; }
     .topbar-title { font-size: 13px; }
     .topbar-logo { width: 26px; height: 26px; }
-    .theme-toggle { width: 30px; height: 30px; font-size: 15px; }
+    .status-label { display: none; }
     .rinui-content { padding: 20px 12px; }
     .panel-title { font-size: 20px; }
     .rinui-statusbar { font-size: 10px; padding: 0 8px; }
