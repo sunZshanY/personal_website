@@ -54,11 +54,12 @@
       <!-- 侧边栏 -->
       <nav class="rinui-sidebar" aria-label="主导航">
         <span class="sidebar-label">导航</span>
-        <button type="button" class="sidebar-btn active" data-panel="blog" aria-current="page"> ブログ(博客)</button>
+        <button type="button" class="sidebar-btn active" data-panel="blog" aria-current="page"> 博客喵</button>
         <button type="button" class="sidebar-btn" data-panel="projects"> 我的项目喵</button>
-        <button type="button" class="sidebar-btn" data-panel="stack"> 我的技术栈面版</button>
-        <button type="button" class="sidebar-btn" data-panel="friends-link">🔗 友链</button>
-        <button type="button" class="sidebar-btn" data-panel="about"> About ME</button>
+        <button type="button" class="sidebar-btn" data-panel="stack"> 我的技术栈面版喵</button>
+        <button type="button" class="sidebar-btn" data-panel="friends-link">友链</button>
+        <button type="button" class="sidebar-btn" data-panel="comments">评论</button>
+        <button type="button" class="sidebar-btn" data-panel="about"> 关于本喵</button>
         <span class="sidebar-spacer"></span>
         <span class="sidebar-version">v4.0</span>
       </nav>
@@ -122,17 +123,6 @@
                 class="rinui-tag">JavaScript</span><span class="rinui-tag">Python</span>
             </div>
           </div>
-
-          <div class="project-card">
-            <div class="project-card-header">
-              <h3>知识库</h3>
-              <a href="knowflow/index.html" class="rinui-btn success" target="_blank" rel="noopener noreferrer">进去看看</a>
-            </div>
-            <p class="project-desc">学啥记啥，踩坑记录本。本地存储，随时查阅。</p>
-            <div class="project-tags">
-              <span class="rinui-tag">知识管理</span><span class="rinui-tag">笔记</span><span class="rinui-tag">学习</span>
-            </div>
-          </div>
         </section>
 
         <!-- ====== 技术栈面板 ====== -->
@@ -142,10 +132,10 @@
           <!-- 编程语言 & 工具 -->
           <div class="stack-section">
             <h3 class="stack-section-title">
-              <span class="stack-section-icon">💻</span> 我的Skills和工具
+              <span class="stack-section-icon">💻</span> 我的技术栈和其他东西
             </h3>
             <div class="stack-icons-grid">
-              <img src="https://skillicons.dev/icons?i=python,c,cpp,java,html,css,js,lua,vscode,vim,neovim,github,gmail,discord" alt="编程语言与工具"
+              <img src="https://skillicons.dev/icons?i=python,c,cpp,java,html,css,js,linux,lua,vscode,vim,neovim,github,gmail,discord,debian" alt="编程语言与工具"
                 class="stack-skill-icons" loading="lazy">
             </div>
             <p
@@ -234,6 +224,13 @@
           </div>
         </section>
 
+        <!-- ====== 评论面板 ====== -->
+        <section id="comments" class="content-panel" aria-labelledby="commentsHeading">
+          <h2 class="panel-title" id="commentsHeading" style="text-align:center">💬 评论与评分</h2>
+          <!-- 假ICP备 评论打分小组件挂载点 -->
+          <div id="flm-comment-widget" data-site="omiasun.pages.dev" data-page-key="/" data-title="Yu Sun的小博客"></div>
+        </section>
+
         <!-- ====== 关于面板 ====== -->
         <section id="about" class="content-panel" aria-labelledby="aboutHeading">
           <h2 class="panel-title" id="aboutHeading" style="text-align:center"> About ME</h2>
@@ -296,6 +293,9 @@
         <span class="statusbar-separator" aria-hidden="true">|</span>
         <a href="https://icp.gov.moe/?keyword=20266671" target="_blank" rel="noopener noreferrer"
           style="text-decoration:none;color:inherit">萌ICP备20266671号</a>
+        <span class="statusbar-separator" aria-hidden="true">|</span>
+        <a href="https://fakeicp.top/query.lua?number=1202648" target="_blank" rel="noopener noreferrer"
+          style="text-decoration:none;color:inherit">假ICP备1202648号</a>
         <span class="statusbar-separator" aria-hidden="true">|</span>
         <span style="opacity:0.35;font-size:12px"><a
             href="https://www.bilibili.com/video/BV1CkN66eEtV/?spm_id_from=333.1391.0.0&vd_source=7c847222bc0c98bdec924409f34d4677"
@@ -437,6 +437,7 @@
   </div>
 
   <script src="js/alert.js" defer></script>
+  <script src="https://fakeicp.top/comment-widget.js" async></script>
 
   <!-- ====== 管理入口：?admin 触发 ====== -->
   <div id="adminGate"
