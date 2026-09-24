@@ -3,7 +3,7 @@
  * ==============================
  * 背景：雫API (api.imlazy.ink)
  * 数据：data/posts.json（GitHub 托管，每日更新）
- * 留言：Giscus（基于 GitHub Discussions）
+ * 评论：flm-comment-widget（挂载于 #comments 面板）
  * 访客：localStorage 本地存储
  */
 (function() {
@@ -355,7 +355,6 @@
                 panes.forEach(function(p){p.classList.remove('active');});
                 var t=document.getElementById(tid);
                 if(t){t.classList.add('active');t.style.animation='none';void t.offsetWidth;t.style.animation='';}
-                if(tid==='guestbook')_loadGiscus();
             });
         });
     }
@@ -407,22 +406,9 @@
         if(id) location.href = 'read.html?post=' + id;
     }
 
-    // ========== 留言板 (Giscus) ==========
-    var GISCUS_REPO = 'sunZshanY/personal_website';
-    var GISCUS_REPO_ID = 'R_kgDOTLFsVw';
-    var GISCUS_CATEGORY = 'General';
-    var GISCUS_CATEGORY_ID = 'DIC_kwDOTLFsV84DCJlw';
-    var _giscusLoaded = false;
-
     // ========== 主题管理 ==========
     function _currentTheme() {
         return document.body.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
-    }
-
-    function _syncGiscusTheme(mode) {
-        var iframe = document.querySelector('iframe.giscus-frame');
-        if (!iframe || !iframe.contentWindow) return;
-        iframe.contentWindow.postMessage({ giscus: { setConfig: { theme: mode } } }, 'https://giscus.app');
     }
 
     function _applyTheme(mode) {
@@ -433,49 +419,6 @@
             E.themeToggle.textContent = mode === 'light' ? '☀️' : '🌙';
             E.themeToggle.title = mode === 'light' ? '切换到深色主题' : '切换到浅色主题';
         }
-        _syncGiscusTheme(mode);
-    }
-
-    function _buildGuestbookPanel() {
-        var friendsPanel = $('#friends');
-        if (!friendsPanel) return;
-
-        friendsPanel.id = 'guestbook';
-        friendsPanel.setAttribute('aria-labelledby', 'gbHeading');
-        friendsPanel.innerHTML = '<h2 class="panel-title" id="gbHeading" style="text-align:center">💬 留言板</h2>'
-            + '<div class="giscus" id="giscusContainer"></div>';
-
-        var friendsBtn = document.querySelector('.sidebar-btn[data-panel="friends"]');
-        if (friendsBtn) {
-            friendsBtn.dataset.panel = 'guestbook';
-            friendsBtn.textContent = ' 留言';
-            friendsBtn.classList.remove('disabled');
-            friendsBtn.removeAttribute('disabled');
-        }
-    }
-
-    function _loadGiscus() {
-        if (_giscusLoaded) return;
-        var container = $('#giscusContainer');
-        if (!container) return;
-        _giscusLoaded = true;
-
-        var script = document.createElement('script');
-        script.src = 'https://giscus.app/client.js';
-        script.setAttribute('data-repo', GISCUS_REPO);
-        script.setAttribute('data-repo-id', GISCUS_REPO_ID);
-        script.setAttribute('data-category', GISCUS_CATEGORY);
-        script.setAttribute('data-category-id', GISCUS_CATEGORY_ID);
-        script.setAttribute('data-mapping', 'pathname');
-        script.setAttribute('data-strict', '0');
-        script.setAttribute('data-reactions-enabled', '1');
-        script.setAttribute('data-emit-metadata', '0');
-        script.setAttribute('data-input-position', 'bottom');
-        script.setAttribute('data-theme', _currentTheme());
-        script.setAttribute('data-lang', 'zh-CN');
-        script.setAttribute('crossorigin', 'anonymous');
-        script.async = true;
-        container.appendChild(script);
     }
 
     // ========== 灯箱 ==========
@@ -532,7 +475,6 @@
 
     // ========== 入口 ==========
     async function _kickstart() {
-        _buildGuestbookPanel();
         _eyeBump();
         _wireItUp();
         _startHeartbeat();

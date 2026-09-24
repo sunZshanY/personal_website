@@ -509,29 +509,6 @@ body.loaded { opacity: 1; }
 .modal-body { padding: 22px 24px; overflow-y: auto; flex: 1; }
 .modal-footer { display: flex; justify-content: flex-end; gap: 10px; padding: 16px 24px; border-top: 1px solid var(--rinui-border); background: var(--rinui-surface-2); }
 
-/* ---- 表单 ---- */
-.form-field { margin-bottom: 16px; }
-.form-field label { display: block; color: var(--rinui-text-reg); font-size: 13px; font-weight: 500; font-family: var(--font-cn); margin-bottom: 5px; }
-.form-field input, .form-field textarea {
-    width: 100%; padding: 10px 12px; background: var(--rinui-surface-3);
-    border: 1px solid var(--rinui-border); border-radius: var(--rinui-radius-s);
-    color: var(--rinui-text); font-size: 14px; font-family: var(--font-cn);
-    outline: none; transition: border-color 0.15s ease, box-shadow 0.15s ease;
-}
-.form-field input:focus, .form-field textarea:focus { border-color: var(--rinui-accent); box-shadow: 0 0 0 3px var(--rinui-accent-soft); }
-.form-field textarea { resize: vertical; min-height: 100px; }
-.form-field input[type="file"] { padding: 8px; background: transparent; border: 1px dashed var(--rinui-border-hov); cursor: pointer; font-size: 13px; }
-.form-field input[type="file"]:hover { border-color: var(--rinui-accent); }
-.form-error { color: var(--rinui-red); font-size: 13px; margin-top: 8px; text-align: center; }
-
-.char-count { display: block; text-align: right; color: var(--rinui-text-dis); font-size: 11px; margin-top: 4px; font-family: var(--font-mono); }
-.char-count.warning { color: var(--rinui-gold); }
-.char-count.danger  { color: var(--rinui-red); }
-
-.image-preview { margin-top: 8px; }
-.image-preview img { max-width: 160px; max-height: 120px; border-radius: var(--rinui-radius-s); border: 1px solid var(--rinui-border); }
-.image-clear-btn { display: block; margin-top: 4px; background: none; border: none; color: var(--rinui-red); cursor: pointer; font-size: 13px; }
-
 /* ---- 详情弹窗 ---- */
 .modal-detail { max-width: 760px; }
 .detail-header { position: sticky; top: 0; z-index: 10; padding: 20px 26px; background: var(--rinui-topbar); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border-bottom: 1px solid var(--rinui-border); }
@@ -581,25 +558,6 @@ body.loaded { opacity: 1; }
 .toast-info    { background: rgba(99, 102, 241, 0.92); border: 1px solid rgba(129, 140, 248, 0.4); }
 @keyframes toastIn { from{opacity:0;transform:translateY(-20px) scale(0.92);} to{opacity:1;transform:translateY(0) scale(1);} }
 @keyframes toastOut { from{opacity:1;transform:translateY(0) scale(1);} to{opacity:0;transform:translateY(-20px) scale(0.92);} }
-
-/* ---- 留言板 ---- */
-.gb-write { background: var(--rinui-card); border: 1px solid var(--rinui-border); border-radius: var(--rinui-radius-l); padding: 22px; margin-bottom: 24px; box-shadow: var(--rinui-shadow-sm); }
-.form-row { display: flex; gap: 16px; }
-.form-row.dual > .form-field { flex: 1; }
-
-.note-wall { display: flex; flex-direction: column; gap: 12px; }
-.note-slab { background: var(--rinui-card); border: 1px solid var(--rinui-border); border-radius: var(--rinui-radius-l); padding: 16px 20px; transition: all 0.2s ease; animation: cardIn 0.35s ease forwards; }
-.note-slab:hover { border-color: var(--rinui-border-hov); box-shadow: var(--rinui-shadow-md); }
-.note-slab.is-starred { border-left: 3px solid var(--rinui-gold); }
-.note-top { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-.note-author { color: var(--rinui-tag-text); font-size: 14px; font-weight: 600; font-family: var(--font-cn); }
-.note-time { color: var(--rinui-text-muted); font-size: 11px; font-family: var(--font-mono); }
-.note-body { color: var(--rinui-text-sub); font-size: 14px; line-height: 1.7; word-break: break-word; }
-.note-contact { margin-top: 8px; font-size: 12px; color: var(--rinui-text-muted); font-family: var(--font-mono); }
-.note-gh-link { text-decoration: none; font-size: 14px; transition: transform 0.2s ease; display: inline-block; }
-.note-gh-link:hover { transform: scale(1.2); }
-.note-avatar { width: 28px; height: 28px; border-radius: 50%; object-fit: cover; border: 1px solid var(--rinui-border-hov); flex-shrink: 0; background: var(--rinui-accent-soft); }
-.note-top-left { display: flex; align-items: center; gap: 10px; }
 
 /* ---- 技术栈面板 ---- */
 .stack-section {
@@ -702,7 +660,6 @@ body.loaded { opacity: 1; }
     .detail-text { font-size: 15px; line-height: 1.9; }
     .detail-text p { text-indent: 1.5em; }
     .detail-text p:first-of-type::first-letter { font-size: 2.2em; padding-top: 3px; }
-    .form-row.dual { flex-direction: column; gap: 0; }
     .modal-intro { max-width: 95%; }
     .intro-card-content { padding-left: 0; }
     .intro-card-head { margin-bottom: 10px; padding-bottom: 10px; }
