@@ -3,6 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
+  <script src="js/theme.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Omiaちゃん的小博客 — 编程学习、项目开发与日常生活">
   <meta name="keywords" content="Omia,博客,编程,Python,C++,Java,Linux">
@@ -17,10 +18,11 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Serif+SC:wght@600;700&family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&display=swap"
     rel="stylesheet">
+  <link rel="stylesheet" href="css/theme.css">
   <link rel="stylesheet" href="css/style.css">
 </head>
 
-<body data-theme="light">
+<body>
   <!-- 背景层 -->
   <div class="bg-layer" id="bgLayer" aria-hidden="true"></div>
   <div class="bg-overlay" aria-hidden="true"></div>
@@ -41,7 +43,21 @@
         <span id="typed-text" class="typed-text"></span><span class="cursor">|</span>
       </div>
       <nav class="topbar-right" aria-label="工具栏">
-        <button type="button" class="theme-toggle" id="themeToggle" aria-label="切换主题" title="切换深浅主题">🌙</button>
+        <div class="theme-switch" data-theme-switch role="group" aria-label="切换主题">
+          <button type="button" class="theme-switch-option" data-theme-value="light" aria-pressed="true" aria-label="浅色主题" title="浅色主题">
+            <svg class="theme-switch-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2v2m0 16v2M2 12h2m16 0h2M4.93 4.93l1.42 1.42m11.3 11.3 1.42 1.42M4.93 19.07l1.42-1.42m11.3-11.3 1.42-1.42"></path>
+            </svg>
+            <span class="theme-switch-label">浅色</span>
+          </button>
+          <button type="button" class="theme-switch-option" data-theme-value="dark" aria-pressed="false" aria-label="深色主题" title="深色主题">
+            <svg class="theme-switch-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+              <path d="M20.9 13.3A9 9 0 0 1 10.7 3.1 9 9 0 1 0 20.9 13.3Z"></path>
+            </svg>
+            <span class="theme-switch-label">深色</span>
+          </button>
+        </div>
         <span class="status-indicator" title="API连接状态" role="status">
           <span class="status-dot" id="apiStatusDot"></span>
           <span class="status-label" id="apiStatusText">雫API检测中</span>
@@ -450,6 +466,7 @@
     </div>
   </div>
 
+  <script src="js/services/posts.js" defer></script>
   <script src="js/alert.js" defer></script>
   <script src="https://fakeicp.top/comment-widget.js" async></script>
 
