@@ -78,7 +78,7 @@ export async function onRequestPost(context) {
   const dataJson = {
     version: '5.1',
     updatedAt,
-    logo: current.logo || 'images/images1.jpg',
+    logo: current.logo || 'images/misaka.jpg',
     posts
   };
   const mainJson = { version: '5.1', updatedAt, posts: posts.map(summarize) };
@@ -244,7 +244,7 @@ async function loadCurrentPosts(env, request) {
     }
   } catch (e) {}
 
-  return { version: '5.1', logo: 'images/images1.jpg', posts: [] };
+  return { version: '5.1', logo: 'images/misaka.jpg', posts: [] };
 }
 
 function b64encode(str) {

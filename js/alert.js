@@ -74,7 +74,7 @@
     // ========== Toast ==========
     function _pop(msg, type) {
         type = type || 'info';
-        var icons = { success: '✅', error: '❌', info: 'ℹ️' };
+        var icons = { success: '✔️', error: '❌', info: 'ℹ️' };
         var el = document.createElement('div');
         el.className = 'toast-item toast-' + type;
         el.textContent = (icons[type]||'') + ' ' + msg;
