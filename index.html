@@ -74,7 +74,7 @@
         <button type="button" class="sidebar-btn" data-panel="projects"> 我的项目喵</button>
         <button type="button" class="sidebar-btn" data-panel="stack"> 我的技术栈面版喵</button>
         <button type="button" class="sidebar-btn" data-panel="friends-link">友链</button>
-        <button type="button" class="sidebar-btn" data-panel="comments">评论</button>
+        <button type="button" class="sidebar-btn" data-panel="discussion">Discussion 讨论</button>
         <button type="button" class="sidebar-btn" data-panel="about"> 关于本喵</button>
         <span class="sidebar-spacer"></span>
         <span class="sidebar-version">v4.0</span>
@@ -262,11 +262,20 @@
           <p class="friends-note">注意，此网页有些链接可能无法访问，这是由于链接过期或被删除导致的。</p>
         </section>
 
-        <!-- ====== 评论面板 ====== -->
-        <section id="comments" class="content-panel" aria-labelledby="commentsHeading">
-          <h2 class="panel-title" id="commentsHeading" style="text-align:center">💬 评论与评分喵</h2>
-          <!-- 假ICP备 评论打分小组件挂载点 -->
-          <div id="flm-comment-widget" data-site="omiasun.pages.dev" data-page-key="/" data-title="Yu Sun的小博客"></div>
+        <!-- ====== GitHub Discussions 面板 ====== -->
+        <section id="discussion" class="content-panel" aria-labelledby="discussionHeading">
+          <h2 class="panel-title" id="discussionHeading" style="text-align:center">💬 Discussion 讨论</h2>
+          <p class="discussion-intro">登录 GitHub，聊聊代码、项目与日常。评论与回应会同步到 GitHub Discussions。</p>
+          <div class="discussion-actions">
+            <a href="https://github.com/sunZshanY/personal_website/discussions/5" class="rinui-btn primary"
+              target="_blank" rel="noopener noreferrer">在 GitHub 中参与</a>
+            <a href="https://github.com/sunZshanY/personal_website/discussions" class="rinui-btn flat"
+              target="_blank" rel="noopener noreferrer">查看全部讨论</a>
+          </div>
+          <div class="discussion-card">
+            <p id="discussionStatus" class="discussion-status" role="status">正在加载讨论…</p>
+            <div id="discussionComments" class="giscus"></div>
+          </div>
         </section>
 
         <!-- ====== 关于面板 ====== -->
@@ -469,7 +478,7 @@
 
   <script src="js/services/posts.js" defer></script>
   <script src="js/alert.js" defer></script>
-  <script src="https://fakeicp.top/comment-widget.js" async></script>
+  <script src="js/discussion.js" defer></script>
 
   <!-- ====== 管理入口：?admin 触发 ====== -->
   <div id="adminGate"

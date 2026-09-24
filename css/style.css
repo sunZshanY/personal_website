@@ -505,6 +505,14 @@ body.loaded { opacity: 1; }
 .friend-card:hover .friend-desc { color: var(--rinui-text-sub); }
 .friend-tag { display: inline-block; padding: 3px 12px; background: var(--rinui-tag-bg); color: var(--rinui-tag-text); font-size: 11px; font-family: var(--font-mono); border-radius: 999px; border: 1px solid var(--rinui-accent-line); flex-shrink: 0; }
 
+/* ---- GitHub Discussions ---- */
+.discussion-intro { margin: 16px 0; text-align: center; color: var(--rinui-text-sub); font-size: 14px; }
+.discussion-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-bottom: 24px; }
+.discussion-card { padding: clamp(12px, 3vw, 24px); background: var(--rinui-card); border: 1px solid var(--rinui-border); border-radius: var(--rinui-radius-l); box-shadow: var(--rinui-shadow-sm); }
+.discussion-status { padding: 12px 0; color: var(--rinui-text-muted); font-size: 14px; text-align: center; }
+.giscus, .giscus-frame { width: 100%; min-width: 0; }
+.giscus-frame { display: block; border: 0; }
+
 /* ---- 🐧 凑企鹅彩蛋 ---- */
 #penguinEE { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 99999; pointer-events: none; overflow: hidden; }
 
