@@ -1,0 +1,219 @@
+/* ---------- 设计令牌：浅色（默认） ---------- */
+:root {
+    /* 材质 / 表面 */
+    --rinui-bg:          #FAFAFA;
+    --rinui-surface:     #FFFFFF;
+    --rinui-surface-2:   #F5F5F7;
+    --rinui-surface-3:   #EEEEF1;
+    --rinui-topbar:      rgba(255, 255, 255, 0.78);
+    --rinui-sidebar:     rgba(250, 250, 250, 0.82);
+    --rinui-statusbar:   rgba(255, 255, 255, 0.78);
+    --rinui-card:        rgba(255, 255, 255, 0.90);
+    --rinui-card-hov:    #FFFFFF;
+    --rinui-overlay:     rgba(250, 250, 250, 0.80);
+    --rinui-veil:        rgba(31, 35, 40, 0.40);
+
+    /* 边框 */
+    --rinui-border:       #EAEAEE;
+    --rinui-border-hov:   #D8D9E0;
+    --rinui-border-strong:#C4C6CE;
+
+    /* 强调色（两种模式通用） */
+    --rinui-accent:       #6366F1;
+    --rinui-accent-hover: #818CF8;
+    --rinui-accent-soft:  rgba(99, 102, 241, 0.10);
+    --rinui-accent-line:  rgba(99, 102, 241, 0.35);
+    --rinui-on-accent:    #FFFFFF;
+    --rinui-active:       rgba(99, 102, 241, 0.12);
+    --rinui-tag-text:     #4F46E5;
+    --rinui-tag-bg:       rgba(99, 102, 241, 0.09);
+
+    /* 文本 */
+    --rinui-text:         #1F2328;
+    --rinui-text-reg:     #2A2E35;
+    --rinui-text-sub:     #4A4F57;
+    --rinui-text-muted:   #7A8089;
+    --rinui-text-stat:    #8A9099;
+    --rinui-text-dis:     #A5ABB4;
+    --rinui-text-ver:     #B0B5BD;
+
+    /* 语义色 */
+    --rinui-green:        #16A34A;
+    --rinui-red:          #DC2626;
+    --rinui-gold:         #D97706;
+    --rinui-green-soft:   rgba(22, 163, 74, 0.10);
+    --rinui-red-soft:     rgba(220, 38, 38, 0.10);
+    --rinui-gold-soft:    rgba(217, 119, 6, 0.10);
+
+    /* 字体 */
+    --font-cn:    'Inter', system-ui, -apple-system, 'Segoe UI', 'Noto Sans SC', 'Source Han Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+    --font-serif: 'Noto Serif SC', 'Source Han Serif SC', 'Songti SC', 'SimSun', serif;
+    --font-mono:  'JetBrains Mono', 'SF Mono', Consolas, 'Cascadia Code', monospace;
+
+    /* 圆角 */
+    --rinui-radius-s: 8px;
+    --rinui-radius-m: 10px;
+    --rinui-radius-l: 12px;
+
+    /* 阴影（极浅） */
+    --rinui-shadow-sm: 0 1px 2px rgba(31, 35, 40, 0.05);
+    --rinui-shadow-md: 0 6px 16px rgba(31, 35, 40, 0.08);
+    --rinui-shadow-lg: 0 16px 40px rgba(31, 35, 40, 0.14);
+
+    /* 缓动曲线 */
+    --ease-out-expo:    cubic-bezier(0.16, 1, 0.3, 1);
+    --ease-out-quart:   cubic-bezier(0.25, 1, 0.5, 1);
+    --ease-spring:      cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    --ease-in-out-circ: cubic-bezier(0.85, 0, 0.15, 1);
+    --ease-smooth:      cubic-bezier(0.4, 0, 0.2, 1);
+    --ease-elastic:     cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    color-scheme: light;
+}
+
+/* ---------- 设计令牌：深色 ---------- */
+:root[data-theme="dark"] {
+    --rinui-bg:          #0F1117;
+    --rinui-surface:     #1A1D27;
+    --rinui-surface-2:   #161923;
+    --rinui-surface-3:   #12141D;
+    --rinui-topbar:      rgba(15, 17, 23, 0.72);
+    --rinui-sidebar:     rgba(15, 17, 23, 0.78);
+    --rinui-statusbar:   rgba(15, 17, 23, 0.72);
+    --rinui-card:        rgba(26, 29, 39, 0.88);
+    --rinui-card-hov:    #1E222E;
+    --rinui-overlay:     rgba(15, 17, 23, 0.68);
+    --rinui-veil:        rgba(0, 0, 0, 0.60);
+
+    --rinui-border:       #262B38;
+    --rinui-border-hov:   #353B4C;
+    --rinui-border-strong:#454C60;
+
+    --rinui-tag-text:     #A5B4FC;
+    --rinui-tag-bg:       rgba(99, 102, 241, 0.14);
+
+    --rinui-text:         #F3F4F6;
+    --rinui-text-reg:     #E5E7EB;
+    --rinui-text-sub:     #C9CDD6;
+    --rinui-text-muted:   #8B90A0;
+    --rinui-text-stat:    #8B90A0;
+    --rinui-text-dis:     #5C6270;
+    --rinui-text-ver:     #4A5060;
+
+    --rinui-green:        #4ADE80;
+    --rinui-red:          #F87171;
+    --rinui-gold:         #FBBF24;
+    --rinui-green-soft:   rgba(74, 222, 128, 0.12);
+    --rinui-red-soft:     rgba(248, 113, 113, 0.12);
+    --rinui-gold-soft:    rgba(251, 191, 36, 0.12);
+
+    --rinui-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.30);
+    --rinui-shadow-md: 0 6px 16px rgba(0, 0, 0, 0.38);
+    --rinui-shadow-lg: 0 16px 40px rgba(0, 0, 0, 0.55);
+
+    color-scheme: dark;
+}
+
+/* Shared segmented control: flex lays out choices; transform animates the thumb. */
+:root {
+    --theme-duration: 320ms;
+    --theme-slide-duration: 380ms;
+}
+.theme-switch {
+    position: relative;
+    isolation: isolate;
+    display: inline-flex;
+    align-items: stretch;
+    flex: 0 0 auto;
+    width: 164px;
+    padding: 4px;
+    border: 1px solid var(--rinui-border-hov);
+    border-radius: 999px;
+    background: var(--rinui-surface-2);
+    font-family: var(--font-cn);
+}
+.theme-switch::before {
+    content: '';
+    position: absolute;
+    z-index: 0;
+    top: 4px;
+    bottom: 4px;
+    left: 4px;
+    width: calc((100% - 8px) / 2);
+    border-radius: inherit;
+    background: var(--rinui-surface);
+    box-shadow: var(--rinui-shadow-sm), 0 0 0 1px var(--rinui-border);
+    transform: translateX(0);
+    transition: transform var(--theme-slide-duration) var(--ease-out-expo),
+        background-color var(--theme-duration) var(--ease-smooth),
+        box-shadow var(--theme-duration) var(--ease-smooth);
+    pointer-events: none;
+}
+:root[data-theme="dark"] .theme-switch::before { transform: translateX(100%); }
+.theme-switch-option {
+    position: relative;
+    z-index: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1 1 0;
+    min-width: 0;
+    min-height: 32px;
+    gap: 6px;
+    padding: 6px 8px;
+    border: 0;
+    border-radius: 999px;
+    background: transparent;
+    color: var(--rinui-text-muted);
+    font: inherit;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1;
+    white-space: nowrap;
+    cursor: pointer;
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+.theme-switch-option:hover { color: var(--rinui-accent); }
+.theme-switch-option[aria-pressed="true"] { color: var(--rinui-tag-text); }
+.theme-switch-option:focus-visible {
+    outline: 2px solid var(--rinui-accent);
+    outline-offset: 2px;
+}
+.theme-switch-icon {
+    width: 16px;
+    height: 16px;
+    flex-shrink: 0;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.75;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+}
+.theme-switch,
+.theme-switch-option,
+.rinui-topbar,
+.rinui-sidebar,
+.rinui-statusbar,
+.read-topbar,
+.article-title,
+.article-meta,
+.article-body,
+.article-tags,
+.read-footer-note {
+    transition: background-color var(--theme-duration) var(--ease-smooth),
+        border-color var(--theme-duration) var(--ease-smooth),
+        color var(--theme-duration) var(--ease-smooth);
+}
+@media (max-width: 480px) {
+    .theme-switch { width: 84px; }
+    .theme-switch-label { display: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0s !important;
+        scroll-behavior: auto !important;
+    }
+}

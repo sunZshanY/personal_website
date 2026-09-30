@@ -1,0 +1,193 @@
+/* Reading layout; shared colors and typography live in theme.css. */
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+    min-height: 100vh;
+    font-family: var(--font-cn);
+    font-size: 16px;
+    background: var(--rinui-bg);
+    color: var(--rinui-text-sub);
+    line-height: 1.7;
+    display: flex; flex-direction: column; align-items: center;
+    transition: background-color var(--theme-duration) var(--ease-smooth), color var(--theme-duration) var(--ease-smooth);
+}
+
+/* ---- 顶栏（极简） ---- */
+.read-topbar {
+    position: sticky; top: 0; z-index: 100;
+    width: 100%; height: 52px;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 24px; gap: 12px;
+    background: var(--rinui-topbar);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--rinui-border);
+}
+.read-top-left { display: flex; align-items: center; gap: 14px; min-width: 0; }
+.read-back {
+    display: inline-flex; align-items: center; gap: 8px;
+    color: var(--rinui-accent); font-size: 14px; font-weight: 600;
+    font-family: var(--font-cn); text-decoration: none;
+    transition: all 0.2s ease;
+}
+.read-back:hover { color: var(--rinui-accent-hover); gap: 12px; }
+.read-back-arrow { font-size: 18px; transition: transform 0.2s ease; }
+.read-back:hover .read-back-arrow { transform: translateX(-3px); }
+.read-top-title {
+    color: var(--rinui-text-muted); font-size: 13px;
+    font-family: var(--font-mono);
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    max-width: 100%;
+}
+/* ---- 主体 ---- */
+.read-main {
+    width: 100%; max-width: 720px;
+    padding: 40px 28px 60px;
+    flex: 1;
+}
+
+/* ---- 文章头 ---- */
+.article-header { margin-bottom: 36px; text-align: center; }
+.article-title {
+    color: var(--rinui-text);
+    font-size: 30px; font-weight: 700;
+    font-family: var(--font-serif);
+    line-height: 1.4; margin-bottom: 18px;
+    letter-spacing: 0.02em;
+}
+.article-meta {
+    display: flex; align-items: center; justify-content: center;
+    gap: 16px; flex-wrap: wrap;
+    color: var(--rinui-text-dis);
+    font-size: 14px; font-family: var(--font-cn);
+    padding-bottom: 22px;
+    border-bottom: 1px solid var(--rinui-border);
+}
+.article-meta-item {
+    display: inline-flex; align-items: center; gap: 5px;
+}
+.article-meta-sep { color: var(--rinui-border-hov); font-size: 12px; }
+
+/* ---- 题图 ---- */
+.article-hero {
+    margin: 0 -28px 36px;
+    border-radius: 12px; overflow: hidden;
+    box-shadow: var(--rinui-shadow-md);
+}
+.article-hero img {
+    display: block; width: 100%; max-height: 420px;
+    object-fit: cover; cursor: pointer;
+    transition: transform 0.5s ease;
+}
+.article-hero img:hover { transform: scale(1.02); }
+
+/* ---- 正文 ---- */
+.article-body {
+    color: var(--rinui-text-sub);
+    font-size: 16px; line-height: 1.9;
+    word-break: break-word;
+}
+.article-body p {
+    margin-bottom: 22px; text-indent: 2em;
+}
+.article-body p:last-child { margin-bottom: 0; }
+/* 首段首字下沉 */
+.article-body p:first-of-type::first-letter {
+    font-size: 3em; font-weight: 700;
+    float: left; line-height: 0.7;
+    padding: 5px 9px 0 0;
+    color: var(--rinui-accent);
+    font-family: var(--font-serif);
+}
+
+/* ---- 标签 ---- */
+.article-tags {
+    margin-top: 36px; padding-top: 24px;
+    border-top: 1px solid var(--rinui-border);
+    display: flex; flex-wrap: wrap; gap: 10px;
+    align-items: center;
+}
+.article-tags::before { content: '🏷️'; font-size: 15px; }
+.article-tags:empty { display: none; }
+.article-tag {
+    display: inline-block;
+    padding: 6px 16px;
+    background: var(--rinui-accent-soft);
+    color: var(--rinui-tag-text);
+    font-size: 13px; font-family: var(--font-mono);
+    border-radius: 999px;
+    border: 1px solid var(--rinui-accent-line);
+    transition: all 0.2s ease;
+}
+.article-tag:hover { background: var(--rinui-accent-soft); border-color: var(--rinui-accent); transform: translateY(-1px); }
+
+/* ---- 底栏 ---- */
+.read-footer {
+    width: 100%; max-width: 720px;
+    padding: 0 28px 36px;
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 12px; flex-wrap: wrap;
+}
+.read-footer-note {
+    color: var(--rinui-text-dis); font-size: 13px;
+    font-family: var(--font-mono);
+}
+.read-footer-btn {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 9px 20px;
+    background: var(--rinui-surface);
+    border: 1px solid var(--rinui-border);
+    border-radius: 10px;
+    color: var(--rinui-accent); font-size: 14px; font-weight: 600;
+    font-family: var(--font-cn); cursor: pointer;
+    text-decoration: none;
+    transition: all 0.25s ease;
+}
+.read-footer-btn:hover {
+    border-color: var(--rinui-accent);
+    transform: translateY(-2px);
+    box-shadow: var(--rinui-shadow-md);
+}
+
+/* ---- 404 ---- */
+.read-404 {
+    text-align: center; padding: 80px 20px;
+}
+.read-404 h2 {
+    color: var(--rinui-text); font-size: 24px; margin-bottom: 12px;
+    font-family: var(--font-serif);
+}
+.read-404 p { color: var(--rinui-text-dis); font-size: 14px; margin-bottom: 24px; }
+
+/* ---- 滚动条 ---- */
+::-webkit-scrollbar { width: 5px; }
+::-webkit-scrollbar-thumb { background: var(--rinui-border-hov); border-radius: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+
+/* ---- 响应式 ---- */
+@media (max-width: 768px) {
+    .read-main { padding: 28px 20px 48px; }
+    .article-title { font-size: 24px; }
+    .article-hero { margin: 0 -20px 28px; }
+    .article-hero img { max-height: 280px; }
+    .article-body { font-size: 15px; line-height: 1.9; }
+    .article-body p { text-indent: 1.5em; margin-bottom: 16px; }
+    .article-body p:first-of-type::first-letter { font-size: 2.4em; }
+    .read-footer { padding: 0 20px 28px; }
+    .read-topbar { padding: 0 16px; }
+}
+
+@media (max-width: 480px) {
+    .read-main { padding: 20px 14px 36px; }
+    .article-title { font-size: 21px; letter-spacing: 0.01em; }
+    .article-meta { font-size: 12px; gap: 10px; }
+    .article-hero { margin: 0 -14px 22px; }
+    .article-hero img { max-height: 200px; }
+    .article-body { font-size: 14px; line-height: 1.8; }
+    .article-body p { text-indent: 1.2em; margin-bottom: 14px; }
+    .article-body p:first-of-type::first-letter { font-size: 2em; padding-right: 6px; }
+    .read-footer { padding: 0 14px 24px; flex-direction: column; text-align: center; }
+    .read-topbar { padding: 0 12px; height: 48px; }
+    .read-back { font-size: 13px; }
+    .read-top-title { display: none; }
+}
