@@ -66,6 +66,79 @@ class FrontendTests(unittest.TestCase):
     def api(self, payload):
         self.context.route("**/api/posts-data", lambda route: route.fulfill(json=payload))
 
+    def giscus_stub(self):
+        # Exercise the embed boundary locally; never post comments to GitHub in tests.
+        self.context.route("https://giscus.app/client.js", lambda route: route.fulfill(
+            content_type="application/javascript", headers={"Access-Control-Allow-Origin": "*"}, body="""
+            const frame = document.createElement('iframe');
+            frame.className = 'giscus-frame';
+            frame.src = 'https://giscus.app/widget?theme=' + document.currentScript.dataset.theme;
+            document.querySelector('.giscus').appendChild(frame);
+            """))
+        self.context.route("https://giscus.app/widget?*", lambda route: route.fulfill(
+            content_type="text/html", body="""<!doctype html><html><body>
+            <textarea aria-label="Comment draft"></textarea>
+            <script>
+            document.documentElement.dataset.theme = new URL(location.href).searchParams.get('theme');
+            window.addEventListener('message', event => {
+                if (event.source === parent && event.data?.giscus?.setConfig?.theme) {
+                    document.documentElement.dataset.theme = event.data.giscus.setConfig.theme;
+                }
+            });
+            parent.postMessage({giscus: {discussion: {number: 5}}}, '*');
+            </script></body></html>"""))
+
+    def test_discussion_loads_on_demand_and_preserves_draft_when_switching_theme(self):
+        self.giscus_stub()
+        self.page.emulate_media(reduced_motion="reduce")
+        self.goto()
+        client = self.page.locator('script[src="https://giscus.app/client.js"]')
+        expect(client).to_have_count(0)
+        self.page.get_by_role("button", name="深色主题", exact=True).click()
+        self.page.locator('[data-panel="discussion"]').click()
+        expect(client).to_have_count(1)
+        expect(client).to_have_attribute("data-repo", "sunZshanY/personal_website")
+        expect(client).to_have_attribute("data-mapping", "number")
+        expect(client).to_have_attribute("data-term", "5")
+        frame = self.page.frame_locator('.giscus-frame')
+        expect(frame.locator('html')).to_have_attribute('data-theme', 'dark')
+        expect(self.page.locator('#discussionStatus')).to_be_hidden()
+        draft = frame.get_by_role('textbox', name='Comment draft')
+        draft.fill('Keep my draft')
+        self.page.get_by_role("button", name="浅色主题", exact=True).click()
+        expect(frame.locator('html')).to_have_attribute('data-theme', 'light')
+        self.page.locator('[data-panel="friends-link"]').click()
+        self.page.locator('[data-panel="discussion"]').click()
+        expect(client).to_have_count(1)
+        expect(draft).to_have_value('Keep my draft')
+        for width in [320, 768, 1440]:
+            self.page.set_viewport_size({"width": width, "height": 850})
+            bounds = self.page.locator('.giscus-frame').bounding_box()
+            self.assertGreaterEqual(bounds['x'], 0)
+            self.assertLessEqual(bounds['x'] + bounds['width'], width)
+            expect(self.page.locator('.rinui-topbar')).to_be_in_viewport()
+            expect(self.page.locator('.rinui-statusbar')).to_be_in_viewport()
+
+    def test_discussion_links_and_sign_in_return_open_panel(self):
+        self.giscus_stub()
+        for path in ['index.html#discussion', 'index.html#discussionComments',
+                     'index.html#comments', 'index.html?giscus=test-session']:
+            with self.subTest(path=path):
+                self.goto(path)
+                expect(self.page.locator('#discussion')).to_be_visible()
+                expect(self.page.locator('[data-panel="discussion"]')).to_have_attribute('aria-current', 'page')
+                expect(self.page.locator('.giscus-frame')).to_have_count(1)
+
+    def test_discussion_network_failure_keeps_github_link_available(self):
+        self.goto()
+        self.page.locator('[data-panel="discussion"]').click()
+        expect(self.page.locator('#discussionStatus')).to_contain_text('讨论暂时无法加载')
+        link = self.page.get_by_role('link', name='在 GitHub 中参与')
+        expect(link).to_be_visible()
+        expect(link).to_have_attribute('href', 'https://github.com/sunZshanY/personal_website/discussions/5')
+        expect(self.page.locator('#flm-comment-widget')).to_have_count(0)
+        expect(self.page.locator('script[src*="fakeicp"]')).to_have_count(0)
+
     def test_sliding_thumb_and_keyboard_on_both_pages(self):
         for path in ["index.html", "read.html?post=1"]:
             with self.subTest(path=path):
