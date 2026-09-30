@@ -3,7 +3,7 @@
  * ==============================
  * 背景：雫API (api.imlazy.ink)
  * 数据：data/posts.json（GitHub 托管，每日更新）
- * 评论：flm-comment-widget（挂载于 #comments 面板）
+ * 讨论：GitHub Discussions / giscus（由 discussion.js 挂载于 #discussion 面板）
  * 访客：localStorage 本地存储
  */
 (function() {
@@ -14,7 +14,7 @@
     var BG_TICK = 60000;
     var API_TIMEOUT = 8000;
 
-    var TYPE_LINE = 'Hello My name is Omiaちゃん';
+    var TYPE_LINE = 'Hello This is Yu Sun';
     var TYPE_TICK = 100, TYPE_REST = 3000, TYPE_DEL = 90, TYPE_GAP = 1500;
 
     // ========== 全局态 ==========
