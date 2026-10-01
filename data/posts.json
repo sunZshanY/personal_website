@@ -60,8 +60,7 @@
       "id": 6,
       "title": "舞萌w3",
       "date": "2026-10-01",
-      "images":"images/rating.jpeg",
-      "images1":"images/score.jpg",
+      "images":["images/rating.jpeg","images/score.jpg"],
       "content":"恭喜w3,然后就是这个Altale是我的第三首的鸟加",
       "tags":[
         "Maimai",
