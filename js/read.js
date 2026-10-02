@@ -4,6 +4,14 @@
     function safeHTML(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
     function safeAttr(s) { return s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
+    function imgList(post) {
+        var out = [];
+        if (Array.isArray(post.images)) out = out.concat(post.images);
+        else if (post.image || post.images) out.push(post.image || post.images);
+        if (post.images1) out.push(post.images1);
+        return out.filter(function(x){ return typeof x === 'string' && x.trim(); });
+    }
+
     // Both pages use the same freshness and fallback rules.
     function getPost(id, cb) {
         window.OmiBlog.posts.load().then(function (data) {
@@ -57,14 +65,22 @@
             var paragraphs = bodyText.split('\n').filter(function(p) { return p.trim(); })
                 .map(function(p) { return '<p>' + safeHTML(p.trim()) + '</p>'; }).join('');
 
-            // 题图
+            // 题图（支持多图）
+            var imgs = imgList(post);
             var heroHTML = '';
-            if (post.image || post.images) {
-                var imgSrc = post.image || post.images;
+            if (imgs.length === 1) {
                 heroHTML = '<div class="article-hero">'
-                    + '<img src="' + safeAttr(imgSrc) + '" alt="' + safeAttr(post.title) + '" '
-                    + 'onclick="window.open(\'' + safeAttr(imgSrc) + '\')" loading="eager" '
+                    + '<img src="' + safeAttr(imgs[0]) + '" alt="' + safeAttr(post.title) + '" '
+                    + 'onclick="window.open(\'' + safeAttr(imgs[0]) + '\')" loading="eager" '
                     + 'onerror="this.parentElement.style.display=\'none\'">'
+                    + '</div>';
+            } else if (imgs.length > 1) {
+                heroHTML = '<div class="article-hero-grid">'
+                    + imgs.map(function(src) {
+                        return '<img src="' + safeAttr(src) + '" alt="' + safeAttr(post.title) + '" loading="lazy" '
+                            + 'onclick="window.open(\'' + safeAttr(src) + '\')" '
+                            + 'onerror="this.style.display=\'none\'">';
+                    }).join('')
                     + '</div>';
             }
 

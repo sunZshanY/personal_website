@@ -56,6 +56,18 @@
     function _safeHTML(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
     function _safeAttr(s) { return s.replace(/&/g,'&amp;').replace(/"/g,'&quot;').replace(/'/g,'&#39;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
 
+    // 兼容 images 数组 / 单字符串 / 旧 images1 字段
+    function _imgList(b) {
+        var out = [];
+        if (Array.isArray(b.images)) out = out.concat(b.images);
+        else if (b.image || b.images) out.push(b.image || b.images);
+        if (b.images1) out.push(b.images1);
+        return out.filter(function(x){ return typeof x === 'string' && x.trim(); });
+    }
+    function _imgTag(title, src) {
+        return '<img src="' + _safeAttr(src) + '" alt="' + _safeAttr(title) + '" class="blog-image" loading="lazy" onclick="event.stopPropagation();openLightbox(\'' + _safeAttr(src) + '\')" onerror="this.parentElement.style.display=\'none\'">';
+    }
+
     function _debounce(fn, ms) {
         var t;
         return function() { var c=this, a=arguments; clearTimeout(t); t=setTimeout(function(){fn.apply(c,a);}, ms); };
@@ -340,7 +352,13 @@
         f.forEach(function(b){
             var card=document.createElement('article'); card.className='blog-card'; card.dataset.blogId=b.id;
             var tagsH=b.tags.map(function(t){return'<span class="blog-tag">'+_safeHTML(t)+'</span>';}).join('');
-            var picH=(b.image||b.images)?'<div class="blog-image-wrapper"><img src="'+_safeAttr(b.image||b.images)+'" alt="'+_safeAttr(b.title)+'" class="blog-image" loading="lazy" onclick="event.stopPropagation();openLightbox(\''+_safeAttr(b.image||b.images)+'\')" onerror="this.parentElement.style.display=\'none\'"></div>':'';
+            var imgs = _imgList(b);
+            var picH = '';
+            if (imgs.length === 1) {
+                picH = '<div class="blog-image-wrapper">' + _imgTag(b.title, imgs[0]) + '</div>';
+            } else if (imgs.length > 1) {
+                picH = '<div class="blog-images-grid">' + imgs.map(function(src){ return '<div class="blog-image-wrapper">' + _imgTag(b.title, src) + '</div>'; }).join('') + '</div>';
+            }
             card.innerHTML='<div class="blog-date">'+_safeHTML(b.date)+'</div><h3 class="blog-card-title" title="点击查看完整文章">'+_safeHTML(b.title)+'</h3>'+picH+'<div class="blog-body"><p>'+_safeHTML(b.content)+'</p></div><div class="blog-tags-row">'+tagsH+'</div><span class="read-more" data-action="expand">展开阅读 ↓</span>';
             E.blogList.appendChild(card);
         });

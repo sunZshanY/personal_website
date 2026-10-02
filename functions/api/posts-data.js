@@ -35,8 +35,9 @@ export async function onRequestGet(context) {
   if (cached && staticData) {
     const cacheCount = cached.posts.length;
     const staticCount = staticData.posts.length;
-    const staticNewer = !cached.updatedAt || !staticData.updatedAt || staticData.updatedAt > cached.updatedAt;
-    if (staticCount > cacheCount || (staticCount === cacheCount && staticNewer)) {
+    const contentSame = JSON.stringify(cached.posts) === JSON.stringify(staticData.posts);
+    const staticNewer = !cached.updatedAt || !staticData.updatedAt || staticData.updatedAt >= cached.updatedAt;
+    if (!contentSame && (staticCount > cacheCount || (staticCount === cacheCount && staticNewer))) {
       data = staticData;
     }
   }
