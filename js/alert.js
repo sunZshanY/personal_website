@@ -343,7 +343,7 @@
     function _paintPosts() {
         var s = E.blogSearch ? E.blogSearch.value.trim().toLowerCase() : '';
         var f = g_postHeap;
-        if (s) f = g_postHeap.filter(function(b){return ~b.title.toLowerCase().indexOf(s)||~b.content.toLowerCase().indexOf(s)||b.tags.some(function(t){return ~t.toLowerCase().indexOf(s);});});
+        if (s) f = g_postHeap.filter(function(b){return ~b.title.toLowerCase().indexOf(s)||~b.content.toLowerCase().indexOf(s)||(Array.isArray(b.tags) && b.tags.some(function(t){return ~t.toLowerCase().indexOf(s);}));});
 
         E.blogList.innerHTML = '';
         if (!f.length) { E.blogList.style.display='none'; E.blogEmpty.classList.remove('hidden'); E.blogEmpty.querySelector('.empty-subtitle').textContent=s?'没有匹配的结果…':'敬请期待新文章~'; return; }
@@ -351,7 +351,7 @@
 
         f.forEach(function(b){
             var card=document.createElement('article'); card.className='blog-card'; card.dataset.blogId=b.id;
-            var tagsH=b.tags.map(function(t){return'<span class="blog-tag">'+_safeHTML(t)+'</span>';}).join('');
+            var tagsH=(Array.isArray(b.tags) ? b.tags : []).map(function(t){return'<span class="blog-tag">'+_safeHTML(t)+'</span>';}).join('');
             var imgs = _imgList(b);
             var picH = '';
             if (imgs.length === 1) {
