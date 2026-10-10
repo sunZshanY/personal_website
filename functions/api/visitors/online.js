@@ -8,15 +8,15 @@
 
 import { getOnlineVisitors } from './_utils';
 
-// Shared secret — must match the one in admin panel
-const ADMIN_AUTH_SECRET = 'omia_admin_2024';
-
 export async function onRequestGet(context) {
   const { request, env } = context;
 
+  // Shared secret — must match the one in admin panel（从环境变量读取）
+  const ADMIN_AUTH_SECRET = env.ADMIN_AUTH_SECRET || '';
+
   // Basic auth check
   const authHeader = request.headers.get('X-Admin-Auth');
-  if (authHeader !== ADMIN_AUTH_SECRET) {
+  if (!ADMIN_AUTH_SECRET || authHeader !== ADMIN_AUTH_SECRET) {
     return new Response(JSON.stringify({ error: 'Unauthorized' }), {
       status: 401,
       headers: { 'Content-Type': 'application/json' }

@@ -421,8 +421,8 @@ var DATA_URL = '../data/posts.json';
 var BOX_KEY = 'omiblog_z';
 var BOSS_KEY = 'adm_sesFlag';
 var LOG_KEY = 'omia_admin_log';
-var DEF_USER = 'admin';
-var DEF_PASS = '123456';
+var DEF_USER_HASH = '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918';
+var DEF_PASS_HASH = '1d58f2649917f5da75f62da2ecb2ec0021b76960f965b0e19c9f8eddc5f6f833';
 
 var g_posts = [];
 
@@ -498,20 +498,33 @@ function initGate(){
   document.getElementById('shell').style.display='none';
 }
 
+function sha256hex(s){
+  return crypto.subtle.digest('SHA-256', new TextEncoder().encode(s)).then(function(buf){
+    var out = '';
+    new Uint8Array(buf).forEach(function(b){ out += b.toString(16).padStart(2,'0'); });
+    return out;
+  });
+}
+
 function login(){
   var u = document.getElementById('gUser').value.trim();
   var p = document.getElementById('gPass').value;
-  if(u===DEF_USER && p===DEF_PASS){
-    localStorage.setItem(BOSS_KEY,'1');
-    document.getElementById('gate').style.display='none';
-    document.getElementById('gUser').value='';document.getElementById('gPass').value='';
-    document.getElementById('gErr').textContent='';
-    addLog('login', '管理员登录成功');
-    showShell();
-  } else {
-    document.getElementById('gErr').textContent='凭证错误';
-    addLog('login', '登录失败（凭证错误）');
-  }
+  var errEl = document.getElementById('gErr');
+  Promise.all([sha256hex(u), sha256hex(p)]).then(function(hs){
+    if(hs[0]===DEF_USER_HASH && hs[1]===DEF_PASS_HASH){
+      localStorage.setItem(BOSS_KEY,'1');
+      document.getElementById('gate').style.display='none';
+      document.getElementById('gUser').value='';document.getElementById('gPass').value='';
+      errEl.textContent='';
+      addLog('login', '管理员登录成功');
+      showShell();
+    } else {
+      errEl.textContent='凭证错误';
+      addLog('login', '登录失败（凭证错误）');
+    }
+  }).catch(function(){
+    errEl.textContent='当前环境不支持加密校验，请使用现代浏览器（需 HTTPS）';
+  });
 }
 
 function logout(){
@@ -525,7 +538,7 @@ function logout(){
 // ===== 实时访客监控 =====
 var VISITOR_API_ONLINE = '/api/visitors/online';
 var VISITOR_POLL_MS = 3000;
-var ADMIN_AUTH = 'omia_admin_2024';
+var ADMIN_AUTH = 'e0c8a441e60db2bad23db9f352b478c5';
 var _visitorTimer = null;
 var _prevSids = {};
 

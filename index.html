@@ -438,6 +438,7 @@
   <script src="js/services/posts.js" defer></script>
   <script src="js/alert.js" defer></script>
   <script src="js/discussion.js" defer></script>
+  <script src="js/gate.js" defer></script>
 
   <!-- ====== 管理入口：?admin 触发 ====== -->
   <div id="adminGate"
@@ -455,22 +456,6 @@
         录</button>
     </div>
   </div>
-  <script>
-    (function () {
-      if (!/[\?&]admin/.test(location.search)) return;
-      var gate = document.getElementById('adminGate'); gate.style.display = 'flex';
-      function go() {
-        var u = document.getElementById('admUser').value.trim();
-        var p = document.getElementById('admPass').value;
-        if (u === 'admin_user' && p === '1209adminforSunZshanY') {
-          localStorage.setItem('adm_sesFlag', '1');
-          location.href = '_p/index.html';
-        } else {document.getElementById('admErr').textContent = '凭证错误'}
-      }
-      document.getElementById('admBtn').addEventListener('click', go);
-      document.getElementById('admPass').addEventListener('keydown', function (e) {if (e.key === 'Enter') go()});
-    })();
-  </script>
 </body>
 
 </html>

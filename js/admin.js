@@ -24,9 +24,9 @@
     var BOSS_KEY = 'adm_sesFlag';
     var RESET_KEY = 'kaze_lastReset';
 
-    // 管理员凭证（和主站同一套）
-    var BOSS_NAME = 'admin';
-    var BOSS_PASS = '123456';
+    // 管理员凭证（和主站同一套，只存哈希）
+    var BOSS_NAME_HASH = '8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918';
+    var BOSS_PASS_HASH = '1d58f2649917f5da75f62da2ecb2ec0021b76960f965b0e19c9f8eddc5f6f833';
 
     // 管理员单会话限制（30分钟超时自动释放）
     var SES_TOKEN_KEY = 'adm_sesToken';
@@ -163,10 +163,24 @@
         return false;
     }
 
+    function _sha256hex(s) {
+        return window.crypto.subtle
+            .digest('SHA-256', new TextEncoder().encode(s))
+            .then(function (buf) {
+                var out = '';
+                new Uint8Array(buf).forEach(function (b) { out += b.toString(16).padStart(2, '0'); });
+                return out;
+            });
+    }
+
     function _gateGo() {
         var u = E.gateUser.value.trim();
         var p = E.gatePass.value;
-        if (u === BOSS_NAME && p === BOSS_PASS) {
+        Promise.all([_sha256hex(u), _sha256hex(p)]).then(function (hs) {
+            if (hs[0] !== BOSS_NAME_HASH || hs[1] !== BOSS_PASS_HASH) {
+                E.gateFlash.textContent = '❌ 凭证错误';
+                return;
+            }
             // 单会话检查
             var ses = _checkAdminSession();
             var myToken = sessionStorage.getItem('adm_myToken');
@@ -183,9 +197,9 @@
             E.gateUser.value = '';
             E.gatePass.value = '';
             _refreshAll();
-        } else {
-            E.gateFlash.textContent = '❌ 凭证错误';
-        }
+        }).catch(function () {
+            E.gateFlash.textContent = '❌ 当前环境不支持加密校验';
+        });
     }
 
     function _gateExit() {

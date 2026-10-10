@@ -28,7 +28,6 @@
  *      → 触发 Cloudflare Pages 自动部署，仓库与线上保持一致
  */
 
-const ADMIN_AUTH_SECRET = 'omia_admin_2024';
 const KV_POSTS_KEY = 'blog:posts';
 const KV_MAIN_KEY = 'blog:main';
 const GH_OWNER = 'sunZshanY';
@@ -38,7 +37,8 @@ const GH_BRANCH = 'main';
 export async function onRequestPost(context) {
   const { request, env } = context;
 
-  if ((request.headers.get('X-Admin-Auth') || '') !== ADMIN_AUTH_SECRET) {
+  const ADMIN_AUTH_SECRET = env.ADMIN_AUTH_SECRET || '';
+  if (!ADMIN_AUTH_SECRET || (request.headers.get('X-Admin-Auth') || '') !== ADMIN_AUTH_SECRET) {
     return _json({ ok: false, error: '未授权' }, 401);
   }
 
